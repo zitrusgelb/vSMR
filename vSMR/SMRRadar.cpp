@@ -296,7 +296,7 @@ void CSMRRadar::OnAsrContentToBeSaved()
 {
 	Logger::info(string(__FUNCSIG__));
 
-	SaveDataToAsr("Airport", "Active airport for RIMCAS", getActiveAirport().c_str());
+	SaveDataToAsr("Airport", "Active airport for RIMCAS", boost::algorithm::join(getActiveAirports(), " ").c_str());
 
 	SaveDataToAsr("ActiveProfile", "vSMR active profile", CurrentConfig->getActiveProfileName().c_str());
 
@@ -563,7 +563,7 @@ void CSMRRadar::OnClickScreenObject(int ObjectType, const char * sObjectId, POIN
 	}
 
 	if (ObjectType == RIMCAS_ACTIVE_AIRPORT) {
-		GetPlugIn()->OpenPopupEdit(Area, RIMCAS_ACTIVE_AIRPORT_FUNC, getActiveAirport().c_str());
+		GetPlugIn()->OpenPopupEdit(Area, RIMCAS_ACTIVE_AIRPORT_FUNC, boost::algorithm::join(getActiveAirports(), " ").c_str());		
 	}
 
 	if (ObjectType == DRAWING_BACKGROUND_CLICK)
@@ -867,7 +867,7 @@ void CSMRRadar::OnFunctionCall(int FunctionId, const char * sItemString, POINT P
 
 	if (FunctionId == RIMCAS_ACTIVE_AIRPORT_FUNC) {
 		setActiveAirport(sItemString);
-		SaveDataToAsr("Airport", "Active airport", getActiveAirport().c_str());
+		SaveDataToAsr("Airport", "Active airport", boost::algorithm::join(getActiveAirports(), " ").c_str());
 	}
 
 	if (FunctionId == RIMCAS_UPDATE_FONTS) {
@@ -2059,9 +2059,9 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 		TagTypes TagType = TagTypes::Departure;		
 		TagTypes ColorTagType = TagTypes::Departure;
 
-		if (fp.IsValid() && strcmp(fp.GetFlightPlanData().GetDestination(), getActiveAirport().c_str()) == 0) {
+		if (fp.IsValid() && isActiveAirport(fp.GetFlightPlanData().GetDestination())) {
 			// Circuit aircraft are treated as departures; not arrivals
-			if (strcmp(fp.GetFlightPlanData().GetOrigin(), getActiveAirport().c_str()) != 0) {
+			if (!isActiveAirport(fp.GetFlightPlanData().GetOrigin())) {
 				TagType = TagTypes::Arrival;
 				ColorTagType = TagTypes::Arrival;
 			}
@@ -2170,8 +2170,8 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 
 		Color definedBackgroundColor = CurrentConfig->getConfigColor(LabelsSettings[Utils::getEnumString(ColorTagType).c_str()]["background_color"]);
 		if (ColorTagType == TagTypes::Departure) {
-			if (!TagReplacingMap["asid"].empty() && CurrentConfig->isSidColorAvail(TagReplacingMap["asid"], getActiveAirport())) {
-				definedBackgroundColor = CurrentConfig->getSidColor(TagReplacingMap["asid"], getActiveAirport());
+			if (!TagReplacingMap["asid"].empty() && isActiveAirport(TagReplacingMap["origin"].c_str()) && CurrentConfig->isSidColorAvail(TagReplacingMap["asid"], TagReplacingMap["origin"].c_str())) {
+				definedBackgroundColor = CurrentConfig->getSidColor(TagReplacingMap["asid"], TagReplacingMap["origin"].c_str());
 			}
 
 			if (fp.GetFlightPlanData().GetPlanType() == "I" && TagReplacingMap["asid"].empty() && LabelsSettings[Utils::getEnumString(ColorTagType).c_str()].HasMember("nosid_color")) {

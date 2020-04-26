@@ -1,6 +1,7 @@
 #pragma once
 #include <EuroScopePlugIn.h>
 #include <string>
+#include <list>
 #include <vector>
 #include <map>
 #include <algorithm>
@@ -18,6 +19,7 @@
 #include <thread>
 #include "ColorManager.h"
 #include "Logger.h"
+#include <boost/algorithm/string/join.hpp>
 
 using namespace std;
 using namespace Gdiplus;
@@ -143,13 +145,41 @@ public:
 
 
 	string ActiveAirport = "EGKK";
+	list <string> ActiveAirports = { "EGKK" };
 
 	inline string getActiveAirport() {
 		return ActiveAirport;
 	}
+	inline list<string> getActiveAirports() {
+		return ActiveAirports;
+	}
+	inline bool isActiveAirport(string value) {
+		bool is = false;
+		for (string airport : getActiveAirports()) {
+			if (airport == value)
+				return true;
+		}
+		return false;
+	}
 
 	inline string setActiveAirport(string value) {
-		return ActiveAirport = value;
+		list<string> airports;
+		StrTrimA(const_cast<char *>(value.c_str()), " ,;\t\r\n");
+		transform(value.begin(), value.end(), value.begin(), ::toupper);
+
+
+		int i = 0, start = 0;
+		while (i <= value.size())
+		{
+			if (i == value.size() || value[i] < 'A' || value[i] > 'Z') {
+				if (i - start == 4)
+					airports.insert(airports.end(), value.substr(start, 4));
+				start = i + 1;
+			}
+			i++;
+		}
+		ActiveAirports = airports;
+		return ActiveAirport = ActiveAirports.front();
 	}
 
 	//---GenerateTagData--------------------------------------------
