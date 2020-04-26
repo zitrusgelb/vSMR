@@ -347,7 +347,7 @@ void CInsetWindow::render(HDC hDC, CSMRRadar * radar_screen, Graphics* gdi, POIN
 		double d = double(rt.GetPosition().GetReportedGS()*0.514444)*10;
 		CPosition AwayBase = BetterHarversine(rt.GetPosition().GetPosition(), rt.GetTrackHeading(), d);
 
-		d = double(rt.GetPosition().GetReportedGS()*0.514444) * (radar_screen->Predictedlength * 60)-10;
+		d = double(rt.GetPosition().GetReportedGS()*0.514444) * (radar_screen->PredictedLength * 60)-10;
 		CPosition PredictedEnd = BetterHarversine(AwayBase, rt.GetTrackHeading(), d);
 
 		POINT liangOne, liangTwo;
@@ -685,7 +685,7 @@ void CInsetWindow::render(HDC hDC, CSMRRadar * radar_screen, Graphics* gdi, POIN
 		bearings = bearings.substr(0, decimal_pos + 2);
 
 		string text = bearings;
-		text += "° / ";
+		text += "ï¿½ / ";
 		text += distances;
 		text += "nm";
 		COLORREF old_color = dc.SetTextColor(RGB(0, 0, 0));
