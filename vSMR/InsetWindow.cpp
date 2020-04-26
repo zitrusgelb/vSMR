@@ -232,10 +232,10 @@ void CInsetWindow::render(HDC hDC, CSMRRadar * radar_screen, Graphics* gdi, POIN
 					
 
 				double reverseHeading = RadToDeg(TrueBearing(OtherEnd, Threshold));
-				double lenght = double(radar_screen->CurrentConfig->getActiveProfile()["approach_insets"]["extended_lines_length"].GetDouble()) * 1852.0;
+				double length = double(radar_screen->CurrentConfig->getActiveProfile()["approach_insets"]["extended_lines_length"].GetDouble()) * 1852.0;
 
 				// Drawing the extended centreline
-				CPosition endExtended = BetterHarversine(Threshold, reverseHeading, lenght);
+				CPosition endExtended = BetterHarversine(Threshold, reverseHeading, length);
 
 				Pt1 = projectPoint(Threshold);
 				Pt2 = projectPoint(endExtended);
@@ -347,7 +347,7 @@ void CInsetWindow::render(HDC hDC, CSMRRadar * radar_screen, Graphics* gdi, POIN
 		double d = double(rt.GetPosition().GetReportedGS()*0.514444)*10;
 		CPosition AwayBase = BetterHarversine(rt.GetPosition().GetPosition(), rt.GetTrackHeading(), d);
 
-		d = double(rt.GetPosition().GetReportedGS()*0.514444) * (radar_screen->PredictedLenght * 60)-10;
+		d = double(rt.GetPosition().GetReportedGS()*0.514444) * (radar_screen->Predictedlength * 60)-10;
 		CPosition PredictedEnd = BetterHarversine(AwayBase, rt.GetTrackHeading(), d);
 
 		POINT liangOne, liangTwo;
@@ -381,7 +381,7 @@ void CInsetWindow::render(HDC hDC, CSMRRadar * radar_screen, Graphics* gdi, POIN
 			dc.LineTo(RtPoint.x + 10, RtPoint.y + 4);
 		}
 
-		int lenght = 50;
+		int length = 50;
 
 		POINT TagCenter;
 		if (m_TagAngles.find(rt.GetCallsign()) == m_TagAngles.end())
@@ -389,8 +389,8 @@ void CInsetWindow::render(HDC hDC, CSMRRadar * radar_screen, Graphics* gdi, POIN
 			m_TagAngles[rt.GetCallsign()] = 45.0; // TODO: Not the best, ah well
 		}
 
-		TagCenter.x = long(RtPoint.x + float(lenght * cos(DegToRad(m_TagAngles[rt.GetCallsign()]))));
-		TagCenter.y = long(RtPoint.y + float(lenght * sin(DegToRad(m_TagAngles[rt.GetCallsign()]))));
+		TagCenter.x = long(RtPoint.x + float(length * cos(DegToRad(m_TagAngles[rt.GetCallsign()]))));
+		TagCenter.y = long(RtPoint.y + float(length * sin(DegToRad(m_TagAngles[rt.GetCallsign()]))));
 		// Drawing the tags, what a mess
 
 		// ----- Generating the replacing map -----

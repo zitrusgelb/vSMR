@@ -5,7 +5,7 @@
 ULONG_PTR m_gdiplusToken;
 CPoint mouseLocation(0, 0);
 string TagBeingDragged;
-int LeaderLineDefaultlenght = 50;
+int LeaderLineDefaultlength = 50;
 
 //
 // Cursor Things
@@ -198,7 +198,7 @@ void CSMRRadar::LoadProfile(string profileName) {
 		RimcasLVP.push_back(RimcasTimerLVP[i].GetInt());
 	}
 	RimcasInstance->setCountdownDefinition(RimcasNorm, RimcasLVP);
-	LeaderLineDefaultlenght = CurrentConfig->getActiveProfile()["labels"]["leader_line_length"].GetInt();
+	LeaderLineDefaultlength = CurrentConfig->getActiveProfile()["labels"]["leader_line_length"].GetInt();
 
 	customCursor = CurrentConfig->isCustomCursorUsed();
 
@@ -231,7 +231,7 @@ void CSMRRadar::OnAsrContentLoaded(bool Loaded)
 		Trail_Gnd = atoi(p_value);
 
 	if ((p_value = GetDataFromAsr("PredictedLine")) != NULL)
-		PredictedLenght = atoi(p_value);
+		PredictedLength = atoi(p_value);
 
 	string temp;
 
@@ -308,7 +308,7 @@ void CSMRRadar::OnAsrContentToBeSaved()
 
 	SaveDataToAsr("GndTrailsDots", "vSMR GRND Trail Dots", std::to_string(Trail_Gnd).c_str());
 
-	SaveDataToAsr("PredictedLine", "vSMR Predicted Track Lines", std::to_string(PredictedLenght).c_str());
+	SaveDataToAsr("PredictedLine", "vSMR Predicted Track Lines", std::to_string(PredictedLength).c_str());
 
 	string temp = "";
 
@@ -438,7 +438,7 @@ void CSMRRadar::OnMoveScreenObject(int ObjectType, const char * sObjectId, POINT
 					angles.push_back(k);
 
 				TagAngles[sObjectId] = closest(angles, angle);
-				TagLeaderLineLength[sObjectId] = max(LeaderLineDefaultlenght, min(int(DistancePts(AcPosPix, TagCenterPix)), LeaderLineDefaultlenght * 2));
+				TagLeaderLineLength[sObjectId] = max(LeaderLineDefaultlength, min(int(DistancePts(AcPosPix, TagCenterPix)), LeaderLineDefaultlength * 2));
 
 			}
 			else
@@ -1000,7 +1000,7 @@ void CSMRRadar::OnFunctionCall(int FunctionId, const char * sItemString, POINT P
 
 	if (FunctionId == RIMCAS_UPDATE_PTL)
 	{
-		PredictedLenght = atoi(sItemString);
+		PredictedLength = atoi(sItemString);
 
 		ShowLists["Predicted Track Line"] = true;
 	}
@@ -1084,7 +1084,7 @@ void CSMRRadar::OnRadarTargetPositionUpdate(CRadarTarget RadarTarget)
 	// All units in M
 	float width = 34.0f;
 	float cabin_width = 4.0f;
-	float lenght = 38.0f;
+	float length = 38.0f;
 
 	if (fp.IsValid()) {
 		char wtc = fp.GetFlightPlanData().GetAircraftWtc();
@@ -1092,26 +1092,26 @@ void CSMRRadar::OnRadarTargetPositionUpdate(CRadarTarget RadarTarget)
 		if (wtc == 'L') {
 			width = 13.0f;
 			cabin_width = 2.0f;
-			lenght = 12.0f;
+			length = 12.0f;
 		}
 
 		if (wtc == 'H') {
 			width = 61.0f;
 			cabin_width = 7.0f;
-			lenght = 64.0f;
+			length = 64.0f;
 		}
 
 		if (wtc == 'J') {
 			width = 80.0f;
 			cabin_width = 7.0f;
-			lenght = 73.0f;
+			length = 73.0f;
 		}
 	}
 
 
 	width = width + float((rand() % 5) - 2);
 	cabin_width = cabin_width + float((rand() % 3) - 1);
-	lenght = lenght + float((rand() % 5) - 2);
+	length = length + float((rand() % 5) - 2);
 
 
 	float trackHead = float(RadarTarget.GetPosition().GetReportedHeadingTrueNorth());
@@ -1119,25 +1119,25 @@ void CSMRRadar::OnRadarTargetPositionUpdate(CRadarTarget RadarTarget)
 	float leftTrackHead = float(fmod(trackHead - 90.0f, 360));
 	float rightTrackHead = float(fmod(trackHead + 90.0f, 360));
 
-	float HalfLenght = lenght / 2.0f;
+	float HalfLength = length / 2.0f;
 	float HalfCabWidth = cabin_width / 2.0f;
 	float HalfSpanWidth = width / 2.0f;
 
 	// Base shape is like a deformed cross
 
 
-	CPosition topMiddle = Haversine(RtPos.GetPosition(), trackHead, HalfLenght);
+	CPosition topMiddle = Haversine(RtPos.GetPosition(), trackHead, HalfLength);
 	CPosition topLeft = Haversine(topMiddle, leftTrackHead, HalfCabWidth);
 	CPosition topRight = Haversine(topMiddle, rightTrackHead, HalfCabWidth);
 
-	CPosition bottomMiddle = Haversine(RtPos.GetPosition(), inverseTrackHead, HalfLenght);
+	CPosition bottomMiddle = Haversine(RtPos.GetPosition(), inverseTrackHead, HalfLength);
 	CPosition bottomLeft = Haversine(bottomMiddle, leftTrackHead, HalfCabWidth);
 	CPosition bottomRight = Haversine(bottomMiddle, rightTrackHead, HalfCabWidth);
 
-	CPosition middleTopLeft = Haversine(topLeft, float(fmod(inverseTrackHead + 25.0f, 360)), 0.8f*HalfLenght);
-	CPosition middleTopRight = Haversine(topRight, float(fmod(inverseTrackHead - 25.0f, 360)), 0.8f*HalfLenght);
-	CPosition middleBottomLeft = Haversine(bottomLeft, float(fmod(trackHead - 15.0f, 360)), 0.8f*HalfLenght);
-	CPosition middleBottomRight = Haversine(bottomRight, float(fmod(trackHead + 15.0f, 360)), 0.8f*HalfLenght);
+	CPosition middleTopLeft = Haversine(topLeft, float(fmod(inverseTrackHead + 25.0f, 360)), 0.8f*HalfLength);
+	CPosition middleTopRight = Haversine(topRight, float(fmod(inverseTrackHead - 25.0f, 360)), 0.8f*HalfLength);
+	CPosition middleBottomLeft = Haversine(bottomLeft, float(fmod(trackHead - 15.0f, 360)), 0.8f*HalfLength);
+	CPosition middleBottomRight = Haversine(bottomRight, float(fmod(trackHead + 15.0f, 360)), 0.8f*HalfLength);
 
 	CPosition rightTop = Haversine(middleBottomRight, rightTrackHead, 0.7f*HalfSpanWidth);
 	CPosition rightBottom = Haversine(rightTop, inverseTrackHead, cabin_width);
@@ -1957,7 +1957,7 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 			double d = double(rt.GetPosition().GetReportedGS()*0.514444) * 10;
 			CPosition AwayBase = BetterHarversine(rt.GetPosition().GetPosition(), rt.GetTrackHeading(), d);
 
-			d = double(rt.GetPosition().GetReportedGS()*0.514444) * (PredictedLenght * 60) - 10;
+			d = double(rt.GetPosition().GetReportedGS()*0.514444) * (PredictedLength * 60) - 10;
 			CPosition PredictedEnd = BetterHarversine(AwayBase, rt.GetTrackHeading(), d);
 
 			dc.MoveTo(ConvertCoordFromPositionToPixel(AwayBase));
@@ -2048,12 +2048,12 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 			if (TagAngles.find(rt.GetCallsign()) == TagAngles.end())
 				TagAngles[rt.GetCallsign()] = 270.0f;
 
-			int lenght = LeaderLineDefaultlenght;
+			int length = LeaderLineDefaultlength;
 			if (TagLeaderLineLength.find(rt.GetCallsign()) != TagLeaderLineLength.end())
-				lenght = TagLeaderLineLength[rt.GetCallsign()];
+				length = TagLeaderLineLength[rt.GetCallsign()];
 
-			TagCenter.x = long(acPosPix.x + float(lenght * cos(DegToRad(TagAngles[rt.GetCallsign()]))));
-			TagCenter.y = long(acPosPix.y + float(lenght * sin(DegToRad(TagAngles[rt.GetCallsign()]))));
+			TagCenter.x = long(acPosPix.x + float(length * cos(DegToRad(TagAngles[rt.GetCallsign()]))));
+			TagCenter.y = long(acPosPix.y + float(length * sin(DegToRad(TagAngles[rt.GetCallsign()]))));
 		}
 
 		TagTypes TagType = TagTypes::Departure;		
@@ -2475,12 +2475,12 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 
 	if (ShowLists["Predicted Track Line"]) {
 		GetPlugIn()->OpenPopupList(ListAreas["Predicted Track Line"], "Predicted Track Line", 1);
-		GetPlugIn()->AddPopupListElement("0", "", RIMCAS_UPDATE_PTL, false, int(bool(PredictedLenght == 0)));
-		GetPlugIn()->AddPopupListElement("1", "", RIMCAS_UPDATE_PTL, false, int(bool(PredictedLenght == 1)));
-		GetPlugIn()->AddPopupListElement("2", "", RIMCAS_UPDATE_PTL, false, int(bool(PredictedLenght == 2)));
-		GetPlugIn()->AddPopupListElement("3", "", RIMCAS_UPDATE_PTL, false, int(bool(PredictedLenght == 3)));
-		GetPlugIn()->AddPopupListElement("4", "", RIMCAS_UPDATE_PTL, false, int(bool(PredictedLenght == 4)));
-		GetPlugIn()->AddPopupListElement("5", "", RIMCAS_UPDATE_PTL, false, int(bool(PredictedLenght == 5)));
+		GetPlugIn()->AddPopupListElement("0", "", RIMCAS_UPDATE_PTL, false, int(bool(PredictedLength == 0)));
+		GetPlugIn()->AddPopupListElement("1", "", RIMCAS_UPDATE_PTL, false, int(bool(PredictedLength == 1)));
+		GetPlugIn()->AddPopupListElement("2", "", RIMCAS_UPDATE_PTL, false, int(bool(PredictedLength == 2)));
+		GetPlugIn()->AddPopupListElement("3", "", RIMCAS_UPDATE_PTL, false, int(bool(PredictedLength == 3)));
+		GetPlugIn()->AddPopupListElement("4", "", RIMCAS_UPDATE_PTL, false, int(bool(PredictedLength == 4)));
+		GetPlugIn()->AddPopupListElement("5", "", RIMCAS_UPDATE_PTL, false, int(bool(PredictedLength == 5)));
 		GetPlugIn()->AddPopupListElement("Close", "", RIMCAS_CLOSE, false, 2, false, true);
 		ShowLists["Predicted Track Line"] = false;
 	}
@@ -2740,9 +2740,9 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 		// We then rotate the tags until we did a 360 or there is no more conflicts
 
 		POINT acPosPix = ConvertCoordFromPositionToPixel(GetPlugIn()->RadarTargetSelect(areas.first.c_str()).GetPosition().GetPosition());
-		int lenght = LeaderLineDefaultlenght;
+		int length = LeaderLineDefaultlength;
 		if (TagLeaderLineLength.find(areas.first) != TagLeaderLineLength.end())
-			lenght = TagLeaderLineLength[areas.first];
+			length = TagLeaderLineLength[areas.first];
 
 		int width = areas.second.Width();
 		int height = areas.second.Height();
@@ -2753,8 +2753,8 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 			double newangle = fmod(TagAngles[areas.first] + rotated, 360.0f);
 
 			POINT TagCenter;
-			TagCenter.x = long(acPosPix.x + float(lenght * cos(DegToRad(newangle))));
-			TagCenter.y = long(acPosPix.y + float(lenght * sin(DegToRad(newangle))));
+			TagCenter.x = long(acPosPix.x + float(length * cos(DegToRad(newangle))));
+			TagCenter.y = long(acPosPix.y + float(length * sin(DegToRad(newangle))));
 
 			CRect NewRectangle(TagCenter.x - (width / 2), TagCenter.y - (height / 2), TagCenter.x + (width / 2), TagCenter.y + (height / 2));
 			NewRectangle.NormalizeRect();
