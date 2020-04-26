@@ -2101,7 +2101,7 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 		TagClickableMap[TagReplacingMap["gs"]] = TAG_CITEM_NO;
 		TagClickableMap[TagReplacingMap["tendency"]] = TAG_CITEM_NO;
 		TagClickableMap[TagReplacingMap["wake"]] = TAG_CITEM_FPBOX;
-		TagClickableMap[TagReplacingMap["tssr"]] = TAG_CITEM_NO;
+		TagClickableMap[TagReplacingMap["ssr"]] = TAG_CITEM_NO;
 		TagClickableMap[TagReplacingMap["asid"]] = TagClickableMap[TagReplacingMap["ssid"]] = TAG_CITEM_SID;
 		TagClickableMap[TagReplacingMap["origin"]] = TAG_CITEM_FPBOX;
 		TagClickableMap[TagReplacingMap["dest"]] = TAG_CITEM_FPBOX;
