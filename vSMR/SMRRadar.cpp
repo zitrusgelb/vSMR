@@ -20,7 +20,6 @@ HWND pluginWindow;
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 map<string, string> CSMRRadar::vStripsStands;
-
 map<int, CInsetWindow *> appWindows;
 
 inline double closest(std::vector<double> const& vec, double value) {
@@ -518,7 +517,7 @@ void CSMRRadar::OnClickScreenObject(int ObjectType, const char * sObjectId, POIN
 
 		if (strcmp(sObjectId, "close") == 0)
 			appWindowDisplays[appWindowId] = false;
-		if (strcmp(sObjectId, "range") == 0) {
+		else if (strcmp(sObjectId, "range") == 0) {
 			GetPlugIn()->OpenPopupList(Area, "SRW Zoom", 1);
 			GetPlugIn()->AddPopupListElement("55", "", RIMCAS_UPDATERANGE + appWindowId, false, int(appWindows[appWindowId]->m_Scale == 55));
 			GetPlugIn()->AddPopupListElement("50", "", RIMCAS_UPDATERANGE + appWindowId, false, int(appWindows[appWindowId]->m_Scale == 50));
@@ -534,7 +533,7 @@ void CSMRRadar::OnClickScreenObject(int ObjectType, const char * sObjectId, POIN
 			GetPlugIn()->AddPopupListElement("1", "", RIMCAS_UPDATERANGE + appWindowId, false, int(appWindows[appWindowId]->m_Scale == 1));
 			GetPlugIn()->AddPopupListElement("Close", "", RIMCAS_CLOSE, false, 2, false, true);
 		}
-		if (strcmp(sObjectId, "filter") == 0) {
+		else if (strcmp(sObjectId, "filter") == 0) {
 			GetPlugIn()->OpenPopupList(Area, "SRW Filter (ft)", 1);
 			GetPlugIn()->AddPopupListElement("UNL", "", RIMCAS_UPDATEFILTER + appWindowId, false, int(appWindows[appWindowId]->m_Filter == 66000));
 			GetPlugIn()->AddPopupListElement("9500", "", RIMCAS_UPDATEFILTER + appWindowId, false, int(appWindows[appWindowId]->m_Filter == 9500));
@@ -551,7 +550,7 @@ void CSMRRadar::OnClickScreenObject(int ObjectType, const char * sObjectId, POIN
 			GetPlugIn()->AddPopupListElement(tmp.c_str(), "", RIMCAS_UPDATEFILTER + appWindowId, false, 2, false, true);
 			GetPlugIn()->AddPopupListElement("Close", "", RIMCAS_CLOSE, false, 2, false, true);
 		}
-		if (strcmp(sObjectId, "rotate") == 0) {
+		else if (strcmp(sObjectId, "rotate") == 0) {
 			GetPlugIn()->OpenPopupList(Area, "SRW Rotate (deg)", 1);
 			for (int k = 0; k <= 360; k++)
 			{
@@ -562,11 +561,11 @@ void CSMRRadar::OnClickScreenObject(int ObjectType, const char * sObjectId, POIN
 		}
 	}
 
-	if (ObjectType == RIMCAS_ACTIVE_AIRPORT) {
+	else if (ObjectType == RIMCAS_ACTIVE_AIRPORT) {
 		GetPlugIn()->OpenPopupEdit(Area, RIMCAS_ACTIVE_AIRPORT_FUNC, boost::algorithm::join(getActiveAirports(), " ").c_str());		
 	}
 
-	if (ObjectType == DRAWING_BACKGROUND_CLICK)
+	else if (ObjectType == DRAWING_BACKGROUND_CLICK)
 	{
 		if (QDMSelectEnabled)
 		{
@@ -576,7 +575,7 @@ void CSMRRadar::OnClickScreenObject(int ObjectType, const char * sObjectId, POIN
 				RequestRefresh();
 			}
 
-			if (Button == BUTTON_RIGHT)
+			else if (Button == BUTTON_RIGHT)
 			{
 				QDMSelectEnabled = false;
 				RequestRefresh();
@@ -593,7 +592,7 @@ void CSMRRadar::OnClickScreenObject(int ObjectType, const char * sObjectId, POIN
 		}
 	}
 
-	if (ObjectType == RIMCAS_MENU) {
+	else if (ObjectType == RIMCAS_MENU) {
 
 		if (strcmp(sObjectId, "DisplayMenu") == 0) {
 			Area.top = Area.top + 30;
@@ -608,7 +607,7 @@ void CSMRRadar::OnClickScreenObject(int ObjectType, const char * sObjectId, POIN
 			GetPlugIn()->AddPopupListElement("Close", "", RIMCAS_CLOSE, false, 2, false, true);
 		}
 
-		if (strcmp(sObjectId, "TargetMenu") == 0) {
+		else if (strcmp(sObjectId, "TargetMenu") == 0) {
 			Area.top = Area.top + 30;
 			Area.bottom = Area.bottom + 30;
 
@@ -623,7 +622,7 @@ void CSMRRadar::OnClickScreenObject(int ObjectType, const char * sObjectId, POIN
 			GetPlugIn()->AddPopupListElement("Close", "", RIMCAS_CLOSE, false, 2, false, true);
 		}
 
-		if (strcmp(sObjectId, "MapMenu") == 0) {
+		else if (strcmp(sObjectId, "MapMenu") == 0) {
 			Area.top = Area.top + 30;
 			Area.bottom = Area.bottom + 30;
 
@@ -633,7 +632,7 @@ void CSMRRadar::OnClickScreenObject(int ObjectType, const char * sObjectId, POIN
 			GetPlugIn()->AddPopupListElement("Close", "", RIMCAS_CLOSE, false, 2, false, true);
 		}
 
-		if (strcmp(sObjectId, "ColourMenu") == 0) {
+		else if (strcmp(sObjectId, "ColourMenu") == 0) {
 			Area.top = Area.top + 30;
 			Area.bottom = Area.bottom + 30;
 
@@ -643,7 +642,7 @@ void CSMRRadar::OnClickScreenObject(int ObjectType, const char * sObjectId, POIN
 			GetPlugIn()->AddPopupListElement("Close", "", RIMCAS_CLOSE, false, 2, false, true);
 		}
 
-		if (strcmp(sObjectId, "RIMCASMenu") == 0) {
+		else if (strcmp(sObjectId, "RIMCASMenu") == 0) {
 			Area.top = Area.top + 30;
 			Area.bottom = Area.bottom + 30;
 
@@ -655,7 +654,7 @@ void CSMRRadar::OnClickScreenObject(int ObjectType, const char * sObjectId, POIN
 			GetPlugIn()->AddPopupListElement("Close", "", RIMCAS_CLOSE, false, 2, false, true);
 		}
 
-		if (strcmp(sObjectId, "/") == 0)
+		else if (strcmp(sObjectId, "/") == 0)
 		{
 			if (Button == BUTTON_LEFT)
 			{
@@ -669,7 +668,7 @@ void CSMRRadar::OnClickScreenObject(int ObjectType, const char * sObjectId, POIN
 					QDMSelectEnabled = false;
 				}
 			}
-			if (Button == BUTTON_RIGHT)
+			else if (Button == BUTTON_RIGHT)
 			{
 				DistanceToolActive = false;
 				ActiveDistance = pair<string, string>("", "");
@@ -680,7 +679,7 @@ void CSMRRadar::OnClickScreenObject(int ObjectType, const char * sObjectId, POIN
 
 	}
 
-	if (ObjectType == DRAWING_TAG || ObjectType == DRAWING_AC_SYMBOL) {		
+	else if (ObjectType == DRAWING_TAG || ObjectType == DRAWING_AC_SYMBOL) {
 		CRadarTarget rt = GetPlugIn()->RadarTargetSelect(sObjectId);
 		//GetPlugIn()->SetASELAircraft(rt); // NOTE: This does NOT work eventhough the api says it should?
 		GetPlugIn()->SetASELAircraft(GetPlugIn()->FlightPlanSelect(sObjectId));  // make sure the correct aircraft is selected before calling 'StartTagFunction'
@@ -776,7 +775,7 @@ void CSMRRadar::OnClickScreenObject(int ObjectType, const char * sObjectId, POIN
 		}
 	}
 
-	if (ObjectType == DRAWING_AC_SYMBOL_APPWINDOW1 || ObjectType == DRAWING_AC_SYMBOL_APPWINDOW2)
+	else if (ObjectType == DRAWING_AC_SYMBOL_APPWINDOW1 || ObjectType == DRAWING_AC_SYMBOL_APPWINDOW2)
 	{
 		if (DistanceToolActive) {
 			if (ActiveDistance.first == "")
@@ -796,7 +795,7 @@ void CSMRRadar::OnClickScreenObject(int ObjectType, const char * sObjectId, POIN
 			if (ObjectType == DRAWING_AC_SYMBOL_APPWINDOW1)
 				appWindows[1]->OnClickScreenObject(sObjectId, Pt, Button);
 
-			if (ObjectType == DRAWING_AC_SYMBOL_APPWINDOW2)
+			else if (ObjectType == DRAWING_AC_SYMBOL_APPWINDOW2)
 				appWindows[2]->OnClickScreenObject(sObjectId, Pt, Button);
 		}
 	}
@@ -822,14 +821,14 @@ void CSMRRadar::OnClickScreenObject(int ObjectType, const char * sObjectId, POIN
 		}
 	}
 
-	if (Button == BUTTON_MIDDLE && TagObjectMiddleTypes[ObjectType]) {
+	else if (Button == BUTTON_MIDDLE && TagObjectMiddleTypes[ObjectType]) {
 		int TagMenu = TagObjectMiddleTypes[ObjectType];
 		CRadarTarget rt = GetPlugIn()->RadarTargetSelect(sObjectId);
 		GetPlugIn()->SetASELAircraft(GetPlugIn()->FlightPlanSelect(sObjectId));
 		StartTagFunction(rt.GetCallsign(), NULL, ObjectType, rt.GetCallsign(), NULL, TagMenu, Pt, Area);
 	}
 
-	if (Button == BUTTON_RIGHT && TagObjectRightTypes[ObjectType]) {
+	else if (Button == BUTTON_RIGHT && TagObjectRightTypes[ObjectType]) {
 		int TagMenu = TagObjectRightTypes[ObjectType];
 		CRadarTarget rt = GetPlugIn()->RadarTargetSelect(sObjectId);
 		GetPlugIn()->SetASELAircraft(GetPlugIn()->FlightPlanSelect(sObjectId));
@@ -865,32 +864,32 @@ void CSMRRadar::OnFunctionCall(int FunctionId, const char * sItemString, POINT P
 		appWindowDisplays[id] = !appWindowDisplays[id];
 	}
 
-	if (FunctionId == RIMCAS_ACTIVE_AIRPORT_FUNC) {
+	else if (FunctionId == RIMCAS_ACTIVE_AIRPORT_FUNC) {
 		setActiveAirport(sItemString);
 		SaveDataToAsr("Airport", "Active airport", boost::algorithm::join(getActiveAirports(), " ").c_str());
 	}
 
-	if (FunctionId == RIMCAS_UPDATE_FONTS) {
+	else if (FunctionId == RIMCAS_UPDATE_FONTS) {
 		if (strcmp(sItemString, "Size 1") == 0)
 			currentFontSize = 1;
-		if (strcmp(sItemString, "Size 2") == 0)
+		else if (strcmp(sItemString, "Size 2") == 0)
 			currentFontSize = 2;
-		if (strcmp(sItemString, "Size 3") == 0)
+		else if (strcmp(sItemString, "Size 3") == 0)
 			currentFontSize = 3;
-		if (strcmp(sItemString, "Size 4") == 0)
+		else if (strcmp(sItemString, "Size 4") == 0)
 			currentFontSize = 4;
-		if (strcmp(sItemString, "Size 5") == 0)
+		else if (strcmp(sItemString, "Size 5") == 0)
 			currentFontSize = 5;
 
 		ShowLists["Label Font Size"] = true;
 	}
 
-	if (FunctionId == RIMCAS_QDM_TOGGLE) {
+	else if (FunctionId == RIMCAS_QDM_TOGGLE) {
 		QDMenabled = !QDMenabled;
 		QDMSelectEnabled = false;
 	}
 
-	if (FunctionId == RIMCAS_QDM_SELECT_TOGGLE)
+	else if (FunctionId == RIMCAS_QDM_SELECT_TOGGLE)
 	{
 		if (!QDMSelectEnabled)
 		{
@@ -900,7 +899,7 @@ void CSMRRadar::OnFunctionCall(int FunctionId, const char * sItemString, POINT P
 		QDMenabled = false;
 	}
 
-	if (FunctionId == RIMCAS_UPDATE_PROFILE) {
+	else if (FunctionId == RIMCAS_UPDATE_PROFILE) {
 		this->CSMRRadar::LoadProfile(sItemString);
 		LoadCustomFont();
 		SaveDataToAsr("ActiveProfile", "vSMR active profile", sItemString);
@@ -908,24 +907,24 @@ void CSMRRadar::OnFunctionCall(int FunctionId, const char * sItemString, POINT P
 		ShowLists["Profiles"] = true;
 	}
 
-	if (FunctionId == RIMCAS_UPDATEFILTER1 || FunctionId == RIMCAS_UPDATEFILTER2) {
+	else if (FunctionId == RIMCAS_UPDATEFILTER1 || FunctionId == RIMCAS_UPDATEFILTER2) {
 		int id = FunctionId - RIMCAS_UPDATEFILTER;
 		if (startsWith("UNL", sItemString))
 			sItemString = "66000";
 		appWindows[id]->m_Filter = atoi(sItemString);
 	}
 
-	if (FunctionId == RIMCAS_UPDATERANGE1 || FunctionId == RIMCAS_UPDATERANGE2) {
+	else if (FunctionId == RIMCAS_UPDATERANGE1 || FunctionId == RIMCAS_UPDATERANGE2) {
 		int id = FunctionId - RIMCAS_UPDATERANGE;
 		appWindows[id]->m_Scale = atoi(sItemString);
 	}
 
-	if (FunctionId == RIMCAS_UPDATEROTATE1 || FunctionId == RIMCAS_UPDATEROTATE2) {
+	else if (FunctionId == RIMCAS_UPDATEROTATE1 || FunctionId == RIMCAS_UPDATEROTATE2) {
 		int id = FunctionId - RIMCAS_UPDATEROTATE;
 		appWindows[id]->m_Rotation = atoi(sItemString);
 	}
 
-	if (FunctionId == RIMCAS_UPDATE_BRIGHNESS) {
+	else if (FunctionId == RIMCAS_UPDATE_BRIGHNESS) {
 		if (strcmp(sItemString, "Day") == 0)
 			ColorSettingsDay = true;
 		else
@@ -936,7 +935,7 @@ void CSMRRadar::OnFunctionCall(int FunctionId, const char * sItemString, POINT P
 		RequestRefresh();
 	}
 
-	if (FunctionId == RIMCAS_CA_ARRIVAL_FUNC) {
+	else if (FunctionId == RIMCAS_CA_ARRIVAL_FUNC) {
 		RimcasInstance->toggleMonitoredRunwayArr(string(sItemString));
 
 		ShowLists["Conflict Alert ARR"] = true;
@@ -944,7 +943,7 @@ void CSMRRadar::OnFunctionCall(int FunctionId, const char * sItemString, POINT P
 		RequestRefresh();
 	}
 
-	if (FunctionId == RIMCAS_CA_MONITOR_FUNC) {
+	else if (FunctionId == RIMCAS_CA_MONITOR_FUNC) {
 		RimcasInstance->toggleMonitoredRunwayDep(string(sItemString));
 
 		ShowLists["Conflict Alert DEP"] = true;
@@ -952,7 +951,7 @@ void CSMRRadar::OnFunctionCall(int FunctionId, const char * sItemString, POINT P
 		RequestRefresh();
 	}
 
-	if (FunctionId == RIMCAS_CLOSED_RUNWAYS_FUNC) {
+	else if (FunctionId == RIMCAS_CLOSED_RUNWAYS_FUNC) {
 		RimcasInstance->toggleClosedRunway(string(sItemString));
 
 		ShowLists["Runway closed"] = true;
@@ -960,7 +959,7 @@ void CSMRRadar::OnFunctionCall(int FunctionId, const char * sItemString, POINT P
 		RequestRefresh();
 	}
 
-	if (FunctionId == RIMCAS_OPEN_LIST) {
+	else if (FunctionId == RIMCAS_OPEN_LIST) {
 
 		ShowLists[string(sItemString)] = true;
 		ListAreas[string(sItemString)] = Area;
@@ -968,7 +967,7 @@ void CSMRRadar::OnFunctionCall(int FunctionId, const char * sItemString, POINT P
 		RequestRefresh();
 	}
 
-	if (FunctionId == RIMCAS_UPDATE_LVP) {
+	else if (FunctionId == RIMCAS_UPDATE_LVP) {
 		if (strcmp(sItemString, "Normal") == 0)
 			isLVP = false;
 		if (strcmp(sItemString, "Low") == 0)
@@ -979,51 +978,51 @@ void CSMRRadar::OnFunctionCall(int FunctionId, const char * sItemString, POINT P
 		RequestRefresh();
 	}
 
-	if (FunctionId == RIMCAS_UPDATE_AFTERGLOW)
+	else if (FunctionId == RIMCAS_UPDATE_AFTERGLOW)
 	{
 		Afterglow = !Afterglow;
 	}
 
-	if (FunctionId == RIMCAS_UPDATE_GND_TRAIL)
+	else if (FunctionId == RIMCAS_UPDATE_GND_TRAIL)
 	{
 		Trail_Gnd = atoi(sItemString);
 
 		ShowLists["GRND Trail Dots"] = true;
 	}
 
-	if (FunctionId == RIMCAS_UPDATE_APP_TRAIL)
+	else if (FunctionId == RIMCAS_UPDATE_APP_TRAIL)
 	{
 		Trail_App = atoi(sItemString);
 
 		ShowLists["APPR Trail Dots"] = true;
 	}
 
-	if (FunctionId == RIMCAS_UPDATE_PTL)
+	else if (FunctionId == RIMCAS_UPDATE_PTL)
 	{
 		PredictedLength = atoi(sItemString);
 
 		ShowLists["Predicted Track Line"] = true;
 	}
 
-	if (FunctionId == RIMCAS_BRIGHTNESS_LABEL)
+	else if (FunctionId == RIMCAS_BRIGHTNESS_LABEL)
 	{
 		ColorManager->update_brightness("label", std::atoi(sItemString));
 		ShowLists["Label"] = true;
 	}
 
-	if (FunctionId == RIMCAS_BRIGHTNESS_AFTERGLOW)
+	else if (FunctionId == RIMCAS_BRIGHTNESS_AFTERGLOW)
 	{
 		ColorManager->update_brightness("afterglow", std::atoi(sItemString));
 		ShowLists["Afterglow"] = true;
 	}
 
-	if (FunctionId == RIMCAS_BRIGHTNESS_SYMBOL)
+	else if (FunctionId == RIMCAS_BRIGHTNESS_SYMBOL)
 	{
 		ColorManager->update_brightness("symbol", std::atoi(sItemString));
 		ShowLists["Symbol"] = true;
 	}
 
-	if (FunctionId == RIMCAS_UPDATE_RELEASE)
+	else if (FunctionId == RIMCAS_UPDATE_RELEASE)
 	{
 		ReleaseInProgress = !ReleaseInProgress;
 		if (ReleaseInProgress)
@@ -1033,7 +1032,7 @@ void CSMRRadar::OnFunctionCall(int FunctionId, const char * sItemString, POINT P
 		CorrelateCursor();
 	}
 
-	if (FunctionId == RIMCAS_UPDATE_ACQUIRE)
+	else if (FunctionId == RIMCAS_UPDATE_ACQUIRE)
 	{
 		AcquireInProgress = !AcquireInProgress;
 		if (AcquireInProgress)
@@ -1095,13 +1094,13 @@ void CSMRRadar::OnRadarTargetPositionUpdate(CRadarTarget RadarTarget)
 			length = 12.0f;
 		}
 
-		if (wtc == 'H') {
+		else if (wtc == 'H') {
 			width = 61.0f;
 			cabin_width = 7.0f;
 			length = 64.0f;
 		}
 
-		if (wtc == 'J') {
+		else if (wtc == 'J') {
 			width = 80.0f;
 			cabin_width = 7.0f;
 			length = 73.0f;
@@ -1232,7 +1231,7 @@ string CSMRRadar::GetBottomLine(const char * Callsign) {
 			string rfl_s;
 			if (rfl == 0)
 				rfl = fp.GetFlightPlanData().GetFinalAltitude();
-			if (rfl > GetPlugIn()->GetTransitionAltitude())
+			else if (rfl > GetPlugIn()->GetTransitionAltitude())
 				rfl_s = "FL" + std::to_string(rfl / 100);
 			else
 				rfl_s = std::to_string(rfl) + "ft";
@@ -1613,9 +1612,9 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 		static string getEnumString(TagTypes type) {
 			if (type == TagTypes::Departure)
 				return "departure";
-			if (type == TagTypes::Arrival)
+			else if (type == TagTypes::Arrival)
 				return "arrival";
-			if (type == TagTypes::Uncorrelated)
+			else if (type == TagTypes::Uncorrelated)
 				return "uncorrelated";
 			return "airborne";
 		}
@@ -2288,9 +2287,9 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 				// Ground tag colors
 				if (strcmp(element.c_str(), "PUSH") == 0)
 					color = &GroundPushColor;
-				if (strcmp(element.c_str(), "TAXI") == 0)
+				else if (strcmp(element.c_str(), "TAXI") == 0)
 					color = &GroundTaxiColor;
-				if (strcmp(element.c_str(), "DEPA") == 0)
+				else if (strcmp(element.c_str(), "DEPA") == 0)
 					color = &GroundDepaColor;
 
 				RectF mRect(0, 0, 0, 0);
