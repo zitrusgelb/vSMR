@@ -607,6 +607,14 @@ void CSMRPlugin::OnFunctionCall(int FunctionId, const char * sItemString, POINT 
 			int ClearedAltitude = FlightPlan.GetControllerAssignedData().GetClearedAltitude();
 			int Ta = GetTransitionAltitude();
 
+			if (ClearedAltitude == 0) {
+				CSMRRadar* radarScreen = RadarScreensOpened[0];
+				if (radarScreen->CurrentConfig != nullptr) {
+					if (radarScreen->CurrentConfig->isSidInitClbAvail(FlightPlan.GetFlightPlanData().GetSidName(), FlightPlan.GetFlightPlanData().GetOrigin())) {
+						ClearedAltitude = radarScreen->CurrentConfig->getSidInitClb(FlightPlan.GetFlightPlanData().GetSidName(), FlightPlan.GetFlightPlanData().GetOrigin());
+					}
+				}
+			}
 			if (ClearedAltitude != 0) {
 				if (ClearedAltitude > Ta && ClearedAltitude > 2) {
 					string str = std::to_string(ClearedAltitude);
@@ -624,6 +632,14 @@ void CSMRPlugin::OnFunctionCall(int FunctionId, const char * sItemString, POINT 
 					toReturn += "ft";
 				}
 			}
+			else {
+				CSMRRadar* radarScreen = RadarScreensOpened[0];
+				if (radarScreen->CurrentConfig != nullptr) {
+					if (radarScreen->CurrentConfig->isSidInitClbAvail(FlightPlan.GetFlightPlanData().GetSidName(), FlightPlan.GetFlightPlanData().GetOrigin())) {
+						int a = 1;
+					}
+				}
+			}
 			dia.m_Climb = toReturn.c_str();
 
 			if (dia.DoModal() != IDOK)
@@ -638,7 +654,7 @@ void CSMRPlugin::OnFunctionCall(int FunctionId, const char * sItemString, POINT 
 			DatalinkToSend.freq = dia.m_Freq;
 			DatalinkToSend.message = dia.m_Message;
 			DatalinkToSend.squawk = FlightPlan.GetControllerAssignedData().GetSquawk();
-			DatalinkToSend.climb = toReturn;
+			DatalinkToSend.climb = dia.m_Climb;
 
 			myfrequency = std::to_string(ControllerMyself().GetPrimaryFrequency()).substr(0, 7);
 

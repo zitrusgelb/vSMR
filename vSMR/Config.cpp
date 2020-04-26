@@ -41,6 +41,55 @@ const Value& CConfig::getActiveProfile() {
 	return document[active_profile];
 }
 
+bool CConfig::isSidInitClbAvail(string sid, string airport) {
+	if (getActiveProfile().HasMember("maps"))
+	{
+		if (getActiveProfile()["maps"].HasMember(airport.c_str()))
+		{
+			if (getActiveProfile()["maps"][airport.c_str()].HasMember("sids") && getActiveProfile()["maps"][airport.c_str()]["sids"].IsArray())
+			{
+				const Value& SIDs = getActiveProfile()["maps"][airport.c_str()]["sids"];
+				for (SizeType i = 0; i < SIDs.Size(); i++)
+				{
+					const Value& SIDNames = SIDs[i]["names"];
+					for (SizeType s = 0; s < SIDNames.Size(); s++) {
+						string currentsid = SIDNames[s].GetString();
+						std::transform(currentsid.begin(), currentsid.end(), currentsid.begin(), ::toupper);
+						if (startsWith(sid.c_str(), currentsid.c_str()) && getActiveProfile()["maps"][airport.c_str()]["sids"][i].HasMember("init_clb"))
+							return true;
+					}
+				}
+			}
+		}
+	}
+	return false;
+}
+
+int CConfig::getSidInitClb(string sid, string airport)
+{
+	if (getActiveProfile().HasMember("maps"))
+	{
+		if (getActiveProfile()["maps"].HasMember(airport.c_str()))
+		{
+			if (getActiveProfile()["maps"][airport.c_str()].HasMember("sids") && getActiveProfile()["maps"][airport.c_str()]["sids"].IsArray())
+			{
+				const Value& SIDs = getActiveProfile()["maps"][airport.c_str()]["sids"];
+				for (SizeType i = 0; i < SIDs.Size(); i++)
+				{
+					const Value& SIDNames = SIDs[i]["names"];
+					for (SizeType s = 0; s < SIDNames.Size(); s++) {
+						string currentsid = SIDNames[s].GetString();
+						std::transform(currentsid.begin(), currentsid.end(), currentsid.begin(), ::toupper);
+						if (startsWith(sid.c_str(), currentsid.c_str()) && getActiveProfile()["maps"][airport.c_str()]["sids"][i].HasMember("init_clb"))
+							return SIDs[i]["init_clb"].GetInt();
+					}
+				}
+			}
+		}
+	}
+	return 0;
+}
+
 bool CConfig::isSidColorAvail(string sid, string airport) {
 	if (getActiveProfile().HasMember("maps"))
 	{
