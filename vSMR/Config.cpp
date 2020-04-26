@@ -104,15 +104,13 @@ bool CConfig::isSidColorAvail(string sid, string airport) {
 					for (SizeType s = 0; s < SIDNames.Size(); s++) {
 						string currentsid = SIDNames[s].GetString();
 						std::transform(currentsid.begin(), currentsid.end(), currentsid.begin(), ::toupper);
-						if (startsWith(sid.c_str(), currentsid.c_str()))
-						{
+						if (startsWith(sid.c_str(), currentsid.c_str()) && getActiveProfile()["maps"][airport.c_str()]["sids"][i].HasMember("color"))
 							return true;
 						}
 					}
 				}
 			}
 		}
-	}
 	return false;
 }
 
