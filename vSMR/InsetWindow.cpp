@@ -426,7 +426,7 @@ void CInsetWindow::render(HDC hDC, CSMRRadar * radar_screen, Graphics* gdi, POIN
 		CSMRRadar::TagTypes TagType = CSMRRadar::TagTypes::Departure;
 		CSMRRadar::TagTypes ColorTagType = CSMRRadar::TagTypes::Departure;
 
-		if (fp.IsValid() && strcmp(fp.GetFlightPlanData().GetDestination(), radar_screen->getActiveAirport().c_str()) == 0) {
+		if (fp.IsValid() && radar_screen->isActiveAirport(fp.GetFlightPlanData().GetDestination())) {
 				TagType = CSMRRadar::TagTypes::Arrival;
 				ColorTagType = CSMRRadar::TagTypes::Arrival;
 		}
@@ -511,8 +511,10 @@ void CInsetWindow::render(HDC hDC, CSMRRadar * radar_screen, Graphics* gdi, POIN
 
 		Color definedBackgroundColor = radar_screen->CurrentConfig->getConfigColor(LabelsSettings[Utils::getEnumString(ColorTagType).c_str()]["background_color"]);
 		if (TagType == CSMRRadar::TagTypes::Departure) {
-			if (!TagReplacingMap["asid"].empty() && radar_screen->CurrentConfig->isSidColorAvail(TagReplacingMap["asid"], radar_screen->getActiveAirport())) {
-				definedBackgroundColor = radar_screen->CurrentConfig->getSidColor(TagReplacingMap["asid"], radar_screen->getActiveAirport());
+			if (!TagReplacingMap["asid"].empty() &&
+				radar_screen->isActiveAirport(TagReplacingMap["origin"].c_str()) &&
+				radar_screen->CurrentConfig->isSidColorAvail(TagReplacingMap["asid"], TagReplacingMap["origin"].c_str())) {
+				definedBackgroundColor = radar_screen->CurrentConfig->getSidColor(TagReplacingMap["asid"], TagReplacingMap["origin"].c_str());
 			}
 
 			if (fp.GetFlightPlanData().GetPlanType() == "I" && TagReplacingMap["asid"].empty() && LabelsSettings[Utils::getEnumString(ColorTagType).c_str()].HasMember("nosid_color")) {
@@ -685,7 +687,7 @@ void CInsetWindow::render(HDC hDC, CSMRRadar * radar_screen, Graphics* gdi, POIN
 		bearings = bearings.substr(0, decimal_pos + 2);
 
 		string text = bearings;
-		text += "ï¿½ / ";
+		text += "° / ";
 		text += distances;
 		text += "nm";
 		COLORREF old_color = dc.SetTextColor(RGB(0, 0, 0));
