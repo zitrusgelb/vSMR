@@ -919,6 +919,7 @@ void CSMRRadar::OnClickScreenObject(int ObjectType, const char * sObjectId, POIN
 		{ TAG_CITEM_SSR, TAG_ITEM_FUNCTION_SET_GROUND_STATUS },
 		{ TAG_CITEM_GS, TAG_ITEM_FUNCTION_ASSIGNED_SPEED_POPUP },
 		{ TAG_CITEM_FL, TAG_ITEM_FUNCTION_TEMP_ALTITUDE_POPUP },
+		{ TAG_CITEM_ASSHDG, TAG_ITEM_FUNCTION_ASSIGNED_HEADING_POPUP },
 	};
 
 	if (Button == BUTTON_LEFT) {
@@ -1403,6 +1404,7 @@ map<string, string> CSMRRadar::GenerateTagData(CRadarTarget rt, CFlightPlan fp, 
 	// dest: destination aerodrome
 	// scratch: Scratchpad
 	// controller: Current Controller
+	// asshdg: Assigned heading
 	// ----
 
 	bool IsPrimary = !rt.GetPosition().GetTransponderC();
@@ -1626,6 +1628,13 @@ map<string, string> CSMRRadar::GenerateTagData(CRadarTarget rt, CFlightPlan fp, 
 		}
 	}
 
+	// ----- ASSHDG -------
+	string asshdg = "";
+	int ass = fp.GetControllerAssignedData().GetAssignedHeading();
+	if (ass > 0)
+		asshdg = "H" + to_string(int(ass / 10));
+
+
 	// ----- Generating the replacing map -----
 	map<string, string> TagReplacingMap;
 
@@ -1685,6 +1694,7 @@ map<string, string> CSMRRadar::GenerateTagData(CRadarTarget rt, CFlightPlan fp, 
 	TagReplacingMap["dest"] = dest;
 	TagReplacingMap["groundstatus"] = gstat;
 	TagReplacingMap["controller"] = controller;
+	TagReplacingMap["asshdg"] = asshdg;
 
 	return TagReplacingMap;
 }
@@ -2275,6 +2285,7 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 		TagClickableMap[TagReplacingMap["systemid"]] = TAG_CITEM_NO;
 		TagClickableMap[TagReplacingMap["groundstatus"]] = TAG_CITEM_GROUNDSTATUS;
 		TagClickableMap[TagReplacingMap["controller"]] = TAG_CITEM_CONTROLLER;
+		TagClickableMap[TagReplacingMap["asshdg"]] = TAG_CITEM_ASSHDG;
 
 		//
 		// ----- Now the hard part, drawing (using gdi+) -------
