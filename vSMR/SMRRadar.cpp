@@ -184,6 +184,21 @@ void CSMRRadar::LoadProfile(string profileName) {
 	// Loading the new profile
 	CurrentConfig->setActiveProfile(profileName);
 
+
+	Logger::info("Loading callsigns");
+	// Loading up the callsigns for the bottom line
+	// Search for ICAO airlines file if it already exists (usually given by the VACC)
+	if (CurrentConfig->getActiveProfile()["icao_airlines"].IsString()) {
+		string AirlinesPath = CurrentConfig->getActiveProfile()["icao_airlines"].GetString();
+		if (AirlinesPath.length()) {
+			ifstream f(AirlinesPath.c_str());
+
+			if (f.good()) {
+				Callsigns = new CCallsignLookup(AirlinesPath);
+			}
+			f.close();
+		}
+	}
 	// Loading all the new data
 	const Value &RimcasTimer = CurrentConfig->getActiveProfile()["rimcas"]["timer"];
 	const Value &RimcasTimerLVP = CurrentConfig->getActiveProfile()["rimcas"]["timer_lvp"];

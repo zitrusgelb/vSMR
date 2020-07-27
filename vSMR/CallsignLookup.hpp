@@ -3,6 +3,8 @@
 #include <string>
 #include <sstream>
 #include <map>
+#include <vector>
+#include "Constant.hpp"
 
 using namespace std;
 
