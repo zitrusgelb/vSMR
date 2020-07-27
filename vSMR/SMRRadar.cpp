@@ -199,6 +199,26 @@ void CSMRRadar::LoadProfile(string profileName) {
 			f.close();
 		}
 	}
+
+	Logger::info("Loading aircraft");
+	// Loading up the callsigns for the bottom line
+	// Search for ICAO airlines file if it already exists (usually given by the VACC)
+	if (CurrentConfig->getActiveProfile()["icao_aircraft"].IsString()) {
+		string AircraftPath = CurrentConfig->getActiveProfile()["icao_aircraft"].GetString();
+		if (AircraftPath.length()) {
+			ifstream f(AircraftPath.c_str());
+
+			if (f.good()) {
+				Aircraft = new CAircraftLookup(AircraftPath);
+			}
+			f.close();
+		}
+	}
+
+	if (CurrentConfig->getActiveProfile()["toolbar_offset"].IsInt()) {
+		Toolbar_Offset = CurrentConfig->getActiveProfile()["toolbar_offset"].GetInt();
+	}
+
 	// Loading all the new data
 	const Value &RimcasTimer = CurrentConfig->getActiveProfile()["rimcas"]["timer"];
 	const Value &RimcasTimerLVP = CurrentConfig->getActiveProfile()["rimcas"]["timer_lvp"];
@@ -1219,6 +1239,14 @@ string CSMRRadar::GetBottomLine(const char * Callsign) {
 		to_render += fp.GetPilotName();
 		to_render += "): ";
 		to_render += fp.GetFlightPlanData().GetAircraftFPType();
+
+		string span = Aircraft->getWingspan(fp.GetFlightPlanData().GetAircraftFPType());
+		if (span.length() > 0) {
+			to_render += " (";
+			to_render += span;
+			to_render += "): ";
+		}
+
 		to_render += " ";
 
 		if (fp.GetFlightPlanData().IsReceived()) {

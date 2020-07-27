@@ -11,6 +11,7 @@
 #include <math.h>
 #include "Constant.hpp"
 #include "CallsignLookup.hpp"
+#include "AircraftLookup.hpp"
 #include "Config.hpp"
 #include "Rimcas.hpp"
 #include "InsetWindow.h"
@@ -82,6 +83,7 @@ public:
 	string DllPath;
 	string ConfigPath;
 	CCallsignLookup * Callsigns;
+	CAircraftLookup * Aircraft;
 	CColorManager * ColorManager;
 
 	map<string, bool> ShowLists;
