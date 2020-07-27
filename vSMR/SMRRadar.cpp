@@ -1560,17 +1560,40 @@ map<string, string> CSMRRadar::GenerateTagData(CPlugIn* Plugin, CRadarTarget rt,
 	}
 	string flightlevel = (pfls + padWithZeros(padding, fl)).substr(0, 3);
 
+	int clrd = fp.GetClearedAltitude();
+	if (clrd && clrd != fp.GetFinalAltitude())
+	{
+		if (clrd < 10000) {
+			if (clrd % 1000)
+				flightlevel += "/" + padWithZeros(4, clrd / 10).substr(0, 3);
+			else
+				flightlevel += "/" + padWithZeros(4, clrd / 10).substr(0, 2);
+		}
+		else
+			flightlevel += "/" + padWithZeros(4, clrd).substr(0, 2);
+	}
 	// ----- Tendency -------
-	string tendency = "-";
-	int delta_fl = rt.GetPosition().GetFlightLevel() - rt.GetPreviousPosition(rt.GetPosition()).GetFlightLevel();
-	if (abs(delta_fl) >= 50) {
-		if (delta_fl < 0) {
+	string tendency = "";
+	int delta_fl = rt.GetVerticalSpeed() / 200;
+
+	if (delta_fl < -2)
 			tendency = "|";
+	else if (delta_fl > 2)
+		tendency = "^";
+
+	if (delta_fl < 0)
+		delta_fl *= -1;
+
+	if (delta_fl <= 2)
+		NULL;
+	else if (delta_fl < 10)
+	{
+		tendency += "0" + to_string(delta_fl);
 		}
 		else {
-			tendency = "^";
-		}
+		tendency += to_string(delta_fl);
 	}
+
 
 	// ----- Wake cat -------
 	string wake = "?";
