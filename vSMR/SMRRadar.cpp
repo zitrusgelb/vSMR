@@ -1488,7 +1488,11 @@ map<string, string> CSMRRadar::GenerateTagData(CRadarTarget rt, CFlightPlan fp, 
 		sctype = sqerror;
 
 	// ----- Groundspeed -------
-	string speed = std::to_string(rt.GetPosition().GetReportedGS());
+	string speed = std::to_string(int(rt.GetPosition().GetReportedGS() / 10));
+
+	int ass_spd = fp.GetControllerAssignedData().GetAssignedSpeed();
+	if (ass_spd)
+		speed += "/" + to_string(int(ass_spd / 10));
 
 	// ----- Departure runway -------
 	string deprwy = fp.GetFlightPlanData().GetDepartureRwy();
@@ -1498,7 +1502,7 @@ map<string, string> CSMRRadar::GenerateTagData(CRadarTarget rt, CFlightPlan fp, 
 	// ----- Departure runway that changes for overspeed -------
 	string seprwy = deprwy;
 	if (rt.GetPosition().GetReportedGS() > 25)
-		seprwy = std::to_string(rt.GetPosition().GetReportedGS());
+		seprwy = speed;
 
 	// ----- Arrival runway -------
 	string arvrwy = fp.GetFlightPlanData().GetArrivalRwy();
