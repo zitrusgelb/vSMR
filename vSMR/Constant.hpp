@@ -285,7 +285,7 @@ const int TAG_CITEM_GATE = 1914;
 const int TAG_CITEM_MANUALCORRELATE = 1915;
 const int TAG_CITEM_SID = 1916;
 const int TAG_CITEM_GROUNDSTATUS = 1917;
-
+const int TAG_CITEM_SCRATCH = 1918;
 const int FUNC_MANUAL_CALLSIGN = 2000;
 
 // RIMCAS Menus & shit

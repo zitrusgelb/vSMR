@@ -21,6 +21,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 map<string, string> CSMRRadar::vStripsStands;
 map<int, CInsetWindow *> appWindows;
+string EmptyScratchpad = "..\0"; // Make Scratchpad tag clickable, if empty
 
 inline double closest(std::vector<double> const& vec, double value) {
 	auto const it = std::lower_bound(vec.begin(), vec.end(), value);
@@ -1282,6 +1283,7 @@ map<string, string> CSMRRadar::GenerateTagData(CRadarTarget rt, CFlightPlan fp, 
 	// ssid: a short version of the SID
 	// origin: origin aerodrome
 	// dest: destination aerodrome
+	// scratch: Scratchpad
 	// ----
 
 	bool IsPrimary = !rt.GetPosition().GetTransponderC();
@@ -1394,6 +1396,13 @@ map<string, string> CSMRRadar::GenerateTagData(CRadarTarget rt, CFlightPlan fp, 
 	string sate = gate;
 	if (rt.GetPosition().GetReportedGS() > 25)
 		sate = speed;
+
+	// ----- Scratchpad -------
+	string scratch;
+	scratch = fp.GetControllerAssignedData().GetScratchPadString();
+	if (strlen(fp.GetControllerAssignedData().GetScratchPadString()) == 0)
+		scratch = EmptyScratchpad;
+	//scratch = scratch.substr(0, 4);
 
 	// ----- Flightlevel -------
 	int fl = rt.GetPosition().GetFlightLevel();
@@ -1515,6 +1524,7 @@ map<string, string> CSMRRadar::GenerateTagData(CRadarTarget rt, CFlightPlan fp, 
 	TagReplacingMap["srvrwy"] = srvrwy;
 	TagReplacingMap["gate"] = gate;
 	TagReplacingMap["sate"] = sate;
+	TagReplacingMap["scratch"] = scratch;
 	TagReplacingMap["flightlevel"] = flightlevel;
 	TagReplacingMap["gs"] = speed;
 	TagReplacingMap["tendency"] = tendency;
@@ -2097,6 +2107,7 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 		TagClickableMap[TagReplacingMap["srvrwy"]] = TAG_CITEM_RWY;
 		TagClickableMap[TagReplacingMap["gate"]] = TAG_CITEM_GATE;
 		TagClickableMap[TagReplacingMap["sate"]] = TAG_CITEM_GATE;
+		TagClickableMap[TagReplacingMap["scratch"]] = TAG_CITEM_SCRATCH;
 		TagClickableMap[TagReplacingMap["flightlevel"]] = TAG_CITEM_NO;
 		TagClickableMap[TagReplacingMap["gs"]] = TAG_CITEM_NO;
 		TagClickableMap[TagReplacingMap["tendency"]] = TAG_CITEM_NO;
@@ -2136,6 +2147,23 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 
 			const Value& line = LabelLines[i];
 			vector<string> lineStringArray;
+
+			// Empty Scratchpad special			
+			if (line.Size() == unsigned(1) && strcmp(line[unsigned(0)].GetString(), "scratch") == 0) {
+				string element = line[unsigned(0)].GetString();
+				string b = TagReplacingMap["gate"];
+
+				for (auto& kv : TagReplacingMap)
+					replaceAll(element, kv.first, kv.second);
+
+				if (strcmp(element.c_str(), EmptyScratchpad.c_str()) == 0)
+					//return;
+					continue;
+				if (TagType == CSMRRadar::TagTypes::Arrival && strcmp(element.c_str(), TagReplacingMap["gate"].c_str()) == 0)
+					//return;
+					continue;
+			}
+			
 
 			// Adds one line height
 			TagHeight += oneLineHeight;

@@ -408,6 +408,7 @@ void CInsetWindow::render(HDC hDC, CSMRRadar * radar_screen, Graphics* gdi, POIN
 		TagClickableMap[TagReplacingMap["srvrwy"]] = TAG_CITEM_RWY;
 		TagClickableMap[TagReplacingMap["gate"]] = TAG_CITEM_GATE;
 		TagClickableMap[TagReplacingMap["sate"]] = TAG_CITEM_GATE;
+		TagClickableMap[TagReplacingMap["scratch"]] = TAG_CITEM_SCRATCH;
 		TagClickableMap[TagReplacingMap["flightlevel"]] = TAG_CITEM_NO;
 		TagClickableMap[TagReplacingMap["gs"]] = TAG_CITEM_NO;
 		TagClickableMap[TagReplacingMap["tendency"]] = TAG_CITEM_NO;
