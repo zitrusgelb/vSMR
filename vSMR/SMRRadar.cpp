@@ -901,6 +901,14 @@ void CSMRRadar::OnClickScreenObject(int ObjectType, const char * sObjectId, POIN
 			sectorIndicator++;
 	}
 
+	map <const int, const int> TagObjectLeftTypes = {
+		{ TAG_CITEM_CALLSIGN, TAG_ITEM_FUNCTION_OPEN_FP_DIALOG },
+		{ TAG_CITEM_FPBOX, TAG_ITEM_FUNCTION_OPEN_FP_DIALOG },
+		{ TAG_CITEM_SCRATCH, TAG_ITEM_FUNCTION_EDIT_SCRATCH_PAD },
+		{ TAG_CITEM_CONTROLLER, TAG_ITEM_FUNCTION_HANDOFF_POPUP_MENU },
+		{ TAG_CITEM_FL, TAG_ITEM_FUNCTION_ASSIGNED_HEADING_POPUP },
+	};
+
 	map <const int, const int> TagObjectMiddleTypes = {
 		{ TAG_CITEM_CALLSIGN, TAG_ITEM_FUNCTION_COMMUNICATION_POPUP },
 		{ TAG_CITEM_FPBOX, TAG_ITEM_FUNCTION_TOGGLE_ROUTE_DRAW },
@@ -922,8 +930,15 @@ void CSMRRadar::OnClickScreenObject(int ObjectType, const char * sObjectId, POIN
 		{ TAG_CITEM_ASSHDG, TAG_ITEM_FUNCTION_ASSIGNED_HEADING_POPUP },
 	};
 
-	if (Button == BUTTON_LEFT) {
+	if (Button == BUTTON_LEFT && TagObjectLeftTypes[ObjectType]) {
+		int TagMenu = TagObjectLeftTypes[ObjectType];
 		CRadarTarget rt = GetPlugIn()->RadarTargetSelect(sObjectId);
+		GetPlugIn()->SetASELAircraft(GetPlugIn()->FlightPlanSelect(sObjectId));
+		StartTagFunction(rt.GetCallsign(), NULL, ObjectType, rt.GetCallsign(), NULL, TagMenu, Pt, Area);
+	}
+	else if (Button == BUTTON_LEFT) {
+		CRadarTarget rt = GetPlugIn()->RadarTargetSelect(sObjectId);
+
 		GetPlugIn()->SetASELAircraft(GetPlugIn()->FlightPlanSelect(sObjectId));
 		if (rt.GetCorrelatedFlightPlan().IsValid()) {
 			StartTagFunction(rt.GetCallsign(), NULL, TAG_ITEM_TYPE_CALLSIGN, rt.GetCallsign(), NULL, TAG_ITEM_FUNCTION_NO, Pt, Area);
