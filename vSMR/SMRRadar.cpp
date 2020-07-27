@@ -2783,35 +2783,35 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 	COLORREF qToolBarColor = RGB(127, 122, 122);
 
 	// Drawing the toolbar on the top
-	CRect ToolBarAreaTop(RadarArea.left, RadarArea.top, RadarArea.right, RadarArea.top + 20);
+	CRect ToolBarAreaTop(RadarArea.left, RadarArea.top, RadarArea.right, RadarArea.top + 20 + Toolbar_Offset);
 	dc.FillSolidRect(ToolBarAreaTop, qToolBarColor);
 
 	COLORREF oldTextColor = dc.SetTextColor(RGB(0, 0, 0));
 	CFont* old_font = dc.SelectObject(&menubar_font_left);
 
 	int offset = 2;
-	dc.TextOutA(ToolBarAreaTop.left + offset, ToolBarAreaTop.top + 4, getActiveAirport().c_str());
-	AddScreenObject(RIMCAS_ACTIVE_AIRPORT, "ActiveAirport", { ToolBarAreaTop.left + offset, ToolBarAreaTop.top + 4, ToolBarAreaTop.left + offset + dc.GetTextExtent(getActiveAirport().c_str()).cx, ToolBarAreaTop.top + 4 + dc.GetTextExtent(getActiveAirport().c_str()).cy }, false, "Active Airport");
+	dc.TextOutA(ToolBarAreaTop.left + offset, ToolBarAreaTop.top + 4 + Toolbar_Offset, getActiveAirport().c_str());
+	AddScreenObject(RIMCAS_ACTIVE_AIRPORT, "ActiveAirport", { ToolBarAreaTop.left + offset, ToolBarAreaTop.top + 4, ToolBarAreaTop.left + offset + dc.GetTextExtent(getActiveAirport().c_str()).cx, ToolBarAreaTop.top + 4 + Toolbar_Offset + dc.GetTextExtent(getActiveAirport().c_str()).cy }, false, "Active Airport");
 
 	offset += dc.GetTextExtent(getActiveAirport().c_str()).cx + 10;
-	dc.TextOutA(ToolBarAreaTop.left + offset, ToolBarAreaTop.top + 4, "Display");
-	AddScreenObject(RIMCAS_MENU, "DisplayMenu", { ToolBarAreaTop.left + offset, ToolBarAreaTop.top + 4, ToolBarAreaTop.left + offset + dc.GetTextExtent("Display").cx, ToolBarAreaTop.top + 4 + dc.GetTextExtent("Display").cy }, false, "Display menu");
+	dc.TextOutA(ToolBarAreaTop.left + offset, ToolBarAreaTop.top + 4 + Toolbar_Offset, "Display");
+	AddScreenObject(RIMCAS_MENU, "DisplayMenu", { ToolBarAreaTop.left + offset, ToolBarAreaTop.top + 4 + Toolbar_Offset, ToolBarAreaTop.left + offset + dc.GetTextExtent("Display").cx, ToolBarAreaTop.top + 4 + Toolbar_Offset + dc.GetTextExtent("Display").cy }, false, "Display menu");
 
 	offset += dc.GetTextExtent("Display").cx + 10;
-	dc.TextOutA(ToolBarAreaTop.left + offset, ToolBarAreaTop.top + 4, "Target");
-	AddScreenObject(RIMCAS_MENU, "TargetMenu", { ToolBarAreaTop.left + offset, ToolBarAreaTop.top + 4, ToolBarAreaTop.left + offset + dc.GetTextExtent("Target").cx, ToolBarAreaTop.top + 4 + dc.GetTextExtent("Target").cy }, false, "Target menu");
+	dc.TextOutA(ToolBarAreaTop.left + offset, ToolBarAreaTop.top + 4 + Toolbar_Offset, "Target");
+	AddScreenObject(RIMCAS_MENU, "TargetMenu", { ToolBarAreaTop.left + offset, ToolBarAreaTop.top + 4 + Toolbar_Offset, ToolBarAreaTop.left + offset + dc.GetTextExtent("Target").cx, ToolBarAreaTop.top + 4 + Toolbar_Offset + dc.GetTextExtent("Target").cy }, false, "Target menu");
 
 	offset += dc.GetTextExtent("Target").cx + 10;
-	dc.TextOutA(ToolBarAreaTop.left + offset, ToolBarAreaTop.top + 4, "Colours");
-	AddScreenObject(RIMCAS_MENU, "ColourMenu", { ToolBarAreaTop.left + offset, ToolBarAreaTop.top + 4, ToolBarAreaTop.left + offset + dc.GetTextExtent("Colour").cx, ToolBarAreaTop.top + 4 + dc.GetTextExtent("Colour").cy }, false, "Colour menu");
+	dc.TextOutA(ToolBarAreaTop.left + offset, ToolBarAreaTop.top + 4 + Toolbar_Offset, "Colours");
+	AddScreenObject(RIMCAS_MENU, "ColourMenu", { ToolBarAreaTop.left + offset, ToolBarAreaTop.top + 4 + Toolbar_Offset, ToolBarAreaTop.left + offset + dc.GetTextExtent("Colour").cx, ToolBarAreaTop.top + 4 + Toolbar_Offset + dc.GetTextExtent("Colour").cy }, false, "Colour menu");
 
 	offset += dc.GetTextExtent("Colours").cx + 10;
-	dc.TextOutA(ToolBarAreaTop.left + offset, ToolBarAreaTop.top + 4, "Alerts");
-	AddScreenObject(RIMCAS_MENU, "RIMCASMenu", { ToolBarAreaTop.left + offset, ToolBarAreaTop.top + 4, ToolBarAreaTop.left + offset + dc.GetTextExtent("Alerts").cx, ToolBarAreaTop.top + 4 + +dc.GetTextExtent("Alerts").cy }, false, "RIMCAS menu");
+	dc.TextOutA(ToolBarAreaTop.left + offset, ToolBarAreaTop.top + 4 + Toolbar_Offset, "Alerts");
+	AddScreenObject(RIMCAS_MENU, "RIMCASMenu", { ToolBarAreaTop.left + offset, ToolBarAreaTop.top + 4 + Toolbar_Offset, ToolBarAreaTop.left + offset + dc.GetTextExtent("Alerts").cx, ToolBarAreaTop.top + 4 + Toolbar_Offset + +dc.GetTextExtent("Alerts").cy }, false, "RIMCAS menu");
 
 	offset += dc.GetTextExtent("Alerts").cx + 10;
-	dc.TextOutA(ToolBarAreaTop.left + offset, ToolBarAreaTop.top + 4, "/");
-	CRect barDistanceRect = { ToolBarAreaTop.left + offset - 2, ToolBarAreaTop.top + 4, ToolBarAreaTop.left + offset + dc.GetTextExtent("/").cx, ToolBarAreaTop.top + 4 + +dc.GetTextExtent("/").cy };
+	dc.TextOutA(ToolBarAreaTop.left + offset, ToolBarAreaTop.top + 4 + Toolbar_Offset, "/");
+	CRect barDistanceRect = { ToolBarAreaTop.left + offset - 2, ToolBarAreaTop.top + 4 + Toolbar_Offset, ToolBarAreaTop.left + offset + dc.GetTextExtent("/").cx, ToolBarAreaTop.top + 4 + Toolbar_Offset + dc.GetTextExtent("/").cy };
 	if (DistanceToolActive)
 	{
 		graphics.DrawRectangle(&Pen(Color::White), CopyRect(barDistanceRect));
