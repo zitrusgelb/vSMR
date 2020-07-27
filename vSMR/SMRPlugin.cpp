@@ -578,14 +578,6 @@ void CSMRPlugin::OnFunctionCall(int FunctionId, const char * sItemString, POINT 
 					toReturn += "ft";
 				}
 			}
-			else {
-				CSMRRadar* radarScreen = RadarScreensOpened[0];
-				if (radarScreen->CurrentConfig != nullptr) {
-					if (radarScreen->CurrentConfig->isSidInitClbAvail(FlightPlan.GetFlightPlanData().GetSidName(), FlightPlan.GetFlightPlanData().GetOrigin())) {
-						int a = 1;
-					}
-				}
-			}
 			dia.m_Climb = toReturn.c_str();
 
 			if (dia.DoModal() != IDOK)
