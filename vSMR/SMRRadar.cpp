@@ -112,7 +112,7 @@ CSMRRadar::~CSMRRadar()
 {
 	Logger::info(string(__FUNCSIG__));
 	try {
-		this->OnAsrContentToBeSaved();
+		//this->OnAsrContentToBeSaved();
 		//this->EuroScopePlugInExitCustom();
 	}
 	catch (exception &e) {
@@ -1464,7 +1464,8 @@ map<string, string> CSMRRadar::GenerateTagData(CRadarTarget rt, CFlightPlan fp, 
 	// ----- GSTAT -------
 	string gstat = "STS";
 	if (fp.IsValid() && isAcCorrelated) {
-		gstat = fp.GetGroundState();
+		if (strlen(fp.GetGroundState()) != 0)
+			gstat = fp.GetGroundState();
 	}
 
 	// ----- Generating the replacing map -----
@@ -2168,6 +2169,7 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 		TagHeight = TagHeight - 2;
 
 		Color definedBackgroundColor = CurrentConfig->getConfigColor(LabelsSettings[Utils::getEnumString(ColorTagType).c_str()]["background_color"]);
+		
 		if (ColorTagType == TagTypes::Departure) {
 			if (!TagReplacingMap["asid"].empty() && isActiveAirport(TagReplacingMap["origin"].c_str()) && CurrentConfig->isSidColorAvail(TagReplacingMap["asid"], TagReplacingMap["origin"].c_str())) {
 				definedBackgroundColor = CurrentConfig->getSidColor(TagReplacingMap["asid"], TagReplacingMap["origin"].c_str());
