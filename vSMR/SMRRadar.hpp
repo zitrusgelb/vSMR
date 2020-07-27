@@ -103,6 +103,7 @@ public:
 	bool ColorSettingsDay = true;
 
 	bool isLVP = false;
+	int sectorIndicator = 0;
 
 	map<string, RECT> TimePopupAreas;
 

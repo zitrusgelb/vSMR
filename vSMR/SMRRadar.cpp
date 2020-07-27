@@ -752,6 +752,7 @@ void CSMRRadar::OnClickScreenObject(int ObjectType, const char * sObjectId, POIN
 			}
 
 		}
+	}
 
 	}
 
@@ -893,8 +894,16 @@ void CSMRRadar::OnClickScreenObject(int ObjectType, const char * sObjectId, POIN
 		}
 
 	}
+	else if (ObjectType == TAG_CITEM_CONTROLLER && Button == BUTTON_MIDDLE) {
+		if (sectorIndicator >= 1)
+			sectorIndicator = 0;
+		else
+			sectorIndicator++;
+	}
+
 	map <const int, const int> TagObjectMiddleTypes = {
 		{ TAG_CITEM_CALLSIGN, TAG_ITEM_FUNCTION_COMMUNICATION_POPUP },
+		{ TAG_CITEM_SCRATCH, TAG_ITEM_FUNCTION_EDIT_SCRATCH_PAD },
 	};
 
 	map <const int, const int> TagObjectRightTypes = {
@@ -904,7 +913,8 @@ void CSMRRadar::OnClickScreenObject(int ObjectType, const char * sObjectId, POIN
 		{ TAG_CITEM_SID, TAG_ITEM_FUNCTION_ASSIGNED_SID },
 		{ TAG_CITEM_GATE, TAG_ITEM_FUNCTION_EDIT_SCRATCH_PAD },
 		{ TAG_CITEM_GROUNDSTATUS, TAG_ITEM_FUNCTION_SET_GROUND_STATUS },
-		{ TAG_CITEM_SCRATCH, TAG_ITEM_FUNCTION_EDIT_SCRATCH_PAD }
+		{ TAG_CITEM_SCRATCH, TAG_ITEM_FUNCTION_EDIT_SCRATCH_PAD },
+		{ TAG_CITEM_CONTROLLER, TAG_ITEM_FUNCTION_ASSIGNED_NEXT_CONTROLLER },
 	};
 
 	if (Button == BUTTON_LEFT) {
@@ -1388,6 +1398,7 @@ map<string, string> CSMRRadar::GenerateTagData(CRadarTarget rt, CFlightPlan fp, 
 	// origin: origin aerodrome
 	// dest: destination aerodrome
 	// scratch: Scratchpad
+	// controller: Current Controller
 	// ----
 
 	bool IsPrimary = !rt.GetPosition().GetTransponderC();
@@ -1584,6 +1595,33 @@ map<string, string> CSMRRadar::GenerateTagData(CRadarTarget rt, CFlightPlan fp, 
 			gstat = fp.GetGroundState();
 	}
 
+	// ----- Current Controller -------
+	string controller = fp.GetTrackingControllerId();
+	string controller_next = fp.GetCoordinatedNextController();
+
+	if (controller.length() == 0 && sectorIndicator == 0) {
+		controller = "*";
+	}
+	else if (sectorIndicator == 1) {
+		if (controller_next.length() == 0 || controller_next == "UNICOM")
+			controller = "-";
+		else {
+			string next = Plugin->ControllerSelect(fp.GetCoordinatedNextController()).GetPositionId();
+			controller = "+" + next;
+		}
+	}
+	else if (sectorIndicator == 2){
+		if (controller_next.length() == 0 || controller_next == "UNICOM")
+			controller = "-122.80";
+		else {
+			char tmp[10] = {};
+			double tt1 = Plugin->ControllerSelect(fp.GetCoordinatedNextController()).GetPrimaryFrequency();
+			_gcvt_s(tmp, 10, Plugin->ControllerSelect(fp.GetCoordinatedNextController()).GetPrimaryFrequency(), 6);
+			string next = tmp;
+			controller = "+" + next;
+		}
+	}
+
 	// ----- Generating the replacing map -----
 	map<string, string> TagReplacingMap;
 
@@ -1642,6 +1680,7 @@ map<string, string> CSMRRadar::GenerateTagData(CRadarTarget rt, CFlightPlan fp, 
 	TagReplacingMap["origin"] = origin;
 	TagReplacingMap["dest"] = dest;
 	TagReplacingMap["groundstatus"] = gstat;
+	TagReplacingMap["controller"] = controller;
 
 	return TagReplacingMap;
 }
@@ -2231,6 +2270,7 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 		TagClickableMap[TagReplacingMap["dest"]] = TAG_CITEM_FPBOX;
 		TagClickableMap[TagReplacingMap["systemid"]] = TAG_CITEM_NO;
 		TagClickableMap[TagReplacingMap["groundstatus"]] = TAG_CITEM_GROUNDSTATUS;
+		TagClickableMap[TagReplacingMap["controller"]] = TAG_CITEM_CONTROLLER;
 
 		//
 		// ----- Now the hard part, drawing (using gdi+) -------
