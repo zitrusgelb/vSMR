@@ -2461,6 +2461,12 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 		SolidBrush ArrivalColor(ColorManager->get_corrected_color("label",
 			CurrentConfig->getConfigColor(LabelsSettings["arrival_color"])));
 
+		SolidBrush ContrAssumedColor(ColorManager->get_corrected_color("label",
+			CurrentConfig->getConfigColor(LabelsSettings["controller_colors"]["assumed"])));
+		SolidBrush ContrTrToColor(ColorManager->get_corrected_color("label",
+			CurrentConfig->getConfigColor(LabelsSettings["controller_colors"]["transfer_to_me"])));
+		SolidBrush ContrTrFromColor(ColorManager->get_corrected_color("label",
+			CurrentConfig->getConfigColor(LabelsSettings["controller_colors"]["transfer_from_me"])));
 
 		// Drawing the leader line
 		RECT TagBackRectData = TagBackgroundRect;
@@ -2552,6 +2558,21 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 				// Hide empty clickable Scratchpad content
 				else if (strcmp(element.c_str(), EmptyScratchpad.c_str()) == 0)
 					color->SetColor(TagBackgroundColor);
+
+				// Tag colors (colours the Controller)
+				else if (element.length() > 0 && strcmp(element.c_str(), TagReplacingMap["controller"].c_str()) == 0) {
+					switch (fp.GetState()) {
+					case FLIGHT_PLAN_STATE_ASSUMED:
+						color = &ContrAssumedColor;
+						break;
+					case FLIGHT_PLAN_STATE_TRANSFER_TO_ME_INITIATED:
+						color = &ContrTrToColor;
+						break;
+					case FLIGHT_PLAN_STATE_TRANSFER_FROM_ME_INITIATED:
+						color = &ContrTrFromColor;
+						break;
+					}
+				}
 
 				RectF mRect(0, 0, 0, 0);
 
