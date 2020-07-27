@@ -2442,6 +2442,11 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 			Pen pw(ColorManager->get_corrected_color("label", Color::White));
 			graphics.DrawRectangle(&pw, CopyRect(TagBackgroundRect));
 		}
+		// Border, when selected
+		else if (strcmp(GetPlugIn()->RadarTargetSelectASEL().GetCallsign(), rt.GetCallsign()) == 0) {
+			Pen pw(ColorManager->get_corrected_color("label", Color::DarkGray));
+			graphics.DrawRectangle(&pw, CopyRect(TagBackgroundRect));
+		}
 
 		// Drawing the tag text
 
