@@ -666,11 +666,11 @@ void CSMRPlugin::OnTimer(int Counter)
 CRadarScreen * CSMRPlugin::OnRadarScreenCreated(const char * sDisplayName, bool NeedRadarContent, bool GeoReferenced, bool CanBeSaved, bool CanBeCreated)
 {
 	Logger::info(string(__FUNCSIG__));
-	if (!strcmp(sDisplayName, MY_PLUGIN_VIEW_AVISO)) {
+	//if (!strcmp(sDisplayName, MY_PLUGIN_VIEW_AVISO)) {
 		CSMRRadar* rd = new CSMRRadar();
 		RadarScreensOpened.push_back(rd);
 		return rd;
-	}
+	//}
 
 	return NULL;
 }
