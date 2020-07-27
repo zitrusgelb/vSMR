@@ -294,6 +294,8 @@ public:
 
 	virtual void OnFlightPlanDisconnect(CFlightPlan FlightPlan);
 
+	//---isVisible---------------------------------------------
+
 	virtual bool isVisible(CRadarTarget rt)
 	{
 		CRadarTargetPositionData RtPos = rt.GetPosition();
@@ -301,8 +303,14 @@ public:
 		int altitudeFilter_above = CurrentConfig->getActiveProfile()["filters"]["hide_above_alt"].GetInt();
 		int altitudeFilter_below = CurrentConfig->getActiveProfile()["filters"]["hide_below_alt"].GetInt();
 		int speedFilter = CurrentConfig->getActiveProfile()["filters"]["hide_above_spd"].GetInt();
+		bool show_on_rwy = CurrentConfig->getActiveProfile()["filters"]["show_on_rwy"].GetBool();
 		bool isAcDisplayed = false;
 
+		if (show_on_rwy && RimcasInstance->isAcOnRunway(rt.GetCallsign())) {
+			return true;
+		}
+		else if (rt.GetCorrelatedFlightPlan().GetTrackingControllerIsMe())
+			return true;
 
 		for (string airport : getActiveAirports()) {
 			if (AirportPositions[airport].DistanceTo(RtPos.GetPosition()) <= radarRange) {
