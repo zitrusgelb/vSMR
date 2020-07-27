@@ -388,6 +388,330 @@
         }
     },
     "maps": {
+         "EDDH": {
+            "sids": [
+               {
+                  "names": [
+                     "BASUM2C",
+                     "ELSOB1C",
+                     "IDEKO6C",
+                     "WSN3C"
+                  ],
+                  "comment": "Default SIDS 05 West",
+                  "comment2": "(Blue)",
+                  "init_clb": 5000,
+                  "color": {
+                     "r": 40,
+                     "g": 50,
+                     "b": 200,
+                     "a": 200
+                  }
+               },
+               {
+                  "names": [
+                     "AMLUH9C",
+                     "EKERN9C",
+                     "LUGEG1C",
+                     "RAMAR4C"
+                  ],
+                  "comment": "Default SIDS 05 East",
+                  "comment2": "(Light Blue)",
+                  "init_clb": 5000,
+                  "color": {
+                     "r": 80,
+                     "g": 100,
+                     "b": 255,
+                     "a": 200
+                  }
+               },
+               {
+                  "names": [
+                     "BASUM5D",
+                     "ELSOB1D",
+                     "IDEKO7D",
+                     "WSN2D"
+                  ],
+                  "comment": "Default SIDS 15 West",
+                  "comment2": "(Blue)",
+                  "init_clb": 5000,
+                  "color": {
+                     "r": 40,
+                     "g": 50,
+                     "b": 200,
+                     "a": 200
+                  }
+               },
+               {
+                  "names": [
+                     "AMLUH9D",
+                     "EKERN1D",
+                     "LUGEG1D",
+                     "RAMAR4D"
+                  ],
+                  "comment": "Default SIDS 15 East",
+                  "comment2": "(Light Blue)",
+                  "init_clb": 5000,
+                  "color": {
+                     "r": 80,
+                     "g": 100,
+                     "b": 255,
+                     "a": 200
+                  }
+               },
+               {
+                  "names": [
+                     "BASUM4B",
+                     "ELSOB1B",
+                     "IDEKO6B",
+                     "WSN2B"
+                  ],
+                  "comment": "Default SIDS 23 West",
+                  "comment2": "(Blue)",
+                  "init_clb": 5000,
+                  "color": {
+                     "r": 40,
+                     "g": 50,
+                     "b": 200,
+                     "a": 200
+                  }
+               },
+               {
+                  "names": [
+                     "AMLUH1B",
+                     "EKERN9B",
+                     "LUGEG1B",
+                     "RAMAR4B"
+                  ],
+                  "comment": "Default SIDS 23 East",
+                  "comment2": "(Light Blue)",
+                  "init_clb": 5000,
+                  "color": {
+                     "r": 80,
+                     "g": 100,
+                     "b": 255,
+                     "a": 200
+                  }
+               },
+               {
+                  "names": [
+                     "BASUM2G",
+                     "ELSOB1G",
+                     "IDEKO5G",
+                     "WSN3G"
+                  ],
+                  "comment": "Default SIDS 33 West",
+                  "comment2": "(Blue)",
+                  "init_clb": 5000,
+                  "color": {
+                     "r": 40,
+                     "g": 50,
+                     "b": 200,
+                     "a": 200
+                  }
+               },
+               {
+                  "names": [
+                     "AMLUH9G",
+                     "EKERN9G",
+                     "LUGEG1G",
+                     "RAMAR3G"
+                  ],
+                  "comment": "Default SIDS 33 East",
+                  "comment2": "(Light Blue)",
+                  "init_clb": 5000,
+                  "color": {
+                     "r": 80,
+                     "g": 100,
+                     "b": 255,
+                     "a": 200
+                  }
+               },
+               {
+                  "names": [
+                     "VCT"
+                  ],
+                  "comment": "Vectored",
+                  "comment2": "(Yellow)",
+                  "color": {
+                     "r": 220,
+                     "g": 175,
+                     "b": 80,
+                     "a": 200
+                  }
+               },
+               {
+                  "names": [
+                     "xxxx"
+                  ],
+                  "comment": "Example",
+                  "comment2": "(Orange accent)",
+                  "init_clb": 5000,
+                  "color": {
+                     "r": 220,
+                     "g": 175,
+                     "b": 80,
+                     "a": 200
+                  }
+               },
+               {
+                  "names": [
+                     "xxxx"
+                  ],
+                  "comment": "Example",
+                  "comment2": "(Light Blue)",
+                  "init_clb": 5000,
+                  "color": {
+                     "r": 80,
+                     "g": 150,
+                     "b": 255,
+                     "a": 200
+                  }
+               },
+               {
+                  "names": [
+                     "xxxx"
+                  ],
+                  "comment": "Example",
+                  "comment2": "(Cyan)",
+                  "init_clb": 5000,
+                  "color": {
+                     "r": 80,
+                     "g": 150,
+                     "b": 255,
+                     "a": 200
+                  }
+               },
+               {
+                  "names": [
+                     "xxxx"
+                  ],
+                  "comment": "Example",
+                  "comment2": "(Yellow)",
+                  "init_clb": 5000,
+                  "color": {
+                     "r": 220,
+                     "g": 175,
+                     "b": 80,
+                     "a": 200
+                  }
+               },
+               {
+                  "names": [
+                     "xxxx"
+                  ],
+                  "comment": "Example",
+                  "comment2": "(Mint Green)",
+                  "init_clb": 5000,
+                  "color": {
+                     "r": 150,
+                     "g": 255,
+                     "b": 150,
+                     "a": 200
+                  }
+               },
+               {
+                  "names": [
+                     "xxxx"
+                  ],
+                  "comment": "Example",
+                  "comment2": "(Brown)",
+                  "init_clb": 5000,
+                  "color": {
+                     "r": 160,
+                     "g": 90,
+                     "b": 30,
+                     "a": 200
+                  }
+               }
+            ]
+         },
+         "EDDW": {
+            "sids": [
+               {
+                  "names": [
+                     "BASUM5Q",
+                     "ERLAD4Q",
+                     "GESTO8M",
+                     "NIE5Q",
+                     "EEL5Q",
+                     "WSN1M"
+                  ],
+                  "comment": "Default SIDS 09",
+                  "comment2": "(Blue)",
+                  "init_clb": 4000,
+                  "color": {
+                     "r": 40,
+                     "g": 50,
+                     "b": 200,
+                     "a": 200
+                  }
+               },
+               {
+                  "names": [
+                     "EEL5E"
+                  ],
+                  "comment": "Kurz SIDS 09",
+                  "comment2": "(Light Blue)",
+                  "init_clb": 4000,
+                  "color": {
+                     "r": 80,
+                     "g": 150,
+                     "b": 255,
+                     "a": 200
+                  }
+               },
+               {
+                  "names": [
+                     "BASUM8K",
+                     "ERLAD2K",
+                     "GESTO5K",
+                     "NIE7K",
+                     "EEL9K",
+                     "WSR1K"
+                  ],
+                  "comment": "Default SIDS 27",
+                  "comment2": "(Blue)",
+                  "init_clb": 4000,
+                  "color": {
+                     "r": 40,
+                     "g": 50,
+                     "b": 200,
+                     "a": 200
+                  }
+               },
+               {
+                  "names": [
+                     "BASUM4A",
+                     "ERLAD2Z",
+                     "GESTO4A",
+                     "NIE4Z",
+                     "EEL9W"
+                  ],
+                  "comment": "Kurz SIDS 27",
+                  "comment2": "(Light Blue)",
+                  "init_clb": 4000,
+                  "color": {
+                     "r": 80,
+                     "g": 150,
+                     "b": 255,
+                     "a": 200
+                  }
+               },
+               {
+                  "names": [
+                     "VCT"
+                  ],
+                  "comment": "Vectored",
+                  "comment2": "(Yellow)",
+                  "color": {
+                     "r": 220,
+                     "g": 175,
+                     "b": 80,
+                     "a": 200
+                  }
+               }
+            ]
+         },
         "EGKK": {
           "sids": [{
                 "names": ["CLN1M", "CLN9M", "CLN5P", "DVR9M", "DVR2P", "LAM5M", "LAM5P", "BIG8M", "BIG3P", "#SAM2M", "SAM3P", "SFD5M", "SFD9P", "BOGNA1M", "NOVMA1M", "DVR1M", "WIZAD4M", "LAM6M", "TIGER3M", "DAGGA1M"],
