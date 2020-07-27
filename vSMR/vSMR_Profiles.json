@@ -1,5 +1,9 @@
-[{
+[
+   {
     "name": "Default",
+      "icao_airlines": "C:\\Users\\xxx\\Documents\\EuroScope\\DATAFILES\\ICAO_Airlines.txt",
+      "icao_aircraft": "C:\\Users\\xxx\\Documents\\EuroScope\\DATAFILES\\ICAO_Aircraft.txt",
+      "toolbar_offset": 16,
     "font": {
         "font_name": "EuroScope",
         "weight": "Regular",
