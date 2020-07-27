@@ -551,6 +551,8 @@ void CInsetWindow::render(HDC hDC, CSMRRadar * radar_screen, Graphics* gdi, POIN
 
 			SolidBrush FontColor(radar_screen->ColorManager->get_corrected_color("label",
 				radar_screen->CurrentConfig->getConfigColor(LabelsSettings[Utils::getEnumString(ColorTagType).c_str()]["text_color"])));
+			SolidBrush FontColorUnrelated(radar_screen->ColorManager->get_corrected_color("label",
+				radar_screen->CurrentConfig->getConfigColor(LabelsSettings[Utils::getEnumString(ColorTagType).c_str()]["text_color_unrelated"])));
 			SolidBrush SquawkErrorColor(radar_screen->ColorManager->get_corrected_color("label",
 				radar_screen->CurrentConfig->getConfigColor(LabelsSettings["squawk_error_color"])));
 			SolidBrush RimcasTextColor(radar_screen->CurrentConfig->getConfigColor(radar_screen->CurrentConfig->getActiveProfile()["rimcas"]["alert_text_color"]));

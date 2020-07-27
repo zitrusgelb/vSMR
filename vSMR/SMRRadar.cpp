@@ -2254,8 +2254,8 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 			TagCenter.y = long(acPosPix.y + float(length * sin(DegToRad(TagAngles[rt.GetCallsign()]))));
 		}
 
-		TagTypes TagType = TagTypes::Departure;		
-		TagTypes ColorTagType = TagTypes::Departure;
+		TagTypes TagType = TagTypes::Uncorrelated;
+		TagTypes ColorTagType = TagTypes::Uncorrelated;
 
 		if (fp.IsValid() && isActiveAirport(fp.GetFlightPlanData().GetDestination())) {
 			// Circuit aircraft are treated as departures; not arrivals
@@ -2436,6 +2436,8 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 
 		SolidBrush FontColor(ColorManager->get_corrected_color("label",
 			CurrentConfig->getConfigColor(LabelsSettings[Utils::getEnumString(ColorTagType).c_str()]["text_color"])));
+		SolidBrush FontColorUnrelated(ColorManager->get_corrected_color("label",
+			CurrentConfig->getConfigColor(LabelsSettings[Utils::getEnumString(ColorTagType).c_str()]["text_color_unrelated"])));
 		SolidBrush SquawkErrorColor(ColorManager->get_corrected_color("label",
 			CurrentConfig->getConfigColor(LabelsSettings["squawk_error_color"])));
 		SolidBrush RimcasTextColor(CurrentConfig->getConfigColor(CurrentConfig->getActiveProfile()["rimcas"]["alert_text_color"]));
