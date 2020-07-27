@@ -50,100 +50,163 @@
     },
     "labels": {
         "auto_deconfliction": true,
-        "leader_line_length": 50,
+         "leader_line_length": 25,
         "use_aspeed_for_gate": false,
         "squawk_error_color": {
             "r": 255,
-            "g": 0,
+            "g": 255,
             "b": 0
         },
         "groundstatus_colors": {
             "push": {
-                "r": 227,
-                "g": 121,
+               "r": 290,
+               "g": 190,
                 "b": 0
             },
             "taxi": {
-                "r": 255,
-                "g": 166,
-                "b": 0
+               "r": 145,
+               "g": 255,
+               "b": 255
             },
             "depa": {
                 "r": 255,
-                "g": 156,
-                "b": 64
+               "g": 80,
+               "b": 200
+            }
+         },
+         "arrival_color": {
+            "r": 110,
+            "g": 200,
+            "b": 80
+         },
+         "controller_colors": {
+            "assumed": {
+               "r": 255,
+               "g": 255,
+               "b": 255
+            },
+            "transfer_to_me": {
+                "r": 255,
+               "g": 128,
+               "b": 192
+            },
+            "transfer_from_me": {
+               "r": 128,
+               "g": 255,
+               "b": 128
             }
         },
         "departure": {
             "definition": [
-                ["callsign", "dest", "groundstatus"],
-                ["sctype", "asid", "deprwy"]
+               [
+                  "callsign",
+                  "ssr",
+                  "controller"
+               ],
+               [
+                  "sctype",
+                  "seprwy",
+                  "ssid"
+               ],
+               [
+                  "scratch"
+               ]
             ],
             "background_color": {
-                "r": 33,
-                "g": 115,
-                "b": 196,
-                "a": 255
+               "r": 40,
+               "g": 50,
+               "b": 200,
+               "a": 200
             },
             "background_color_on_runway": {
                 "r": 40,
                 "g": 50,
                 "b": 200,
-                "a": 255
+               "a": 200
             },
             "nofpl_color": {
-                "r": 170,
-                "g": 50,
-                "b": 50,
-                "a": 255
+               "r": 120,
+               "g": 80,
+               "b": 80,
+               "a": 200
             },
             "nosid_color": {
                 "r": 104,
                 "g": 50,
                 "b": 168,
-                "a": 255
+               "a": 200
             },
             "text_color": {
                 "r": 255,
                 "g": 255,
                 "b": 255
+            },
+            "text_color_unrelated": {
+               "r": 240,
+               "g": 240,
+               "b": 240
             }
         },
         "arrival": {
             "definition": [
-                ["callsign", "srvrwy"],
-                ["gate", "actype"]
+               [
+                  "callsign",
+                  "controller"
+               ],
+               [
+                  "sate",
+                  "actype"
+               ],
+               [
+                  "scratch"
+               ]
             ],
             "background_color": {
                 "r": 170,
                 "g": 50,
                 "b": 50,
-                "a": 255
+               "a": 200
             },
             "background_color_on_runway": {
                 "r": 170,
                 "g": 50,
                 "b": 50,
-                "a": 255
+               "a": 200
             },
             "text_color": {
                 "r": 255,
                 "g": 255,
                 "b": 255
+            },
+            "text_color_unrelated": {
+               "r": 240,
+               "g": 240,
+               "b": 240
             }
         },
         "airborne": {
-            "use_departure_arrival_coloring": true,
+            "use_departure_arrival_coloring": false,
             "definition": [
-                ["callsign", "dep"],
-                ["gs", "tendency", "flightlevel"],
-                ["actype", "dest"]
+               [
+                  "callsign",
+                  "gs",
+                  "controller"
+               ],
+               [
+                  "flightlevel",
+                  "tendency"
+               ],
+               [
+                  "actype",
+                  "asshdg",
+                  "scratch"
+               ]
             ],
             "background_color": {
                 "r": 0,
                 "g": 0,
                 "b": 0,
-                "a": 255
+               "a": 0
             },
             "background_color_on_runway": {
                 "r": 0,
@@ -155,48 +218,120 @@
                 "r": 255,
                 "g": 255,
                 "b": 255
+            },
+            "text_color_unrelated": {
+               "r": 240,
+               "g": 240,
+               "b": 240
             }
         },
         "uncorrelated": {
             "definition": [
-                ["systemid"]
+               [
+                  "callsign",
+                  "controller"
+               ]
             ],
             "background_color": {
-                "r": 150,
-                "g": 22,
-                "b": 135,
-                "a": 255
+               "r": 120,
+               "g": 90,
+               "b": 110,
+               "a": 200
             },
             "background_color_on_runway": {
-                "r": 150,
-                "g": 22,
-                "b": 135,
-                "a": 50
+               "r": 0,
+               "g": 0,
+               "b": 0,
+               "a": 0
+            },
+            "text_color": {
+               "r": 255,
+               "g": 255,
+               "b": 255
+            },
+            "text_color_unrelated": {
+               "r": 240,
+               "g": 240,
+               "b": 240
+            }
+         },
+         "vfr": {
+            "definition": [
+               [
+                  "callsign",
+                  "controller"
+               ],
+               [
+                  "sctype",
+                  "seprwy",
+                  "scratch"
+               ]
+            ],
+            "background_color": {
+               "r": 0,
+               "g": 120,
+               "b": 0,
+               "a": 200
+            },
+            "background_color_on_runway": {
+               "r": 0,
+               "g": 120,
+               "b": 0,
+               "a": 240
+            },
+            "nofpl_color": {
+               "r": 120,
+               "g": 80,
+               "b": 80,
+               "a": 200
+            },
+            "nosid_color": {
+               "r": 104,
+               "g": 50,
+               "b": 168,
+               "a": 240
             },
             "text_color": {
                 "r": 255,
                 "g": 255,
                 "b": 255
+            },
+            "text_color_unrelated": {
+               "r": 240,
+               "g": 240,
+               "b": 240
             }
         }
     },
     "rimcas": {
         "rimcas_label_only": true,
         "use_red_symbol_for_emergencies": true,
-        "timer": [60, 45, 30, 15, 0],
-        "timer_lvp": [120, 90, 60, 30, 0],
+         "timer": [
+            60,
+            45,
+            30,
+            15,
+            0
+         ],
+         "timer_lvp": [
+            120,
+            90,
+            60,
+            30,
+            0
+         ],
         "rimcas_stage_two_speed_threshold": 25,
         "background_color_stage_one": {
             "r": 160,
             "g": 90,
             "b": 30,
-            "a": 255
+            "a": 200
         },
         "background_color_stage_two": {
             "r": 150,
             "g": 0,
             "b": 0,
-            "a": 255
+            "a": 200
         },
         "alert_text_color": {
           "r": 255,
@@ -210,25 +345,25 @@
             "r": 255,
             "g": 242,
             "b": 73,
-            "a": 255
+            "a": 220
         },
         "history_one_color": {
             "r": 0,
             "g": 255,
             "b": 255,
-            "a": 255
+            "a": 200
         },
         "history_two_color": {
             "r": 0,
             "g": 219,
             "b": 219,
-            "a": 255
+            "a": 200
         },
         "history_three_color": {
             "r": 0,
             "g": 183,
             "b": 183,
-            "a": 255
+            "a": 200
         }
     },
     "approach_insets": {
