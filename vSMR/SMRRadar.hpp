@@ -302,7 +302,14 @@ public:
 		int speedFilter = CurrentConfig->getActiveProfile()["filters"]["hide_above_spd"].GetInt();
 		bool isAcDisplayed = true;
 
-		if (AirportPositions[getActiveAirport()].DistanceTo(RtPos.GetPosition()) > radarRange)
+
+		for (string airport : getActiveAirports()) {
+			if (AirportPositions[airport].DistanceTo(RtPos.GetPosition()) <= radarRange) {
+				isAcDisplayed = true;
+				break;
+			}
+		}
+
 			isAcDisplayed = false;
 
 		if (altitudeFilter != 0) {

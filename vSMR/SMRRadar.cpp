@@ -2790,10 +2790,10 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 	CFont* old_font = dc.SelectObject(&menubar_font_left);
 
 	int offset = 2;
-	dc.TextOutA(ToolBarAreaTop.left + offset, ToolBarAreaTop.top + 4 + Toolbar_Offset, getActiveAirport().c_str());
-	AddScreenObject(RIMCAS_ACTIVE_AIRPORT, "ActiveAirport", { ToolBarAreaTop.left + offset, ToolBarAreaTop.top + 4, ToolBarAreaTop.left + offset + dc.GetTextExtent(getActiveAirport().c_str()).cx, ToolBarAreaTop.top + 4 + Toolbar_Offset + dc.GetTextExtent(getActiveAirport().c_str()).cy }, false, "Active Airport");
+	dc.TextOutA(ToolBarAreaTop.left + offset, ToolBarAreaTop.top + 4 + Toolbar_Offset, boost::algorithm::join(getActiveAirports(), " ").c_str());
+	AddScreenObject(RIMCAS_ACTIVE_AIRPORT, "ActiveAirport", { ToolBarAreaTop.left + offset, ToolBarAreaTop.top + 4 + Toolbar_Offset, ToolBarAreaTop.left + offset + dc.GetTextExtent(boost::algorithm::join(getActiveAirports(), " ").c_str()).cx, ToolBarAreaTop.top + 4 + Toolbar_Offset + dc.GetTextExtent(boost::algorithm::join(getActiveAirports(), " ").c_str()).cy }, false, "Active Airport");
 
-	offset += dc.GetTextExtent(getActiveAirport().c_str()).cx + 10;
+	offset += dc.GetTextExtent(boost::algorithm::join(getActiveAirports(), " ").c_str()).cx + 10;
 	dc.TextOutA(ToolBarAreaTop.left + offset, ToolBarAreaTop.top + 4 + Toolbar_Offset, "Display");
 	AddScreenObject(RIMCAS_MENU, "DisplayMenu", { ToolBarAreaTop.left + offset, ToolBarAreaTop.top + 4 + Toolbar_Offset, ToolBarAreaTop.left + offset + dc.GetTextExtent("Display").cx, ToolBarAreaTop.top + 4 + Toolbar_Offset + dc.GetTextExtent("Display").cy }, false, "Display menu");
 
