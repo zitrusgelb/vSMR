@@ -286,7 +286,11 @@ const int TAG_CITEM_MANUALCORRELATE = 1915;
 const int TAG_CITEM_SID = 1916;
 const int TAG_CITEM_GROUNDSTATUS = 1917;
 const int TAG_CITEM_SCRATCH = 1918;
-const int FUNC_MANUAL_CALLSIGN = 2000;
+const int TAG_CITEM_CONTROLLER = 1919;
+const int TAG_CITEM_SSR = 1920;
+const int TAG_CITEM_GS = 1921;
+const int TAG_CITEM_FL = 1922;
+const int TAG_CITEM_ASSHDG = 1923;
 
 // RIMCAS Menus & shit
 const int RIMCAS_CLOSE = EuroScopePlugIn::TAG_ITEM_FUNCTION_NO;
