@@ -191,7 +191,7 @@ public:
 
 	//---GenerateTagData--------------------------------------------
 
-	static map<string, string> GenerateTagData(CRadarTarget Rt, CFlightPlan fp, bool isAcCorrelated, bool isProMode, int TransitionAltitude, bool useSpeedForGates, string ActiveAirport);
+	static map<string, string> GenerateTagData(CPlugIn* Plugin, CRadarTarget Rt, CFlightPlan fp, bool isAcCorrelated, bool isProMode, int TransitionAltitude, bool useSpeedForGates, int sectorIndicator, string ActiveAirport);
 
 	//---IsCorrelatedFuncs---------------------------------------------
 
