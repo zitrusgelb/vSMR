@@ -298,9 +298,10 @@ public:
 	{
 		CRadarTargetPositionData RtPos = rt.GetPosition();
 		int radarRange = CurrentConfig->getActiveProfile()["filters"]["radar_range_nm"].GetInt();
-		int altitudeFilter = CurrentConfig->getActiveProfile()["filters"]["hide_above_alt"].GetInt();
+		int altitudeFilter_above = CurrentConfig->getActiveProfile()["filters"]["hide_above_alt"].GetInt();
+		int altitudeFilter_below = CurrentConfig->getActiveProfile()["filters"]["hide_below_alt"].GetInt();
 		int speedFilter = CurrentConfig->getActiveProfile()["filters"]["hide_above_spd"].GetInt();
-		bool isAcDisplayed = true;
+		bool isAcDisplayed = false;
 
 
 		for (string airport : getActiveAirports()) {
@@ -310,10 +311,12 @@ public:
 			}
 		}
 
+		if (altitudeFilter_above != 0) {
+			if (RtPos.GetPressureAltitude() > altitudeFilter_above)
 			isAcDisplayed = false;
-
-		if (altitudeFilter != 0) {
-			if (RtPos.GetPressureAltitude() > altitudeFilter)
+		}
+		if (altitudeFilter_below != 0) {
+			if (RtPos.GetPressureAltitude() < altitudeFilter_below)
 				isAcDisplayed = false;
 		}
 
