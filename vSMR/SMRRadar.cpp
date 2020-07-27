@@ -918,6 +918,7 @@ void CSMRRadar::OnClickScreenObject(int ObjectType, const char * sObjectId, POIN
 		{ TAG_CITEM_CONTROLLER, TAG_ITEM_FUNCTION_ASSIGNED_NEXT_CONTROLLER },
 		{ TAG_CITEM_SSR, TAG_ITEM_FUNCTION_SET_GROUND_STATUS },
 		{ TAG_CITEM_GS, TAG_ITEM_FUNCTION_ASSIGNED_SPEED_POPUP },
+		{ TAG_CITEM_FL, TAG_ITEM_FUNCTION_TEMP_ALTITUDE_POPUP },
 	};
 
 	if (Button == BUTTON_LEFT) {
@@ -2263,7 +2264,7 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 		TagClickableMap[TagReplacingMap["gate"]] = TAG_CITEM_GATE;
 		TagClickableMap[TagReplacingMap["sate"]] = TAG_CITEM_GATE;
 		TagClickableMap[TagReplacingMap["scratch"]] = TAG_CITEM_SCRATCH;
-		TagClickableMap[TagReplacingMap["flightlevel"]] = TAG_CITEM_NO;
+		TagClickableMap[TagReplacingMap["flightlevel"]] = TAG_CITEM_FL;
 		TagClickableMap[TagReplacingMap["gs"]] = TAG_CITEM_GS;
 		TagClickableMap[TagReplacingMap["tendency"]] = TAG_CITEM_NO;
 		TagClickableMap[TagReplacingMap["wake"]] = TAG_CITEM_FPBOX;
