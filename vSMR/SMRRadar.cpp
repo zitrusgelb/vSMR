@@ -1428,7 +1428,13 @@ map<string, string> CSMRRadar::GenerateTagData(CPlugIn* Plugin, CRadarTarget rt,
 	bool isAirborne = rt.GetPosition().GetReportedGS() > 50;
 
 	// ----- Callsign -------
-	string callsign = rt.GetCallsign();
+	string isVFR = IsVFR(fp, rt);
+	string callsign = rt.GetCallsign();;
+	string vfrCallsign = "";
+	if (isVFR.length()) {
+		vfrCallsign = callsign;
+		callsign = isVFR;
+	}
 	if (fp.IsValid()) {
 		if (fp.GetControllerAssignedData().GetCommunicationType() == 't' ||
 			fp.GetControllerAssignedData().GetCommunicationType() == 'T' ||
@@ -1483,6 +1489,8 @@ map<string, string> CSMRRadar::GenerateTagData(CPlugIn* Plugin, CRadarTarget rt,
 		actype = fp.GetFlightPlanData().GetAircraftFPType();
 	if (actype.size() > 4 && actype != "NoFPL")
 		actype = actype.substr(0, 4);
+	if (vfrCallsign.length())
+		actype = vfrCallsign;
 
 	// ----- Aircraft type that changes to squawk error -------
 	string sctype = actype;
@@ -1831,6 +1839,8 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 				return "arrival";
 			else if (type == TagTypes::Uncorrelated)
 				return "uncorrelated";
+			else if (type == TagTypes::VFR)
+				return "vfr";
 			return "airborne";
 		}
 	};
@@ -2300,6 +2310,10 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 			if (!useDepArrColors) {
 				ColorTagType = TagTypes::Airborne;
 			}
+			
+			if (IsVFR(fp, rt).length()) {
+				ColorTagType = TagTypes::VFR;
+			}
 		}
 
 		if (!AcisCorrelated && reportedGs >= 3)
@@ -2317,6 +2331,10 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 			ColorTagType = TagTypes::Arrival;
 		}
 		
+		if (reportedGs <= 50 && IsVFR(fp, rt).length()) {
+			TagType = TagTypes::VFR;
+			ColorTagType = TagTypes::VFR;
+		}
 
 		// ----- Generating the clickable map -----
 		map<string, int> TagClickableMap;

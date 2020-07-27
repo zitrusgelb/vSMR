@@ -144,8 +144,11 @@ void CInsetWindow::render(HDC hDC, CSMRRadar * radar_screen, Graphics* gdi, POIN
 				return "arrival";
 			if (type == CSMRRadar::TagTypes::Uncorrelated)
 				return "uncorrelated";
+			else if (type == CSMRRadar::TagTypes::VFR)
+				return "vfr";
 			return "airborne";
 		}
+
 		static RECT GetAreaFromText(CDC * dc, string text, POINT Pos) {
 			RECT Area = { Pos.x, Pos.y, Pos.x + dc->GetTextExtent(text.c_str()).cx, Pos.y + dc->GetTextExtent(text.c_str()).cy };
 			return Area;

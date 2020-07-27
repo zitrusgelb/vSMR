@@ -148,8 +148,7 @@ public:
 	// Tag types
 	//---
 
-	enum TagTypes { Departure, Arrival, Airborne, Uncorrelated };
-
+	enum TagTypes { Departure, Arrival, Airborne, Uncorrelated, VFR };
 
 	string ActiveAirport = "EGKK";
 	list <string> ActiveAirports = { "EGKK" };
@@ -369,6 +368,113 @@ public:
 	//---GetBottomLine---------------------------------------------
 
 	virtual string GetBottomLine(const char * Callsign);
+
+	//---IsVFR---------------------------------------------
+
+	static string IsVFR(CFlightPlan fp, CRadarTarget rt)
+	{
+		if (!rt.GetPosition().IsValid())
+			return "";
+
+		switch (atoi(rt.GetPosition().GetSquawk()))
+		{
+		case 20:
+			return "RESCU";
+		case 23:
+			return "BPO";
+		case 24:
+			return "TFFN";
+		case 25:
+			return "PJE";
+		case 27:
+			return "ACRO";
+		case 30:
+			return "CAL";
+		case 31:
+			return "OPSKY";
+		case 33:
+			return "VM";
+		case 34:
+			return "SAR";
+		case 35:
+			return "AIRCL";
+		case 36:
+			return "POL";
+		case 37:
+			return "BIV";
+		case 76:
+			return "VFRCD";
+		case 3701:
+			return "VFS";
+		case 3702:
+			return "VFW";
+		case 3703:
+			return "VFM";
+		case 3704:
+			return "VFN";
+		case 3707:
+			return "CR";
+		case 4406:
+			return "SW";
+		case 4472:
+			return "PJV";
+		case 4473:
+			return "CHX4";
+		case 4474:
+			return "BALL";
+		case 4476:
+			return "TAXI";
+		case 4660:
+			return "TWR";
+		case 4642:
+			return "VDH";
+		case 4643:
+			return "SSF";
+		case 4644:
+			return "SV";
+		case 4645:
+			return "EDHI";
+		case 4647:
+			return "HL";
+		case 6103:
+			return "RAFIS";
+		case 6311:
+			return "FR1";
+		case 6312:
+			return "FR2";
+		case 6313:
+			return "FR3";
+		case 6314:
+			return "FR4";
+		case 6315:
+			return "FR5";
+		case 6316:
+			return "FIS";
+		case 6317:
+			return "VMR";
+		case 6550:
+			return "DT";
+		case 6570:
+			return "DB";
+		case 7000:
+			return "V";
+		case 7001:
+			return "VOUT";
+		case 7010:
+			return "VIN";
+		case 7012:
+			return "HELI";
+		case 7040:
+			return "NL";
+		case 7050:
+			return "NU";
+		default:
+			if (fp.IsValid() && fp.GetFlightPlanData().GetPlanType()[0] == 'V')
+				return "V";
+			return "";
+		}
+	}
+
 
 	//---LineIntersect---------------------------------------------
 
