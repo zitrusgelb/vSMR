@@ -19,6 +19,7 @@
         "hide_above_alt": 4000,
         "hide_below_alt": 0,
         "hide_above_spd": 250,
+        "show_on_rwy": true,
         "radar_range_nm": 30,
         "night_alpha_setting": 110,
         "pro_mode": {
