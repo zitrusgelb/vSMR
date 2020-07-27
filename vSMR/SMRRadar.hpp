@@ -140,6 +140,9 @@ public:
 	bool DistanceToolActive = false;
 	pair<string, string> ActiveDistance;
 
+
+	int Toolbar_Offset = 0;
+
 	//----
 	// Tag types
 	//---
