@@ -8,11 +8,11 @@
         "font_name": "EuroScope",
         "weight": "Regular",
         "sizes": {
-            "one": 11,
-            "two": 12,
-            "three": 13,
-            "four": 14,
-            "five": 16
+            "one": 8,
+            "two": 9,
+            "three": 10,
+            "four": 11,
+            "five": 12
         }
     },
     "filters": {
