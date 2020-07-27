@@ -1413,7 +1413,7 @@ map<string, string> CSMRRadar::GenerateTagData(CPlugIn* Plugin, CRadarTarget rt,
 	// wake: Wake turbulance cat *
 	// groundstatus: Current status *
 	// ssr: the current squawk of the ac
-	// sid: the assigned SID
+	// asid: the assigned SID
 	// ssid: a short version of the SID
 	// origin: origin aerodrome
 	// dest: destination aerodrome
@@ -2390,7 +2390,9 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 		Color definedBackgroundColor = CurrentConfig->getConfigColor(LabelsSettings[Utils::getEnumString(ColorTagType).c_str()]["background_color"]);
 		
 		if (ColorTagType == TagTypes::Departure) {
-			if (!TagReplacingMap["asid"].empty() && isActiveAirport(TagReplacingMap["origin"].c_str()) && CurrentConfig->isSidColorAvail(TagReplacingMap["asid"], TagReplacingMap["origin"].c_str())) {
+			if (!TagReplacingMap["asid"].empty() && 
+				isActiveAirport(TagReplacingMap["origin"].c_str()) &&
+				CurrentConfig->isSidColorAvail(TagReplacingMap["asid"], TagReplacingMap["origin"].c_str())) {
 				definedBackgroundColor = CurrentConfig->getSidColor(TagReplacingMap["asid"], TagReplacingMap["origin"].c_str());
 			}
 
