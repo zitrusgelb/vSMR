@@ -1484,6 +1484,9 @@ map<string, string> CSMRRadar::GenerateTagData(CRadarTarget rt, CFlightPlan fp, 
 	else
 		gate = fp.GetControllerAssignedData().GetScratchPadString();
 
+	if (gate.size() > 4)
+		gate = "NoGATE";
+	else
 	gate = gate.substr(0, 4);
 
 	// If there is a vStrips gate, we use that
