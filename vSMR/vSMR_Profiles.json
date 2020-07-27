@@ -17,6 +17,7 @@
     },
     "filters": {
         "hide_above_alt": 4000,
+        "hide_below_alt": 0,
         "hide_above_spd": 250,
         "radar_range_nm": 30,
         "night_alpha_setting": 110,
