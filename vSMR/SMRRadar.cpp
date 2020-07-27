@@ -1392,7 +1392,7 @@ bool CSMRRadar::OnCompileCommand(const char * sCommandLine)
 	return false;
 }
 
-map<string, string> CSMRRadar::GenerateTagData(CRadarTarget rt, CFlightPlan fp, bool isAcCorrelated, bool isProMode, int TransitionAltitude, bool useSpeedForGates, string ActiveAirport)
+map<string, string> CSMRRadar::GenerateTagData(CPlugIn* Plugin, CRadarTarget rt, CFlightPlan fp, bool isAcCorrelated, bool isProMode, int TransitionAltitude, bool useSpeedForGates, int sectorIndicator, string ActiveAirport)
 {
 	Logger::info(string(__FUNCSIG__));
 	// ----
