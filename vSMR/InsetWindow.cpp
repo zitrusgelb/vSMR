@@ -409,16 +409,18 @@ void CInsetWindow::render(HDC hDC, CSMRRadar * radar_screen, Graphics* gdi, POIN
 		TagClickableMap[TagReplacingMap["gate"]] = TAG_CITEM_GATE;
 		TagClickableMap[TagReplacingMap["sate"]] = TAG_CITEM_GATE;
 		TagClickableMap[TagReplacingMap["scratch"]] = TAG_CITEM_SCRATCH;
-		TagClickableMap[TagReplacingMap["flightlevel"]] = TAG_CITEM_NO;
-		TagClickableMap[TagReplacingMap["gs"]] = TAG_CITEM_NO;
+		TagClickableMap[TagReplacingMap["flightlevel"]] = TAG_CITEM_FL;
+		TagClickableMap[TagReplacingMap["gs"]] = TAG_CITEM_GS;
 		TagClickableMap[TagReplacingMap["tendency"]] = TAG_CITEM_NO;
 		TagClickableMap[TagReplacingMap["wake"]] = TAG_CITEM_FPBOX;
-		TagClickableMap[TagReplacingMap["tssr"]] = TAG_CITEM_NO;
+		TagClickableMap[TagReplacingMap["ssr"]] = TAG_CITEM_SSR;
 		TagClickableMap[TagReplacingMap["asid"]] = TagClickableMap[TagReplacingMap["ssid"]] = TAG_CITEM_SID;
 		TagClickableMap[TagReplacingMap["origin"]] = TAG_CITEM_FPBOX;
 		TagClickableMap[TagReplacingMap["dest"]] = TAG_CITEM_FPBOX;
 		TagClickableMap[TagReplacingMap["systemid"]] = TAG_CITEM_MANUALCORRELATE;
-		TagClickableMap[TagReplacingMap["gstatus"]] = TAG_CITEM_GROUNDSTATUS;
+		TagClickableMap[TagReplacingMap["groundstatus"]] = TAG_CITEM_GROUNDSTATUS;
+		TagClickableMap[TagReplacingMap["controller"]] = TAG_CITEM_CONTROLLER;
+		TagClickableMap[TagReplacingMap["asshdg"]] = TAG_CITEM_ASSHDG;
 
 		//
 		// ----- Now the hard part, drawing (using gdi+) -------
