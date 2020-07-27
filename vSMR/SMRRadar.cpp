@@ -876,6 +876,23 @@ void CSMRRadar::OnClickScreenObject(int ObjectType, const char * sObjectId, POIN
 		}
 	}
 
+	else if (ObjectType == RIMCAS_DISTANCE_TOOL)
+	{
+		vector<string> s = split(sObjectId, ',');
+		pair<string, string> toRemove = pair<string, string>(s.front(), s.back());
+
+		typedef multimap<string, string>::iterator iterator;
+		std::pair<iterator, iterator> iterpair = DistanceTools.equal_range(toRemove.first);
+
+		iterator it = iterpair.first;
+		for (; it != iterpair.second; ++it) {
+			if (it->second == toRemove.second) {
+				it = DistanceTools.erase(it);
+				break;
+			}
+		}
+
+	}
 	map <const int, const int> TagObjectMiddleTypes = {
 		{ TAG_CITEM_CALLSIGN, TAG_ITEM_FUNCTION_COMMUNICATION_POPUP },
 	};
@@ -911,23 +928,6 @@ void CSMRRadar::OnClickScreenObject(int ObjectType, const char * sObjectId, POIN
 		StartTagFunction(rt.GetCallsign(), NULL, ObjectType, rt.GetCallsign(), NULL, TagMenu, Pt, Area);
 	}
 
-	if (ObjectType == RIMCAS_DISTANCE_TOOL)
-	{
-		vector<string> s = split(sObjectId, ',');
-		pair<string, string> toRemove = pair<string, string>(s.front(), s.back());
-
-		typedef multimap<string, string>::iterator iterator;
-		std::pair<iterator, iterator> iterpair = DistanceTools.equal_range(toRemove.first);
-
-		iterator it = iterpair.first;
-		for (; it != iterpair.second; ++it) {
-			if (it->second == toRemove.second) {
-				it = DistanceTools.erase(it);
-				break;
-			}
-		}
-
-	}
 
 	RequestRefresh();
 };
