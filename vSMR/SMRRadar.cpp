@@ -38,7 +38,9 @@ bool mouseWithin(CRect rect) {
 		return true;
 	return false;
 }
-
+bool is_digits(const std::string &str) {
+	return str.find_first_not_of("0123456789") == std::string::npos;
+}
 // ReSharper disable CppMsExtAddressOfClassRValue
 
 CSMRRadar::CSMRRadar()
@@ -2257,13 +2259,15 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 		TagTypes TagType = TagTypes::Uncorrelated;
 		TagTypes ColorTagType = TagTypes::Uncorrelated;
 
-		if (fp.IsValid() && isActiveAirport(fp.GetFlightPlanData().GetDestination())) {
-			// Circuit aircraft are treated as departures; not arrivals
-			if (!isActiveAirport(fp.GetFlightPlanData().GetOrigin())) {
+		if (fp.IsValid() && isActiveAirport(fp.GetFlightPlanData().GetOrigin())) {
+			TagType = TagTypes::Departure;
+			ColorTagType = TagTypes::Departure;
+		}
+		else if (fp.IsValid() && isActiveAirport(fp.GetFlightPlanData().GetDestination())) {
 				TagType = TagTypes::Arrival;
 				ColorTagType = TagTypes::Arrival;
 			}
-		}
+
 
 		if (reportedGs > 50) {
 			TagType = TagTypes::Airborne;
@@ -2283,6 +2287,13 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 
 		map<string, string> TagReplacingMap = GenerateTagData(GetPlugIn(), rt, fp, IsCorrelated(fp, rt), CurrentConfig->getActiveProfile()["filters"]["pro_mode"]["enable"].GetBool(), GetPlugIn()->GetTransitionAltitude(), CurrentConfig->getActiveProfile()["labels"]["use_aspeed_for_gate"].GetBool(), sectorIndicator, getActiveAirport());
 
+		// Special for Circuit Traffic
+		if (reportedGs <= 50 && TagReplacingMap["origin"] == TagReplacingMap["dest"] &&
+			isActiveAirport(TagReplacingMap["origin"]) && is_digits(TagReplacingMap["gate"])) {
+			TagType = TagTypes::Arrival;
+			ColorTagType = TagTypes::Arrival;
+		}
+		
 
 		// ----- Generating the clickable map -----
 		map<string, int> TagClickableMap;
@@ -2447,6 +2458,8 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 			CurrentConfig->getConfigColor(LabelsSettings["groundstatus_colors"]["taxi"])));
 		SolidBrush GroundDepaColor(ColorManager->get_corrected_color("label",
 			CurrentConfig->getConfigColor(LabelsSettings["groundstatus_colors"]["depa"])));
+		SolidBrush ArrivalColor(ColorManager->get_corrected_color("label",
+			CurrentConfig->getConfigColor(LabelsSettings["arrival_color"])));
 
 
 		// Drawing the leader line
@@ -2509,13 +2522,36 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 				if (RimcasInstance->getAlert(rt.GetCallsign()) != CRimcas::NoAlert)
 					color = &RimcasTextColor;
 
-				// Ground tag colors
-				if (strcmp(element.c_str(), "PUSH") == 0)
-					color = &GroundPushColor;
-				else if (strcmp(element.c_str(), "TAXI") == 0)
-					color = &GroundTaxiColor;
-				else if (strcmp(element.c_str(), "DEPA") == 0)
-					color = &GroundDepaColor;
+				// Tag colors (colors the callsign)
+				if (element.length() > 0 && strcmp(element.c_str(), TagReplacingMap["callsign"].c_str()) == 0) {
+					// Departure
+					if (isActiveAirport(TagReplacingMap["origin"].c_str())) {
+						//Ground (Dep)
+						if (strcmp(TagReplacingMap["groundstatus"].c_str(), "PUSH") == 0)
+							color = &GroundPushColor;
+						else if (strcmp(TagReplacingMap["groundstatus"].c_str(), "TAXI") == 0)
+							color = &GroundTaxiColor;
+						else if (strcmp(TagReplacingMap["groundstatus"].c_str(), "DEPA") == 0)
+							color = &GroundDepaColor;
+
+						// Circuits
+						if (isActiveAirport(TagReplacingMap["dest"].c_str())) {
+							if (reportedGs > 50)
+								color = &ArrivalColor;
+							else if (is_digits(TagReplacingMap["gate"]))
+								color = &FontColor;
+						}
+					}
+					// Arrival
+					else if (element.length() > 0 && isActiveAirport(TagReplacingMap["dest"].c_str())) {
+						if (reportedGs > 50)
+							color = &ArrivalColor;
+					}
+				}
+
+				// Hide empty clickable Scratchpad content
+				else if (strcmp(element.c_str(), EmptyScratchpad.c_str()) == 0)
+					color->SetColor(TagBackgroundColor);
 
 				RectF mRect(0, 0, 0, 0);
 
