@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Config.hpp"
 #include <algorithm>
+#include <regex>
 
 CConfig::CConfig(string configPath)
 {
@@ -49,13 +50,20 @@ bool CConfig::isSidInitClbAvail(string sid, string airport) {
 			if (getActiveProfile()["maps"][airport.c_str()].HasMember("sids") && getActiveProfile()["maps"][airport.c_str()]["sids"].IsArray())
 			{
 				const Value& SIDs = getActiveProfile()["maps"][airport.c_str()]["sids"];
+				string sidzero;
+				std::regex_replace(std::back_inserter(sidzero), sid.begin(), sid.end(), std::regex("[0-9]"), "0");
 				for (SizeType i = 0; i < SIDs.Size(); i++)
 				{
 					const Value& SIDNames = SIDs[i]["names"];
 					for (SizeType s = 0; s < SIDNames.Size(); s++) {
 						string currentsid = SIDNames[s].GetString();
 						std::transform(currentsid.begin(), currentsid.end(), currentsid.begin(), ::toupper);
-						if (startsWith(sid.c_str(), currentsid.c_str()) && getActiveProfile()["maps"][airport.c_str()]["sids"][i].HasMember("init_clb"))
+						
+						if (currentsid.find('0') != std::string::npos) {
+							if (startsWith(sidzero.c_str(), currentsid.c_str()) && getActiveProfile()["maps"][airport.c_str()]["sids"][i].HasMember("init_clb"))
+								return true;
+						}
+						else if (startsWith(sid.c_str(), currentsid.c_str()) && getActiveProfile()["maps"][airport.c_str()]["sids"][i].HasMember("init_clb"))
 							return true;
 					}
 				}
@@ -74,13 +82,20 @@ int CConfig::getSidInitClb(string sid, string airport)
 			if (getActiveProfile()["maps"][airport.c_str()].HasMember("sids") && getActiveProfile()["maps"][airport.c_str()]["sids"].IsArray())
 			{
 				const Value& SIDs = getActiveProfile()["maps"][airport.c_str()]["sids"];
+				string sidzero;
+				std::regex_replace(std::back_inserter(sidzero), sid.begin(), sid.end(), std::regex("[0-9]"), "0");
 				for (SizeType i = 0; i < SIDs.Size(); i++)
 				{
 					const Value& SIDNames = SIDs[i]["names"];
 					for (SizeType s = 0; s < SIDNames.Size(); s++) {
 						string currentsid = SIDNames[s].GetString();
 						std::transform(currentsid.begin(), currentsid.end(), currentsid.begin(), ::toupper);
-						if (startsWith(sid.c_str(), currentsid.c_str()) && getActiveProfile()["maps"][airport.c_str()]["sids"][i].HasMember("init_clb"))
+
+						if (currentsid.find('0') != std::string::npos) {
+							if (startsWith(sidzero.c_str(), currentsid.c_str()) && getActiveProfile()["maps"][airport.c_str()]["sids"][i].HasMember("init_clb"))
+								return SIDs[i]["init_clb"].GetInt();
+						}
+						else if (startsWith(sid.c_str(), currentsid.c_str()) && getActiveProfile()["maps"][airport.c_str()]["sids"][i].HasMember("init_clb"))
 							return SIDs[i]["init_clb"].GetInt();
 					}
 				}
@@ -98,13 +113,21 @@ bool CConfig::isSidColorAvail(string sid, string airport) {
 			if (getActiveProfile()["maps"][airport.c_str()].HasMember("sids") && getActiveProfile()["maps"][airport.c_str()]["sids"].IsArray())
 			{
 				const Value& SIDs = getActiveProfile()["maps"][airport.c_str()]["sids"];
+				string sidzero;
+				std::regex_replace(std::back_inserter(sidzero), sid.begin(), sid.end(), std::regex("[0-9]"), "0");
+
 				for (SizeType i = 0; i < SIDs.Size(); i++)
 				{
 					const Value& SIDNames = SIDs[i]["names"];
 					for (SizeType s = 0; s < SIDNames.Size(); s++) {
 						string currentsid = SIDNames[s].GetString();
 						std::transform(currentsid.begin(), currentsid.end(), currentsid.begin(), ::toupper);
-						if (startsWith(sid.c_str(), currentsid.c_str()) && getActiveProfile()["maps"][airport.c_str()]["sids"][i].HasMember("color"))
+
+						if (currentsid.find('0') != std::string::npos) {
+							if (startsWith(sidzero.c_str(), currentsid.c_str()) && getActiveProfile()["maps"][airport.c_str()]["sids"][i].HasMember("color"))
+								return true;
+						}
+						else if (startsWith(sid.c_str(), currentsid.c_str()) && getActiveProfile()["maps"][airport.c_str()]["sids"][i].HasMember("color"))
 							return true;
 						}
 					}
@@ -123,13 +146,20 @@ Gdiplus::Color CConfig::getSidColor(string sid, string airport)
 			if (getActiveProfile()["maps"][airport.c_str()].HasMember("sids") && getActiveProfile()["maps"][airport.c_str()]["sids"].IsArray())
 			{
 				const Value& SIDs = getActiveProfile()["maps"][airport.c_str()]["sids"];
+				string sidzero;
+				std::regex_replace(std::back_inserter(sidzero), sid.begin(), sid.end(), std::regex("[0-9]"), "0");
 				for (SizeType i = 0; i < SIDs.Size(); i++)
 				{
 					const Value& SIDNames = SIDs[i]["names"];
 					for (SizeType s = 0; s < SIDNames.Size(); s++) {
 						string currentsid = SIDNames[s].GetString();
 						std::transform(currentsid.begin(), currentsid.end(), currentsid.begin(), ::toupper);
-						if (startsWith(sid.c_str(), currentsid.c_str()))
+
+						if (currentsid.find('0') != std::string::npos) {
+							if (startsWith(sidzero.c_str(), currentsid.c_str()))
+								return getConfigColor(SIDs[i]["color"]);
+						}
+						else if (startsWith(sid.c_str(), currentsid.c_str()))
 						{
 							return getConfigColor(SIDs[i]["color"]);
 						}

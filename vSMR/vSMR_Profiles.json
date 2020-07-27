@@ -392,10 +392,10 @@
             "sids": [
                {
                   "names": [
-                     "BASUM2C",
-                     "ELSOB1C",
-                     "IDEKO6C",
-                     "WSN3C"
+                     "BASUM0C",
+                     "ELSOB0C",
+                     "IDEKO0C",
+                     "WSN0C"
                   ],
                   "comment": "Default SIDS 05 West",
                   "comment2": "(Blue)",
@@ -409,10 +409,10 @@
                },
                {
                   "names": [
-                     "AMLUH9C",
-                     "EKERN9C",
-                     "LUGEG1C",
-                     "RAMAR4C"
+                     "AMLUH0C",
+                     "EKERN0C",
+                     "LUGEG0C",
+                     "RAMAR0C"
                   ],
                   "comment": "Default SIDS 05 East",
                   "comment2": "(Light Blue)",
@@ -426,10 +426,10 @@
                },
                {
                   "names": [
-                     "BASUM5D",
-                     "ELSOB1D",
-                     "IDEKO7D",
-                     "WSN2D"
+                     "BASUM0D",
+                     "ELSOB0D",
+                     "IDEKO0D",
+                     "WSN0D"
                   ],
                   "comment": "Default SIDS 15 West",
                   "comment2": "(Blue)",
@@ -443,10 +443,10 @@
                },
                {
                   "names": [
-                     "AMLUH9D",
-                     "EKERN1D",
-                     "LUGEG1D",
-                     "RAMAR4D"
+                     "AMLUH0D",
+                     "EKERN0D",
+                     "LUGEG0D",
+                     "RAMAR0D"
                   ],
                   "comment": "Default SIDS 15 East",
                   "comment2": "(Light Blue)",
@@ -460,10 +460,10 @@
                },
                {
                   "names": [
-                     "BASUM4B",
-                     "ELSOB1B",
-                     "IDEKO6B",
-                     "WSN2B"
+                     "BASUM0B",
+                     "ELSOB0B",
+                     "IDEKO0B",
+                     "WSN0B"
                   ],
                   "comment": "Default SIDS 23 West",
                   "comment2": "(Blue)",
@@ -477,10 +477,10 @@
                },
                {
                   "names": [
-                     "AMLUH1B",
-                     "EKERN9B",
-                     "LUGEG1B",
-                     "RAMAR4B"
+                     "AMLUH0B",
+                     "EKERN0B",
+                     "LUGEG0B",
+                     "RAMAR0B"
                   ],
                   "comment": "Default SIDS 23 East",
                   "comment2": "(Light Blue)",
@@ -494,10 +494,10 @@
                },
                {
                   "names": [
-                     "BASUM2G",
-                     "ELSOB1G",
-                     "IDEKO5G",
-                     "WSN3G"
+                     "BASUM0G",
+                     "ELSOB0G",
+                     "IDEKO0G",
+                     "WSN0G"
                   ],
                   "comment": "Default SIDS 33 West",
                   "comment2": "(Blue)",
@@ -511,10 +511,10 @@
                },
                {
                   "names": [
-                     "AMLUH9G",
-                     "EKERN9G",
-                     "LUGEG1G",
-                     "RAMAR3G"
+                     "AMLUH0G",
+                     "EKERN0G",
+                     "LUGEG0G",
+                     "RAMAR0G"
                   ],
                   "comment": "Default SIDS 33 East",
                   "comment2": "(Light Blue)",
@@ -629,12 +629,12 @@
             "sids": [
                {
                   "names": [
-                     "BASUM5Q",
-                     "ERLAD4Q",
-                     "GESTO8M",
-                     "NIE5Q",
-                     "EEL5Q",
-                     "WSN1M"
+                     "BASUM0Q",
+                     "ERLAD0Q",
+                     "GESTO0M",
+                     "NIE0Q",
+                     "EEL0Q",
+                     "WSN0M"
                   ],
                   "comment": "Default SIDS 09",
                   "comment2": "(Blue)",
@@ -648,7 +648,7 @@
                },
                {
                   "names": [
-                     "EEL5E"
+                     "EEL0E"
                   ],
                   "comment": "Kurz SIDS 09",
                   "comment2": "(Light Blue)",
@@ -662,12 +662,12 @@
                },
                {
                   "names": [
-                     "BASUM8K",
-                     "ERLAD2K",
-                     "GESTO5K",
-                     "NIE7K",
-                     "EEL9K",
-                     "WSR1K"
+                     "BASUM0K",
+                     "ERLAD0K",
+                     "GESTO0K",
+                     "NIE0K",
+                     "EEL0K",
+                     "WSR0K"
                   ],
                   "comment": "Default SIDS 27",
                   "comment2": "(Blue)",
@@ -681,11 +681,11 @@
                },
                {
                   "names": [
-                     "BASUM4A",
-                     "ERLAD2Z",
-                     "GESTO4A",
-                     "NIE4Z",
-                     "EEL9W"
+                     "BASUM0A",
+                     "ERLAD0Z",
+                     "GESTO0A",
+                     "NIE0Z",
+                     "EEL0W"
                   ],
                   "comment": "Kurz SIDS 27",
                   "comment2": "(Light Blue)",
@@ -714,7 +714,7 @@
          },
         "EGKK": {
           "sids": [{
-                "names": ["CLN1M", "CLN9M", "CLN5P", "DVR9M", "DVR2P", "LAM5M", "LAM5P", "BIG8M", "BIG3P", "#SAM2M", "SAM3P", "SFD5M", "SFD9P", "BOGNA1M", "NOVMA1M", "DVR1M", "WIZAD4M", "LAM6M", "TIGER3M", "DAGGA1M"],
+                "names": ["CLN0M", "CLN0M", "CLN0P", "DVR0M", "DVR0P", "LAM0M", "LAM0P", "BIG0M", "BIG0P", "#SAM0M", "SAM0P", "SFD0M", "SFD0P", "BOGNA0M", "NOVMA0M", "DVR0M", "WIZAD0M", "LAM0M", "TIGER0M", "DAGGA0M"],
                 "comment": "Old Conventional Unused SIDS",
 			    "color": {
                     "r": 255,
@@ -724,7 +724,7 @@
                 }
             },
             {
-                "names": ["BOGNA1X", "HARDY1X", "NOVMA1X"],
+                "names": ["BOGNA0X", "HARDY0X", "NOVMA0X"],
                 "comment": "26L A2 SIDs",
                 "color": {
                     "r": 220,
@@ -734,7 +734,7 @@
                 }
             },
             {
-                "names": ["FRANE1X", "LAM2X", "ADMAG2X"],
+                "names": ["FRANE0X", "LAM0X", "ADMAG0X"],
                 "comment": "26L A3 SIDs",
                 "color": {
                     "r": 80,
@@ -744,7 +744,7 @@
                 }
             },
             {
-                "names": ["FRANE1Z", "LAM1Z", "ODVIK2Z"],
+                "names": ["FRANE0Z", "LAM0Z", "ODVIK0Z"],
                 "comment": "08R J4 SIDs",
                 "color": {
                     "r": 80,
@@ -754,7 +754,7 @@
                 }
             },
             {
-                "names": ["SFD4Z", "IMVUR1Z", "KENET3P"],
+                "names": ["SFD0Z", "IMVUR0Z", "KENET0P"],
                 "comment": "08R J7 SIDs",
                 "color": {
                     "r": 220,
@@ -764,7 +764,7 @@
                 }
             },
             {
-                "names": ["BIG2X", "BIG2Z"],
+                "names": ["BIG0X", "BIG0Z"],
                 "comment": "Biggin Hill SIDs",
                 "color": {
                     "r": 150,
@@ -774,7 +774,7 @@
                 }
             },
             {
-                "names": ["SFD1X", "DAGGA1X", "TIGER1X", "WIZAD1X"],
+                "names": ["SFD0X", "DAGGA0X", "TIGER0X", "WIZAD0X"],
                 "comment": "Time Restricted and Relief SIDs",
                 "color": {
                     "r": 160,
@@ -805,4 +805,5 @@
             ]
         }
     }
-}]
+   }
+]
