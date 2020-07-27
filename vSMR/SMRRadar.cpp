@@ -1933,7 +1933,8 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 
 		int reportedGs = rt.GetPosition().GetReportedGS();
 		int radarRange = CurrentConfig->getActiveProfile()["filters"]["radar_range_nm"].GetInt();
-		int altitudeFilter = CurrentConfig->getActiveProfile()["filters"]["hide_above_alt"].GetInt();
+		int altitudeFilter_above = CurrentConfig->getActiveProfile()["filters"]["hide_above_alt"].GetInt();
+		int altitudeFilter_below = CurrentConfig->getActiveProfile()["filters"]["hide_below_alt"].GetInt();
 		int speedFilter = CurrentConfig->getActiveProfile()["filters"]["hide_above_spd"].GetInt();
 		bool isAcDisplayed = isVisible(rt);
 
@@ -2137,8 +2138,10 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 		// Filtering the targets
 
 		int radarRange = CurrentConfig->getActiveProfile()["filters"]["radar_range_nm"].GetInt();
-		int altitudeFilter = CurrentConfig->getActiveProfile()["filters"]["hide_above_alt"].GetInt();
+		int altitudeFilter_above = CurrentConfig->getActiveProfile()["filters"]["hide_above_alt"].GetInt();
+		int altitudeFilter_below = CurrentConfig->getActiveProfile()["filters"]["hide_below_alt"].GetInt();
 		int speedFilter = CurrentConfig->getActiveProfile()["filters"]["hide_above_spd"].GetInt();
+		bool show_on_rwy = CurrentConfig->getActiveProfile()["filters"]["show_on_rwy"].GetBool();
 		bool isAcDisplayed = isVisible(rt);
 
 		bool AcisCorrelated = IsCorrelated(fp, rt);
@@ -2148,6 +2151,9 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 
 		if (std::find(ReleasedTracks.begin(), ReleasedTracks.end(), rt.GetSystemID()) != ReleasedTracks.end())
 			isAcDisplayed = false;
+
+		if (show_on_rwy && RimcasInstance->isAcOnRunway(rt.GetCallsign()))
+			isAcDisplayed = true;
 
 		if (!isAcDisplayed)
 			continue;
