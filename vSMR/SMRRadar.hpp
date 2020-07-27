@@ -122,6 +122,7 @@ public:
 
 	map<int, Gdiplus::Font *> customFonts;
 	int currentFontSize = 1;
+	CFont menubar_font_left, menubar_font_right, menubar_font_timer;
 
 	map<string, CPosition> AirportPositions;
 

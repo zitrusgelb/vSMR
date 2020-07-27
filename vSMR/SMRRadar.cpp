@@ -53,6 +53,35 @@ CSMRRadar::CSMRRadar()
 	GdiplusStartupInput gdiplusStartupInput;
 	GdiplusStartup(&m_gdiplusToken, &gdiplusStartupInput, nullptr);
 
+
+	menubar_font_left.CreateFont(14,   // height of the font   
+		0,                        // width font  
+		0,                        //  nEscapement 
+		0,                        //  nOrientation   
+		FW_NORMAL,                //   nWeight   
+		FALSE,                    //   bItalic   
+		FALSE,                    //   bUnderline   
+		0,                        //   cStrikeOut   
+		ANSI_CHARSET,             //   nCharSet   
+		OUT_DEFAULT_PRECIS,       //   nOutPrecision   
+		CLIP_DEFAULT_PRECIS,      //   nClipPrecision   
+		DEFAULT_QUALITY,          //   nQuality   
+		DEFAULT_PITCH | FF_SWISS, //   nPitchAndFamily     
+		_T("Euroscope"));
+	menubar_font_right.CreateFont(15,   // height of the font   
+		0,                        // width font  
+		0,                        //  nEscapement 
+		0,                        //  nOrientation   
+		FW_NORMAL,                //   nWeight   
+		FALSE,                    //   bItalic   
+		FALSE,                    //   bUnderline   
+		0,                        //   cStrikeOut   
+		ANSI_CHARSET,             //   nCharSet   
+		OUT_DEFAULT_PRECIS,       //   nOutPrecision   
+		CLIP_DEFAULT_PRECIS,      //   nClipPrecision   
+		DEFAULT_QUALITY,          //   nQuality   
+		DEFAULT_PITCH | FF_SWISS, //   nPitchAndFamily     
+		_T("Euroscope"));
 	// Getting the DLL file folder
 	GetModuleFileNameA(HINSTANCE(&__ImageBase), DllPathFile, sizeof(DllPathFile));
 	DllPath = DllPathFile;
@@ -689,6 +718,17 @@ void CSMRRadar::OnClickScreenObject(int ObjectType, const char * sObjectId, POIN
 			GetPlugIn()->AddPopupListElement("Visibility", "", RIMCAS_OPEN_LIST);
 			GetPlugIn()->AddPopupListElement("Close", "", RIMCAS_CLOSE, false, 2, false, true);
 		}
+		else if (strcmp(sObjectId, "QuestionmarkMenu") == 0) {
+			Area.top = Area.top + 30;
+			Area.bottom = Area.bottom + 30;
+			
+			GetPlugIn()->OpenPopupList(Area, "Options", 1);
+			GetPlugIn()->AddPopupListElement("Reload", "", RIMCAS_RELOAD_PROFILE);
+			GetPlugIn()->AddPopupListElement("CPDLC Settings", "", RIMCAS_CPDLC_SETTINGS);
+			GetPlugIn()->AddPopupListElement("CPDLC Connect", "", RIMCAS_CPDLC_CONNECT);
+			GetPlugIn()->AddPopupListElement("CPDLC Poll Messages", "", RIMCAS_CPDLC_POLL);
+			GetPlugIn()->AddPopupListElement("Close", "", RIMCAS_CLOSE, false, 2, false, true);
+		}
 
 		else if (strcmp(sObjectId, "/") == 0)
 		{
@@ -943,6 +983,11 @@ void CSMRRadar::OnFunctionCall(int FunctionId, const char * sItemString, POINT P
 		ShowLists["Profiles"] = true;
 	}
 
+	else if (FunctionId == RIMCAS_RELOAD_PROFILE) {
+		this->CSMRRadar::CurrentConfig = new CConfig(ConfigPath);
+		this->CSMRRadar::LoadProfile(CurrentConfig->getActiveProfileName());
+	}
+
 	else if (FunctionId == RIMCAS_UPDATEFILTER1 || FunctionId == RIMCAS_UPDATEFILTER2) {
 		int id = FunctionId - RIMCAS_UPDATEFILTER;
 		if (startsWith("UNL", sItemString))
@@ -1076,6 +1121,21 @@ void CSMRRadar::OnFunctionCall(int FunctionId, const char * sItemString, POINT P
 		NeedCorrelateCursor = AcquireInProgress;
 
 		CorrelateCursor();
+	}
+
+	else if (FunctionId == RIMCAS_CPDLC_SETTINGS)
+	{
+		GetPlugIn()->OnCompileCommand(".smr");
+	}
+
+	else if (FunctionId == RIMCAS_CPDLC_CONNECT)
+	{
+		GetPlugIn()->OnCompileCommand(".smr connect");
+	}
+
+	else if (FunctionId == RIMCAS_CPDLC_POLL)
+	{
+		GetPlugIn()->OnCompileCommand(".smr poll");
 	}
 }
 
@@ -2724,6 +2784,7 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 	dc.FillSolidRect(ToolBarAreaTop, qToolBarColor);
 
 	COLORREF oldTextColor = dc.SetTextColor(RGB(0, 0, 0));
+	CFont* old_font = dc.SelectObject(&menubar_font_left);
 
 	int offset = 2;
 	dc.TextOutA(ToolBarAreaTop.left + offset, ToolBarAreaTop.top + 4, getActiveAirport().c_str());
@@ -2754,7 +2815,15 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 	}
 	AddScreenObject(RIMCAS_MENU, "/", barDistanceRect, false, "Distance tool");
 
-	dc.SetTextColor(oldTextColor);
+
+	dc.SelectObject(&menubar_font_right);
+
+	offset = 10 + dc.GetTextExtent("?").cx;
+	dc.TextOutA(ToolBarAreaTop.right - offset, ToolBarAreaTop.top + 4 + Toolbar_Offset, "?");
+	AddScreenObject(RIMCAS_MENU, "QuestionmarkMenu", { ToolBarAreaTop.right - offset, ToolBarAreaTop.top + 4 + Toolbar_Offset, ToolBarAreaTop.right - offset + dc.GetTextExtent("?").cx, ToolBarAreaTop.top + 4 + Toolbar_Offset + dc.GetTextExtent("?").cy }, false, "Questionmark menu");
+
+	dc.SelectObject(old_font);
+	
 
 	//
 	// Tag deconflicting
