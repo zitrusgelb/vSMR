@@ -332,7 +332,13 @@ bool CSMRPlugin::OnCompileCommand(const char * sCommandLine) {
 			}
 		}
 		else {
+			if (!HoppieConnected) {
 			DisplayUserMessage("CPDLC", "Error", "You are not logged in as a controller!", true, true, false, true, false);
+		}
+			else {
+				HoppieConnected = false;
+				DisplayUserMessage("CPDLC", "Server", "Logged off!", true, true, false, true, false);
+			}
 		}
 
 		return true;
