@@ -752,10 +752,7 @@ void CSMRRadar::OnClickScreenObject(int ObjectType, const char * sObjectId, POIN
 				ActiveDistance = pair<string, string>("", "");
 				DistanceTools.clear();
 			}
-
 		}
-	}
-
 	}
 
 	else if (ObjectType == DRAWING_TAG || ObjectType == DRAWING_AC_SYMBOL) {
