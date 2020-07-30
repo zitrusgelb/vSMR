@@ -110,6 +110,25 @@ CSMRRadar::CSMRRadar()
 	}
 	f.close();
 
+	Logger::info("Loading aircraft");
+	// Loading up the aircraft for the bottom line
+	// Search for ICAO aircraft file if it already exists (usually given by the VACC)
+	string AircraftPath = DllPath;
+	for (int i = 0; i < 3; ++i) {
+		AircraftPath = AircraftPath.substr(0, AircraftPath.find_last_of("/\\"));
+	}
+	AircraftPath += "\\ICAO\\ICAO_Aircraft.txt";
+
+	f.open(AircraftPath.c_str());
+
+	if (f.good()) {
+		Aircraft = new CAircraftLookup(AircraftPath);
+	}
+	else {
+		Aircraft = new CAircraftLookup(DllPath + "\\ICAO_Aircraft.txt");
+	}
+	f.close();
+
 	Logger::info("Loading RIMCAS & Config");
 	// Creating the RIMCAS instance
 	if (RimcasInstance == nullptr)
