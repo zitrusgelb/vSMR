@@ -479,6 +479,22 @@ void CInsetWindow::render(HDC hDC, CSMRRadar * radar_screen, Graphics* gdi, POIN
 			const Value& line = LabelLines[i];
 			vector<string> lineStringArray;
 
+			// Empty Scratchpad special			
+			if (line.Size() == unsigned(1) && strcmp(line[unsigned(0)].GetString(), "scratch") == 0) {
+				string element = line[unsigned(0)].GetString();
+				string b = TagReplacingMap["gate"];
+
+				for (auto& kv : TagReplacingMap)
+					replaceAll(element, kv.first, kv.second);
+
+				if (strcmp(element.c_str(), EmptyScratchpad.c_str()) == 0)
+					//return;
+					continue;
+				if (TagType == CSMRRadar::TagTypes::Arrival && strcmp(element.c_str(), TagReplacingMap["gate"].c_str()) == 0)
+					//return;
+					continue;
+			}
+
 			// Adds one line height
 			TagHeight += oneLineHeight;
 

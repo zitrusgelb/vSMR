@@ -20,6 +20,7 @@ public:
 	POINT m_Offset = { 0, 0 }, m_OffsetInit = { 0, 0 }, m_OffsetDrag = { 0, 0 };
 	bool m_Grip = false;
 	double m_Rotation = 0;
+	string EmptyScratchpad = "..\0"; // Make Scratchpad tag clickable, if empty
 
 	map<string, double> m_TagAngles;
 
