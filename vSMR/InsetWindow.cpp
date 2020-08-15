@@ -805,7 +805,9 @@ void CInsetWindow::render(HDC hDC, CSMRRadar * radar_screen, Graphics* gdi, POIN
 
 	// Sides
 	//CBrush FrameBrush(RGB(35, 35, 35));
-	CBrush FrameBrush(RGB(127, 122, 122));
+	
+	COLORREF qFrameColor = radar_screen->CurrentConfig->getConfigColorRef(radar_screen->CurrentConfig->getActiveProfile()["approach_insets"]["background_color"]);
+	CBrush FrameBrush(RGB(min(GetRValue(qFrameColor) + 20, 255), min(GetGValue(qFrameColor) + 20, 255), min(GetBValue(qFrameColor) + 20, 255)));
 	COLORREF TopBarTextColor(RGB(35, 35, 35));
 	dc.FrameRect(windowAreaCRect, &FrameBrush);
 
