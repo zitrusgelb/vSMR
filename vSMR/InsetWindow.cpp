@@ -576,6 +576,21 @@ void CInsetWindow::render(HDC hDC, CSMRRadar * radar_screen, Graphics* gdi, POIN
 				radar_screen->CurrentConfig->getConfigColor(LabelsSettings["squawk_error_color"])));
 			SolidBrush RimcasTextColor(radar_screen->CurrentConfig->getConfigColor(radar_screen->CurrentConfig->getActiveProfile()["rimcas"]["alert_text_color"]));
 
+			SolidBrush GroundPushColor(radar_screen->ColorManager->get_corrected_color("label",
+				radar_screen->CurrentConfig->getConfigColor(LabelsSettings["groundstatus_colors"]["push"])));
+			SolidBrush GroundTaxiColor(radar_screen->ColorManager->get_corrected_color("label",
+				radar_screen->CurrentConfig->getConfigColor(LabelsSettings["groundstatus_colors"]["taxi"])));
+			SolidBrush GroundDepaColor(radar_screen->ColorManager->get_corrected_color("label",
+				radar_screen->CurrentConfig->getConfigColor(LabelsSettings["groundstatus_colors"]["depa"])));
+			SolidBrush ArrivalColor(radar_screen->ColorManager->get_corrected_color("label",
+				radar_screen->CurrentConfig->getConfigColor(LabelsSettings["arrival_color"])));
+			SolidBrush ContrAssumedColor(radar_screen->ColorManager->get_corrected_color("label",
+				radar_screen->CurrentConfig->getConfigColor(LabelsSettings["controller_colors"]["assumed"])));
+			SolidBrush ContrTrToColor(radar_screen->ColorManager->get_corrected_color("label",
+				radar_screen->CurrentConfig->getConfigColor(LabelsSettings["controller_colors"]["transfer_to_me"])));
+			SolidBrush ContrTrFromColor(radar_screen->ColorManager->get_corrected_color("label",
+				radar_screen->CurrentConfig->getConfigColor(LabelsSettings["controller_colors"]["transfer_from_me"])));
+
 			int heightOffset = 0;
 			for (auto&& line : ReplacedLabelLines)
 			{
@@ -588,6 +603,52 @@ void CInsetWindow::render(HDC hDC, CSMRRadar * radar_screen, Graphics* gdi, POIN
 
 					if (radar_screen->RimcasInstance->getAlert(rt.GetCallsign()) != CRimcas::NoAlert)
 						color = &RimcasTextColor;
+
+					// Tag colors (colors the callsign)
+					if (element.length() > 0 && strcmp(element.c_str(), TagReplacingMap["callsign"].c_str()) == 0) {
+						// Departure
+						if (radar_screen->isActiveAirport(TagReplacingMap["origin"].c_str())) {
+							//Ground (Dep)
+							if (strcmp(TagReplacingMap["groundstatus"].c_str(), "PUSH") == 0)
+								color = &GroundPushColor;
+							else if (strcmp(TagReplacingMap["groundstatus"].c_str(), "TAXI") == 0)
+								color = &GroundTaxiColor;
+							else if (strcmp(TagReplacingMap["groundstatus"].c_str(), "DEPA") == 0)
+								color = &GroundDepaColor;
+
+							// Circuits
+							if (radar_screen->isActiveAirport(TagReplacingMap["dest"].c_str())) {
+								if (reportedGs > 50)
+									color = &ArrivalColor;
+								else if (TagReplacingMap["gate"].find_first_not_of("0123456789") == std::string::npos)
+									color = &FontColor;
+							} 
+						}
+						// Arrival
+						else if (element.length() > 0 && radar_screen->isActiveAirport(TagReplacingMap["dest"].c_str())) {
+							if (reportedGs > 50)
+								color = &ArrivalColor;
+						}
+					}
+					
+					// Hide empty clickable Scratchpad content
+					else if (strcmp(element.c_str(), EmptyScratchpad.c_str()) == 0)
+						color->SetColor(TagBackgroundColor);
+
+					// Tag colors (colours the Controller)
+					else if (element.length() > 0 && strcmp(element.c_str(), TagReplacingMap["controller"].c_str()) == 0) {
+						switch (fp.GetState()) {
+						case FLIGHT_PLAN_STATE_ASSUMED:
+							color = &ContrAssumedColor;
+							break;
+						case FLIGHT_PLAN_STATE_TRANSFER_TO_ME_INITIATED:
+							color = &ContrTrToColor;
+							break;
+						case FLIGHT_PLAN_STATE_TRANSFER_FROM_ME_INITIATED:
+							color = &ContrTrFromColor;
+							break;
+						}
+					}
 
 					RectF mRect(0, 0, 0, 0);
 
