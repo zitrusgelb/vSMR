@@ -475,23 +475,19 @@ void CInsetWindow::render(HDC hDC, CSMRRadar * radar_screen, Graphics* gdi, POIN
 
 		for (unsigned int i = 0; i < LabelLines.Size(); i++)
 		{
-
 			const Value& line = LabelLines[i];
 			vector<string> lineStringArray;
 
 			// Empty Scratchpad special			
 			if (line.Size() == unsigned(1) && strcmp(line[unsigned(0)].GetString(), "scratch") == 0) {
 				string element = line[unsigned(0)].GetString();
-				string b = TagReplacingMap["gate"];
 
 				for (auto& kv : TagReplacingMap)
 					replaceAll(element, kv.first, kv.second);
 
 				if (strcmp(element.c_str(), EmptyScratchpad.c_str()) == 0)
-					//return;
 					continue;
 				if (TagType == CSMRRadar::TagTypes::Arrival && strcmp(element.c_str(), TagReplacingMap["gate"].c_str()) == 0)
-					//return;
 					continue;
 			}
 
@@ -634,7 +630,6 @@ void CInsetWindow::render(HDC hDC, CSMRRadar * radar_screen, Graphics* gdi, POIN
 					// Hide empty clickable Scratchpad content
 					else if (strcmp(element.c_str(), EmptyScratchpad.c_str()) == 0)
 						color->SetColor(TagBackgroundColor);
-
 					// Tag colors (colours the Controller)
 					else if (element.length() > 0 && strcmp(element.c_str(), TagReplacingMap["controller"].c_str()) == 0) {
 						switch (fp.GetState()) {
@@ -772,7 +767,7 @@ void CInsetWindow::render(HDC hDC, CSMRRadar * radar_screen, Graphics* gdi, POIN
 		bearings = bearings.substr(0, decimal_pos + 2);
 
 		string text = bearings;
-		text += "° / ";
+		text += "ï¿½ / ";
 		text += distances;
 		text += "nm";
 		COLORREF old_color = dc.SetTextColor(RGB(0, 0, 0));
