@@ -127,7 +127,7 @@ POINT CInsetWindow::projectPoint(CPosition pos)
 	}
 }
 
-void CInsetWindow::render(HDC hDC, CSMRRadar * radar_screen, Graphics* gdi, POINT mouseLocation, multimap<string, string> DistanceTools)
+void CInsetWindow::render(HDC hDC, CSMRRadar * radar_screen, Graphics* gdi, POINT mouseLocation, multimap<string, string> DistanceTools, set<string> TagsDetailed)
 {
 	CDC dc;
 	dc.Attach(hDC);
@@ -467,31 +467,36 @@ void CInsetWindow::render(HDC hDC, CSMRRadar * radar_screen, Graphics* gdi, POIN
 		int oneLineHeight = (int)mesureRect.GetBottom();
 
 		const Value& LabelsSettings = radar_screen->CurrentConfig->getActiveProfile()["labels"];
-		const Value& LabelLines = LabelsSettings[Utils::getEnumString(TagType).c_str()]["definition"];
+		const Value& LabelLines_Normal = LabelsSettings[Utils::getEnumString(TagType).c_str()]["definition"];
+		const Value& LabelLines_Detailed = LabelsSettings[Utils::getEnumString(TagType).c_str()]["definition_detailed"];
 		vector<vector<string>> ReplacedLabelLines;
 
-		if (!LabelLines.IsArray())
+		if (!LabelLines_Normal.IsArray())
 			return;
 
+		bool isDetailed = false;
+		if (LabelLines_Detailed.IsArray()) {
+			if (TagsDetailed.find(rt.GetCallsign()) != TagsDetailed.end()) {
+				isDetailed = true;
+			}
+		}
+
+		const Value& LabelLines = isDetailed ? LabelLines_Detailed : LabelLines_Normal;
 		for (unsigned int i = 0; i < LabelLines.Size(); i++)
 		{
-
 			const Value& line = LabelLines[i];
 			vector<string> lineStringArray;
 
 			// Empty Scratchpad special			
 			if (line.Size() == unsigned(1) && strcmp(line[unsigned(0)].GetString(), "scratch") == 0) {
 				string element = line[unsigned(0)].GetString();
-				string b = TagReplacingMap["gate"];
 
 				for (auto& kv : TagReplacingMap)
 					replaceAll(element, kv.first, kv.second);
 
 				if (strcmp(element.c_str(), EmptyScratchpad.c_str()) == 0)
-					//return;
 					continue;
 				if (TagType == CSMRRadar::TagTypes::Arrival && strcmp(element.c_str(), TagReplacingMap["gate"].c_str()) == 0)
-					//return;
 					continue;
 			}
 
@@ -634,7 +639,6 @@ void CInsetWindow::render(HDC hDC, CSMRRadar * radar_screen, Graphics* gdi, POIN
 					// Hide empty clickable Scratchpad content
 					else if (strcmp(element.c_str(), EmptyScratchpad.c_str()) == 0)
 						color->SetColor(TagBackgroundColor);
-
 					// Tag colors (colours the Controller)
 					else if (element.length() > 0 && strcmp(element.c_str(), TagReplacingMap["controller"].c_str()) == 0) {
 						switch (fp.GetState()) {
