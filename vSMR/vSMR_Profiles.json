@@ -102,6 +102,15 @@
             "definition": [
                [
                   "callsign",
+                  "controller"
+               ],
+               [
+                  "scratch"
+               ]
+            ],
+            "definition_detailed": [
+               [
+                  "callsign",
                   "ssr",
                   "controller"
                ],
@@ -199,7 +208,21 @@
                   "tendency"
                ],
                [
-                  "actype",
+                  "scratch"
+               ]
+            ],
+            "definition_detailed": [
+               [
+                  "callsign",
+                  "gs",
+                  "controller"
+               ],
+               [
+                  "flightlevel",
+                  "tendency"
+               ],
+               [
+                  "sctype",
                   "asshdg",
                   "scratch"
                ]
@@ -264,8 +287,22 @@
                   "controller"
                ],
                [
-                  "sctype",
-                  "seprwy",
+                  "actype",
+                  "scratch"
+               ]
+            ],
+            "definition_detailed": [
+               [
+                  "callsign",
+                  "gs",
+                  "controller"
+               ],
+               [
+                  "actype",
+                  "flightlevel",
+                  "tendency"
+               ],
+               [
                   "scratch"
                ]
             ],

@@ -5,6 +5,7 @@
 ULONG_PTR m_gdiplusToken;
 CPoint mouseLocation(0, 0);
 string TagBeingDragged;
+set<string> TagsDetailed;
 int LeaderLineDefaultlength = 50;
 
 //
@@ -26,7 +27,7 @@ string EmptyScratchpad = "..\0"; // Make Scratchpad tag clickable, if empty
 inline double closest(std::vector<double> const& vec, double value) {
 	auto const it = std::lower_bound(vec.begin(), vec.end(), value);
 	if (it == vec.end()) { return -1; }
-
+	
 	return *it;
 };
 inline bool IsTagBeingDragged(string c)
@@ -50,7 +51,7 @@ CSMRRadar::CSMRRadar()
 
 	// Initializing randomizer
 	srand(static_cast<unsigned>(time(nullptr)));
-
+		
 	// Initialize GDI+
 	GdiplusStartupInput gdiplusStartupInput;
 	GdiplusStartup(&m_gdiplusToken, &gdiplusStartupInput, nullptr);
@@ -233,7 +234,7 @@ void CSMRRadar::LoadProfile(string profileName) {
 	Logger::info(string(__FUNCSIG__));
 	// Loading the new profile
 	CurrentConfig->setActiveProfile(profileName);
-
+	
 
 	Logger::info("Loading callsigns");
 	// Loading up the callsigns for the bottom line
@@ -593,6 +594,21 @@ void CSMRRadar::OnOverScreenObject(int ObjectType, const char * sObjectId, POINT
 	RequestRefresh();
 }
 
+void CSMRRadar::OnDoubleClickScreenObject(int ObjectType, const char* sObjectId, POINT Pt, RECT Area, int Button)
+{
+	Logger::info(string(__FUNCSIG__));
+	if (Button == BUTTON_RIGHT) {
+		string callsign = GetPlugIn()->RadarTargetSelect(sObjectId).GetCallsign();
+		if (TagsDetailed.find(callsign) != TagsDetailed.end()) {
+			TagsDetailed.erase(callsign);
+		}
+		else {
+			TagsDetailed.insert(callsign);
+		}
+	}
+	RequestRefresh();
+}
+
 void CSMRRadar::OnClickScreenObject(int ObjectType, const char * sObjectId, POINT Pt, RECT Area, int Button)
 {
 	Logger::info(string(__FUNCSIG__));
@@ -781,7 +797,7 @@ void CSMRRadar::OnClickScreenObject(int ObjectType, const char * sObjectId, POIN
 		
 		if (rt.GetCorrelatedFlightPlan().IsValid()) {
 			StartTagFunction(rt.GetCallsign(), NULL, EuroScopePlugIn::TAG_ITEM_TYPE_CALLSIGN, rt.GetCallsign(), NULL, EuroScopePlugIn::TAG_ITEM_FUNCTION_NO, Pt, Area);
-		}		
+		}
 
 		// Release & correlate actions
 		if (ReleaseInProgress || AcquireInProgress)
@@ -1097,7 +1113,7 @@ void CSMRRadar::OnFunctionCall(int FunctionId, const char * sItemString, POINT P
 			isLVP = false;
 		if (strcmp(sItemString, "Low") == 0)
 			isLVP = true;
-
+		
 		ShowLists["Visibility"] = true;
 
 		RequestRefresh();
@@ -1352,7 +1368,7 @@ string CSMRRadar::GetBottomLine(const char * Callsign) {
 		}
 
 		to_render += " ";
-
+		
 		if (fp.GetFlightPlanData().IsReceived()) {
 			const char * assr = fp.GetControllerAssignedData().GetSquawk();
 			const char * ssr = GetPlugIn()->RadarTargetSelect(fp.GetCallsign()).GetPosition().GetSquawk();
@@ -1501,7 +1517,7 @@ map<string, string> CSMRRadar::GenerateTagData(CPlugIn* Plugin, CRadarTarget rt,
 		actype = actype.substr(0, 4);
 	if (vfrCallsign.length())
 		actype = vfrCallsign;
-
+	
 	// ----- Aircraft type that changes to squawk error -------
 	string sctype = actype;
 	if (has_squawk_error)
@@ -1544,7 +1560,7 @@ map<string, string> CSMRRadar::GenerateTagData(CPlugIn* Plugin, CRadarTarget rt,
 	if (gate.size() > 4)
 		gate = "NoGATE";
 	else
-	gate = gate.substr(0, 4);
+		gate = gate.substr(0, 4);
 
 	// If there is a vStrips gate, we use that
 	if (vStripsStands.find(rt.GetCallsign()) != vStripsStands.end())
@@ -1594,7 +1610,7 @@ map<string, string> CSMRRadar::GenerateTagData(CPlugIn* Plugin, CRadarTarget rt,
 	int delta_fl = rt.GetVerticalSpeed() / 200;
 
 	if (delta_fl < -2)
-			tendency = "|";
+		tendency = "|";
 	else if (delta_fl > 2)
 		tendency = "^";
 
@@ -1606,8 +1622,8 @@ map<string, string> CSMRRadar::GenerateTagData(CPlugIn* Plugin, CRadarTarget rt,
 	else if (delta_fl < 10)
 	{
 		tendency += "0" + to_string(delta_fl);
-		}
-		else {
+	}
+	else {
 		tendency += to_string(delta_fl);
 	}
 
@@ -2015,7 +2031,7 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 	{
 		if (!rt.IsValid() || !rt.GetPosition().IsValid())
 			continue;
-
+		
 		int reportedGs = rt.GetPosition().GetReportedGS();
 		int radarRange = CurrentConfig->getActiveProfile()["filters"]["radar_range_nm"].GetInt();
 		int altitudeFilter_above = CurrentConfig->getActiveProfile()["filters"]["hide_above_alt"].GetInt();
@@ -2272,9 +2288,9 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 			ColorTagType = TagTypes::Departure;
 		}
 		else if (fp.IsValid() && isActiveAirport(fp.GetFlightPlanData().GetDestination())) {
-				TagType = TagTypes::Arrival;
-				ColorTagType = TagTypes::Arrival;
-			}
+			TagType = TagTypes::Arrival;
+			ColorTagType = TagTypes::Arrival;
+		}
 
 
 		if (reportedGs > 50) {
@@ -2354,18 +2370,27 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 		int oneLineHeight = (int)mesureRect.GetBottom();
 
 		const Value& LabelsSettings = CurrentConfig->getActiveProfile()["labels"];
-		const Value& LabelLines = LabelsSettings[Utils::getEnumString(TagType).c_str()]["definition"];
+		const Value& LabelLines_Normal = LabelsSettings[Utils::getEnumString(TagType).c_str()]["definition"];
+		const Value& LabelLines_Detailed = LabelsSettings[Utils::getEnumString(TagType).c_str()]["definition_detailed"];
 		vector<vector<string>> ReplacedLabelLines;
 
-		if (!LabelLines.IsArray())
+		if (!LabelLines_Normal.IsArray())
 			return;
+		
+		bool isDetailed = false;
+		if (LabelLines_Detailed.IsArray()) {
+			if (TagsDetailed.find(rt.GetCallsign()) != TagsDetailed.end()) {
+				isDetailed = true;
+			}
+		}
 
+		const Value& LabelLines = isDetailed ? LabelLines_Detailed : LabelLines_Normal;
 		for (unsigned int i = 0; i < LabelLines.Size(); i++)
 		{
 			const Value& line = LabelLines[i];
 			vector<string> lineStringArray;
 
-			// Empty Scratchpad special			
+			// Empty Scratchpad special
 			if (line.Size() == unsigned(1) && strcmp(line[unsigned(0)].GetString(), "scratch") == 0) {
 				string element = line[unsigned(0)].GetString();
 
@@ -2377,7 +2402,7 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 				if (TagType == CSMRRadar::TagTypes::Arrival && strcmp(element.c_str(), TagReplacingMap["gate"].c_str()) == 0)
 					continue;
 			}
-			
+
 			// Adds one line height
 			TagHeight += oneLineHeight;
 
@@ -2527,20 +2552,23 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 
 		// Clickable zones
 		int heightOffset = 0;
-		for (auto&& line : ReplacedLabelLines)
+		//for (auto&& line : ReplacedLabelLines)
+		for (unsigned int i = 0; i < ReplacedLabelLines.size(); i++)
 		{
+			auto&& line = ReplacedLabelLines[i];
 			int widthOffset = 0;
-			for (auto&& element : line)
+			for (unsigned int j = 0; j < line.size(); j++)
 			{
+				auto&& element = line[j];
 				SolidBrush* color = &FontColor;
-				if (TagReplacingMap["sqerror"].size() > 0 && strcmp(element.c_str(), TagReplacingMap["sqerror"].c_str()) == 0)
+				if (TagReplacingMap["sqerror"].size() > 0 && (strcmp(LabelLines[i][j].GetString(), "sqerror") == 0 || strcmp(LabelLines[i][j].GetString(), "sctype") == 0))
 					color = &SquawkErrorColor;
 
 				if (RimcasInstance->getAlert(rt.GetCallsign()) != CRimcas::NoAlert)
 					color = &RimcasTextColor;
-
+				
 				// Tag colors (colors the callsign)
-				if (element.length() > 0 && strcmp(element.c_str(), TagReplacingMap["callsign"].c_str()) == 0) {
+				if (element.length() > 0 && strcmp(LabelLines[i][j].GetString(), "callsign") == 0) {
 					// Departure
 					if (isActiveAirport(TagReplacingMap["origin"].c_str())) {
 						//Ground (Dep)
@@ -2567,11 +2595,11 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 				}
 
 				// Hide empty clickable Scratchpad content
-				else if (strcmp(element.c_str(), EmptyScratchpad.c_str()) == 0)
-					color->SetColor(TagBackgroundColor);
+				else if (strcmp(LabelLines[i][j].GetString(), "scratch") == 0 && strcmp(element.c_str(), EmptyScratchpad.c_str()) == 0)
+					color = &TagBackgroundBrush;
 
 				// Tag colors (colours the Controller)
-				else if (element.length() > 0 && strcmp(element.c_str(), TagReplacingMap["controller"].c_str()) == 0) {
+				else if (element.length() > 0 && strcmp(LabelLines[i][j].GetString(), "controller") == 0) {
 					switch (fp.GetState()) {
 					case FLIGHT_PLAN_STATE_ASSUMED:
 						color = &ContrAssumedColor;
@@ -3099,7 +3127,7 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 			continue;
 
 		int appWindowId = it->first;
-		appWindows[appWindowId]->render(hDC, this, &graphics, mouseLocation, DistanceTools);
+		appWindows[appWindowId]->render(hDC, this, &graphics, mouseLocation, DistanceTools, TagsDetailed);
 	}
 
 	dc.Detach();

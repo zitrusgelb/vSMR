@@ -3,6 +3,7 @@
 #include <string>
 #include <list>
 #include <vector>
+#include <set>
 #include <map>
 #include <algorithm>
 #include <time.h>
@@ -272,6 +273,10 @@ public:
 	//---OnClickScreenObject-----------------------------------------
 
 	virtual void OnClickScreenObject(int ObjectType, const char * sObjectId, POINT Pt, RECT Area, int Button);
+
+	//---OnDoubleClickScreenObject-----------------------------------------
+
+	virtual void OnDoubleClickScreenObject(int ObjectType, const char* sObjectId, POINT Pt, RECT Area, int Button);
 
 	//---OnMoveScreenObject---------------------------------------------
 
