@@ -2287,6 +2287,7 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 			}
 			
 			if (IsVFR(fp, rt).length()) {
+				TagType = TagTypes::VFR;
 				ColorTagType = TagTypes::VFR;
 			}
 		}
