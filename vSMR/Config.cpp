@@ -20,7 +20,9 @@ void CConfig::loadConfig() {
 	ifs.close();
 
 	if (document.Parse<0>(ss.str().c_str()).HasParseError()) {
-		AfxMessageBox("An error parsing vSMR configuration occurred.\nOnce fixed, reload the config by typing '.smr reload'", MB_OK);
+		CString msg;
+		msg.Format("An error parsing vSMR configuration occurred. Error: %s (Offset: %i)\nOnce fixed, reload the config by typing '.smr reload'", document.GetParseError(), document.GetErrorOffset());
+		AfxMessageBox(msg, MB_OK);
 	
 		ASSERT(AfxGetMainWnd() != NULL);
 		AfxGetMainWnd()->SendMessage(WM_CLOSE);
