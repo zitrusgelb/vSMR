@@ -23,9 +23,19 @@ void CConfig::loadConfig() {
 		CString msg;
 		msg.Format("An error parsing vSMR configuration occurred. Error: %s (Offset: %i)\nOnce fixed, reload the config by typing '.smr reload'", document.GetParseError(), document.GetErrorOffset());
 		AfxMessageBox(msg, MB_OK);
-	
-		ASSERT(AfxGetMainWnd() != NULL);
-		AfxGetMainWnd()->SendMessage(WM_CLOSE);
+
+		document.Parse<0>("[{"
+						"\"name\": \"Default\","
+						"\"font\": {"
+						"\"font_name\": \"EuroScope\","
+						"\"weight\": \"Regular\","
+						"\"sizes\": {\"one\": 0,\"two\": 0,\"three\": 0,\"four\": 0,\"five\": 0}},"
+						"\"rimcas\": {\"timer\": [0],\"timer_lvp\": [0],\"rimcas_stage_two_speed_threshold\": 0},"
+						"\"labels\": {\"leader_line_length\": 0,\"use_aspeed_for_gate\": false,\"airborne\": {\"use_departure_arrival_coloring\": false}},"
+			"\"filters\": {\"hide_above_alt\": 0,\"hide_below_alt\": 0,\"hide_above_spd\": 0,\"show_on_rwy\": true,\"radar_range_nm\": 0,\"night_alpha_setting\": 0,\"pro_mode\": {\"enable\": false}},"
+						"\"targets\": {\"show_primary_target\": false},"
+			"\"approach_insets\": {\"extended_lines_length\": 0,\"extended_lines_ticks_spacing\": 1,\"background_color\": {\"r\": 127,\"g\": 122,\"b\": 122},\"extended_lines_color\": {\"r\": 0,\"g\": 0,\"b\": 0},\"runway_color\": {\"r\": 0,\"g\": 0,\"b\": 0}}"
+						"}]");
 	}
 	
 	profiles.clear();
