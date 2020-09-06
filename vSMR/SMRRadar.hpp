@@ -126,6 +126,8 @@ public:
 	int currentFontSize = 1;
 	CFont menubar_font_left, menubar_font_right, menubar_font_timer;
 
+	map<string, string> customCursors;
+
 	map<string, CPosition> AirportPositions;
 
 	bool Afterglow = true;
@@ -253,6 +255,10 @@ public:
 	//---LoadCustomFont--------------------------------------------
 
 	virtual void LoadCustomFont();
+
+	//---LoadCustomCursors--------------------------------------------
+
+	virtual void LoadCustomCursors();
 
 	//---LoadProfile--------------------------------------------
 

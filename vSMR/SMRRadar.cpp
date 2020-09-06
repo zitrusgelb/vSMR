@@ -157,6 +157,8 @@ CSMRRadar::CSMRRadar()
 
 	this->CSMRRadar::LoadCustomFont();
 
+	this->CSMRRadar::LoadCustomCursors();
+
 	this->CSMRRadar::RefreshAirportActivity();
 }
 
@@ -182,6 +184,9 @@ void CSMRRadar::CorrelateCursor() {
 	{
 		if (standardCursor)
 		{
+			if (customCursors["default"].length())
+				smrCursor = CopyCursor((HCURSOR)::LoadImage(AfxGetInstanceHandle(), customCursors["default"].c_str(), IMAGE_CURSOR, 0, 0, LR_SHARED | LR_LOADFROMFILE));
+			else
 			smrCursor = CopyCursor((HCURSOR)::LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDC_SMRCORRELATE), IMAGE_CURSOR, 0, 0, LR_SHARED));
 
 			AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -195,6 +200,9 @@ void CSMRRadar::CorrelateCursor() {
 		if (!standardCursor)
 		{
 			if (customCursor) {
+				if (customCursors["default"].length())
+					smrCursor = CopyCursor((HCURSOR)::LoadImage(AfxGetInstanceHandle(), customCursors["default"].c_str(), IMAGE_CURSOR, 0, 0, LR_SHARED | LR_LOADFROMFILE));
+				else
 				smrCursor = CopyCursor((HCURSOR)::LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDC_SMRCURSOR), IMAGE_CURSOR, 0, 0, LR_SHARED));
 			}
 			else {
@@ -228,6 +236,44 @@ void CSMRRadar::LoadCustomFont() {
 	customFonts[3] = new Gdiplus::Font(buffer.c_str(), Gdiplus::REAL(FSizes["three"].GetInt()), fontStyle, Gdiplus::UnitPixel);
 	customFonts[4] = new Gdiplus::Font(buffer.c_str(), Gdiplus::REAL(FSizes["four"].GetInt()), fontStyle, Gdiplus::UnitPixel);
 	customFonts[5] = new Gdiplus::Font(buffer.c_str(), Gdiplus::REAL(FSizes["five"].GetInt()), fontStyle, Gdiplus::UnitPixel);
+}
+
+void CSMRRadar::LoadCustomCursors() {
+	Logger::info(string(__FUNCSIG__));
+	// Loading the custom cursors if there is one in use
+	customCursors.clear();
+
+	customCursors["default"] = "";
+	customCursors["correlate"] = "";
+	customCursors["inset_move"] = "";
+	customCursors["inset_resize"] = "";
+	customCursors["move_tag"] = "";
+
+	if (CurrentConfig->getActiveProfile().HasMember("cursors")) {
+		string temp = "";
+
+		temp = CurrentConfig->getActiveProfile()["cursors"]["default"].GetString();
+		if (temp.length() && !(FILE_ATTRIBUTE_DIRECTORY == GetFileAttributes(temp.c_str()) || (INVALID_FILE_ATTRIBUTES == GetFileAttributes(temp.c_str()) && (GetLastError() == ERROR_FILE_NOT_FOUND || GetLastError() == ERROR_PATH_NOT_FOUND))))
+			customCursors["default"] = temp;
+		
+		temp = CurrentConfig->getActiveProfile()["cursors"]["correlate"].GetString();
+		if (temp.length() && !(FILE_ATTRIBUTE_DIRECTORY == GetFileAttributes(temp.c_str()) || (INVALID_FILE_ATTRIBUTES == GetFileAttributes(temp.c_str()) && (GetLastError() == ERROR_FILE_NOT_FOUND || GetLastError() == ERROR_PATH_NOT_FOUND))))
+			customCursors["correlate"] = temp;
+
+		temp = CurrentConfig->getActiveProfile()["cursors"]["inset_move"].GetString();
+		if (temp.length() && !(FILE_ATTRIBUTE_DIRECTORY == GetFileAttributes(temp.c_str()) || (INVALID_FILE_ATTRIBUTES == GetFileAttributes(temp.c_str()) && (GetLastError() == ERROR_FILE_NOT_FOUND || GetLastError() == ERROR_PATH_NOT_FOUND))))
+			customCursors["inset_move"] = temp;
+
+		temp = CurrentConfig->getActiveProfile()["cursors"]["inset_resize"].GetString();
+		if (temp.length() && !(FILE_ATTRIBUTE_DIRECTORY == GetFileAttributes(temp.c_str()) || (INVALID_FILE_ATTRIBUTES == GetFileAttributes(temp.c_str()) && (GetLastError() == ERROR_FILE_NOT_FOUND || GetLastError() == ERROR_PATH_NOT_FOUND))))
+			customCursors["inset_resize"] = temp;
+
+		temp = CurrentConfig->getActiveProfile()["cursors"]["move_tag"].GetString();
+		if (temp.length() && !(FILE_ATTRIBUTE_DIRECTORY == GetFileAttributes(temp.c_str()) || (INVALID_FILE_ATTRIBUTES == GetFileAttributes(temp.c_str()) && (GetLastError() == ERROR_FILE_NOT_FOUND || GetLastError() == ERROR_PATH_NOT_FOUND))))
+			customCursors["move_tag"] = temp;
+	}
+
+	initCursor = true;
 }
 
 void CSMRRadar::LoadProfile(string profileName) {
@@ -290,6 +336,9 @@ void CSMRRadar::LoadProfile(string profileName) {
 
 	// Reloading the fonts
 	this->LoadCustomFont();
+
+	// Reloading the cursors
+	this->LoadCustomCursors();
 }
 
 void CSMRRadar::OnAsrContentLoaded(bool Loaded)
@@ -429,11 +478,18 @@ void CSMRRadar::OnMoveScreenObject(int ObjectType, const char * sObjectId, POINT
 		{
 			if (standardCursor)
 			{
-				if (strcmp(sObjectId, "topbar") == 0)
+				if (strcmp(sObjectId, "topbar") == 0) {
+					if (customCursors["inset_move"].length())
+						smrCursor = CopyCursor((HCURSOR)::LoadImage(AfxGetInstanceHandle(), customCursors["inset_move"].c_str(), IMAGE_CURSOR, 0, 0, LR_SHARED | LR_LOADFROMFILE));
+					else
 					smrCursor = CopyCursor((HCURSOR)::LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDC_SMRMOVEWINDOW), IMAGE_CURSOR, 0, 0, LR_SHARED));
-				else if (strcmp(sObjectId, "resize") == 0)
+				}
+				else if (strcmp(sObjectId, "resize") == 0) {
+					if (customCursors["inset_resize"].length())
+						smrCursor = CopyCursor((HCURSOR)::LoadImage(AfxGetInstanceHandle(), customCursors["inset_resize"].c_str(), IMAGE_CURSOR, 0, 0, LR_SHARED | LR_LOADFROMFILE));
+					else
 					smrCursor = CopyCursor((HCURSOR)::LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDC_SMRRESIZE), IMAGE_CURSOR, 0, 0, LR_SHARED));
-
+				}
 				AFX_MANAGE_STATE(AfxGetStaticModuleState());
 				ASSERT(smrCursor);
 				SetCursor(smrCursor);
@@ -444,6 +500,9 @@ void CSMRRadar::OnMoveScreenObject(int ObjectType, const char * sObjectId, POINT
 			if (!standardCursor)
 			{
 				if (customCursor) {
+					if (customCursors["default"].length())
+						smrCursor = CopyCursor((HCURSOR)::LoadImage(AfxGetInstanceHandle(), customCursors["default"].c_str(), IMAGE_CURSOR, 0, 0, LR_SHARED | LR_LOADFROMFILE));
+					else
 					smrCursor = CopyCursor((HCURSOR)::LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDC_SMRCURSOR), IMAGE_CURSOR, 0, 0, LR_SHARED));
 				}
 				else {
@@ -465,6 +524,9 @@ void CSMRRadar::OnMoveScreenObject(int ObjectType, const char * sObjectId, POINT
 		{
 			if (standardCursor)
 			{
+				if (customCursors["move_tag"].length())
+					smrCursor = CopyCursor((HCURSOR)::LoadImage(AfxGetInstanceHandle(), customCursors["move_tag"].c_str(), IMAGE_CURSOR, 0, 0, LR_SHARED | LR_LOADFROMFILE));
+				else
 				smrCursor = CopyCursor((HCURSOR)::LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDC_SMRMOVETAG), IMAGE_CURSOR, 0, 0, LR_SHARED));
 				AFX_MANAGE_STATE(AfxGetStaticModuleState());
 				ASSERT(smrCursor);
@@ -477,6 +539,9 @@ void CSMRRadar::OnMoveScreenObject(int ObjectType, const char * sObjectId, POINT
 			if (!standardCursor)
 			{
 				if (customCursor) {
+					if (customCursors["default"].length())
+						smrCursor = CopyCursor((HCURSOR)::LoadImage(AfxGetInstanceHandle(), customCursors["default"].c_str(), IMAGE_CURSOR, 0, 0, LR_SHARED | LR_LOADFROMFILE));
+					else
 					smrCursor = CopyCursor((HCURSOR)::LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDC_SMRCURSOR), IMAGE_CURSOR, 0, 0, LR_SHARED));
 				}
 				else {
@@ -536,6 +601,9 @@ void CSMRRadar::OnMoveScreenObject(int ObjectType, const char * sObjectId, POINT
 		{
 			if (standardCursor)
 			{
+				if (customCursors["inset_move"].length())
+					smrCursor = CopyCursor((HCURSOR)::LoadImage(AfxGetInstanceHandle(), customCursors["inset_move"].c_str(), IMAGE_CURSOR, 0, 0, LR_SHARED | LR_LOADFROMFILE));
+				else
 				smrCursor = CopyCursor((HCURSOR)::LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDC_SMRMOVEWINDOW), IMAGE_CURSOR, 0, 0, LR_SHARED));
 
 				AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -549,6 +617,9 @@ void CSMRRadar::OnMoveScreenObject(int ObjectType, const char * sObjectId, POINT
 			if (!standardCursor)
 			{
 				if (customCursor) {
+					if (customCursors["default"].length())
+						smrCursor = CopyCursor((HCURSOR)::LoadImage(AfxGetInstanceHandle(), customCursors["default"].c_str(), IMAGE_CURSOR, 0, 0, LR_SHARED | LR_LOADFROMFILE));
+					else
 					smrCursor = CopyCursor((HCURSOR)::LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDC_SMRCURSOR), IMAGE_CURSOR, 0, 0, LR_SHARED));					
 				}
 				else {
@@ -1020,6 +1091,7 @@ void CSMRRadar::OnFunctionCall(int FunctionId, const char * sItemString, POINT P
 	else if (FunctionId == RIMCAS_UPDATE_PROFILE) {
 		this->CSMRRadar::LoadProfile(sItemString);
 		LoadCustomFont();
+		LoadCustomCursors();
 		SaveDataToAsr("ActiveProfile", "vSMR active profile", sItemString);
 
 		ShowLists["Profiles"] = true;
@@ -1791,6 +1863,9 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 	if (initCursor)
 	{
 		if (customCursor) {
+			if (customCursors["default"].length())
+				smrCursor = CopyCursor((HCURSOR)::LoadImage(AfxGetInstanceHandle(), customCursors["default"].c_str(), IMAGE_CURSOR, 0, 0, LR_SHARED | LR_LOADFROMFILE));
+			else
 			smrCursor = CopyCursor((HCURSOR)::LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDC_SMRCURSOR), IMAGE_CURSOR, 0, 0, LR_SHARED));
 			// This got broken because of threading as far as I can tell
 			// The cursor does change for some milliseconds but gets reset almost instantly by external MFC code
@@ -1800,7 +1875,7 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 			smrCursor = (HCURSOR)::LoadCursor(NULL, IDC_ARROW);
 		}
 
-		if (smrCursor != nullptr)
+		if (smrCursor != nullptr && gSourceProc == nullptr)
 		{		
 			pluginWindow = GetActiveWindow();
 			gSourceProc = (WNDPROC)SetWindowLong(pluginWindow, GWL_WNDPROC, (LONG)WindowProc);

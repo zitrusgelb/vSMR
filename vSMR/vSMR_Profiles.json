@@ -4,6 +4,14 @@
       "icao_airlines": "C:\\Users\\xxx\\Documents\\EuroScope\\DATAFILES\\ICAO_Airlines.txt",
       "icao_aircraft": "C:\\Users\\xxx\\Documents\\EuroScope\\DATAFILES\\ICAO_Aircraft.txt",
       "toolbar_offset": 16,
+      "cursor": "Non_Default",
+      "cursors": {
+         "default": "",
+         "correlate": "",
+         "inset_move": "",
+         "inset_resize": "",
+         "move_tag": ""
+      },
     "font": {
         "font_name": "EuroScope",
         "weight": "Regular",
