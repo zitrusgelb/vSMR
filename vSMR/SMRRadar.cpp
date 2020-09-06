@@ -402,32 +402,17 @@ void CSMRRadar::OnAsrContentToBeSaved()
 	{
 		string prefix = "SRW" + std::to_string(i);
 
-		temp = std::to_string(appWindows[i]->m_Area.left);
-		SaveDataToAsr(string(prefix + "TopLeftX").c_str(), "SRW position", temp.c_str());
+		SaveDataToAsr(string(prefix + "TopLeftX").c_str(), "SRW position", std::to_string(appWindows[i]->m_Area.left).c_str());
+		SaveDataToAsr(string(prefix + "TopLeftY").c_str(), "SRW position", std::to_string(appWindows[i]->m_Area.top).c_str());
+		SaveDataToAsr(string(prefix + "BottomRightX").c_str(), "SRW position", std::to_string(appWindows[i]->m_Area.right).c_str());
+		SaveDataToAsr(string(prefix + "BottomRightY").c_str(), "SRW position", std::to_string(appWindows[i]->m_Area.bottom).c_str());
 
-		temp = std::to_string(appWindows[i]->m_Area.top);
-		SaveDataToAsr(string(prefix + "TopLeftY").c_str(), "SRW position", temp.c_str());
+		SaveDataToAsr(string(prefix + "OffsetX").c_str(), "SRW offset", std::to_string(appWindows[i]->m_Offset.x).c_str());
+		SaveDataToAsr(string(prefix + "OffsetY").c_str(), "SRW offset", std::to_string(appWindows[i]->m_Offset.y).c_str());
 
-		temp = std::to_string(appWindows[i]->m_Area.right);
-		SaveDataToAsr(string(prefix + "BottomRightX").c_str(), "SRW position", temp.c_str());
-
-		temp = std::to_string(appWindows[i]->m_Area.bottom);
-		SaveDataToAsr(string(prefix + "BottomRightY").c_str(), "SRW position", temp.c_str());
-
-		temp = std::to_string(appWindows[i]->m_Offset.x);
-		SaveDataToAsr(string(prefix + "OffsetX").c_str(), "SRW offset", temp.c_str());
-
-		temp = std::to_string(appWindows[i]->m_Offset.y);
-		SaveDataToAsr(string(prefix + "OffsetY").c_str(), "SRW offset", temp.c_str());
-
-		temp = std::to_string(appWindows[i]->m_Filter);
-		SaveDataToAsr(string(prefix + "Filter").c_str(), "SRW filter", temp.c_str());
-
-		temp = std::to_string(appWindows[i]->m_Scale);
-		SaveDataToAsr(string(prefix + "Scale").c_str(), "SRW range", temp.c_str());
-
-		temp = std::to_string((int)appWindows[i]->m_Rotation);
-		SaveDataToAsr(string(prefix + "Rotation").c_str(), "SRW rotation", temp.c_str());
+		SaveDataToAsr(string(prefix + "Filter").c_str(), "SRW filter", std::to_string(appWindows[i]->m_Filter).c_str());
+		SaveDataToAsr(string(prefix + "Scale").c_str(), "SRW range", std::to_string(appWindows[i]->m_Scale).c_str());
+		SaveDataToAsr(string(prefix + "Rotation").c_str(), "SRW rotation", std::to_string(appWindows[i]->m_Rotation).c_str());
 
 		string to_save = "0";
 		if (appWindowDisplays[i])
