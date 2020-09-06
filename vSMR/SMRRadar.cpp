@@ -319,8 +319,6 @@ void CSMRRadar::OnAsrContentLoaded(bool Loaded)
 	if ((p_value = GetDataFromAsr("PredictedLine")) != NULL)
 		PredictedLength = atoi(p_value);
 
-	string temp;
-
 	for (int i = 1; i < 3; i++)
 	{
 		string prefix = "SRW" + std::to_string(i);
@@ -395,8 +393,6 @@ void CSMRRadar::OnAsrContentToBeSaved()
 	SaveDataToAsr("GndTrailsDots", "vSMR GRND Trail Dots", std::to_string(Trail_Gnd).c_str());
 
 	SaveDataToAsr("PredictedLine", "vSMR Predicted Track Lines", std::to_string(PredictedLength).c_str());
-
-	string temp = "";
 
 	for (int i = 1; i < 3; i++)
 	{
