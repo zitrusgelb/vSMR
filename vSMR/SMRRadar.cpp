@@ -20,7 +20,6 @@ WNDPROC gSourceProc;
 HWND pluginWindow;
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-map<string, string> CSMRRadar::vStripsStands;
 map<int, CInsetWindow *> appWindows;
 string EmptyScratchpad = "..\0"; // Make Scratchpad tag clickable, if empty
 
@@ -1619,12 +1618,6 @@ map<string, string> CSMRRadar::GenerateTagData(CPlugIn* Plugin, CRadarTarget rt,
 		gate = "NoGATE";
 	else
 		gate = gate.substr(0, 4);
-
-	// If there is a vStrips gate, we use that
-	if (vStripsStands.find(rt.GetCallsign()) != vStripsStands.end())
-	{
-		gate = vStripsStands[rt.GetCallsign()];
-	}
 
 	if (gate.size() == 0 || gate == "0" || !isAcCorrelated)
 		gate = "NoGATE";

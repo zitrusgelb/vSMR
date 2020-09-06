@@ -17,7 +17,6 @@
 #include "Rimcas.hpp"
 #include "InsetWindow.h"
 #include <memory>
-#include <asio/io_service.hpp>
 #include <thread>
 #include "ColorManager.h"
 #include "Logger.h"
@@ -35,11 +34,6 @@ namespace SMRSharedData
 };
 
 
-namespace SMRPluginSharedData
-{
-	static asio::io_service io_service;
-}
-
 using namespace SMRSharedData;
 
 class CSMRRadar :
@@ -48,8 +42,6 @@ class CSMRRadar :
 public:
 	CSMRRadar();
 	virtual ~CSMRRadar();
-
-	static map<string, string> vStripsStands;
 
 	bool BLINK = false;
 

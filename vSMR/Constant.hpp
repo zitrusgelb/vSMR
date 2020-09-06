@@ -10,7 +10,6 @@
 #include <sstream>
 #include <iomanip>
 
-#define VSTRIPS_PORT 53487
 
 using namespace std;
 using namespace EuroScopePlugIn;

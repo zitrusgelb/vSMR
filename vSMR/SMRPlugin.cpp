@@ -57,11 +57,6 @@ clock_t timer;
 
 string myfrequency;
 
-map<string, string> vStrips_Stands;
-
-bool startThreadvStrips = true;
-
-using namespace SMRPluginSharedData;
 char recv_buf[1024];
 
 vector<CSMRRadar*> RadarScreensOpened;
@@ -307,16 +302,6 @@ CSMRPlugin::~CSMRPlugin()
 	if (PlaySoundClr)
 		temp = 1;
 	SaveDataToSettings("cpdlc_sound", "Play sound on clearance request", std::to_string(temp).c_str());
-
-	try
-	{
-		io_service.stop();
-		//vStripsThread.join();
-	}
-	catch (std::exception& e)
-	{
-		std::cerr << e.what() << std::endl;
-	}
 }
 
 bool CSMRPlugin::OnCompileCommand(const char * sCommandLine) {
