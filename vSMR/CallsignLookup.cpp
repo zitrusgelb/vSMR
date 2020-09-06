@@ -16,6 +16,9 @@ CCallsignLookup::CCallsignLookup(string fileName) {
 		while (getline(myfile, line)) {
 			vector<string> strs;
 
+			if (line[0] == ';') // ignore comments
+				continue;
+
 			sstream << line;
 			strs = split(line, '\t');
 
