@@ -1002,6 +1002,7 @@ void CSMRRadar::OnFunctionCall(int FunctionId, const char * sItemString, POINT P
 		else if (strcmp(sItemString, "Size 5") == 0)
 			currentFontSize = 5;
 
+		SaveDataToAsr("FontSize", "vSMR font size", std::to_string(currentFontSize).c_str());
 		ShowLists["Label Font Size"] = true;
 	}
 
@@ -1107,11 +1108,13 @@ void CSMRRadar::OnFunctionCall(int FunctionId, const char * sItemString, POINT P
 	else if (FunctionId == RIMCAS_UPDATE_AFTERGLOW)
 	{
 		Afterglow = !Afterglow;
+		SaveDataToAsr("Afterglow", "vSMR Afterglow enabled", std::to_string(int(Afterglow)).c_str());
 	}
 
 	else if (FunctionId == RIMCAS_UPDATE_GND_TRAIL)
 	{
 		Trail_Gnd = atoi(sItemString);
+		SaveDataToAsr("GndTrailsDots", "vSMR GRND Trail Dots", std::to_string(Trail_Gnd).c_str());
 
 		ShowLists["GRND Trail Dots"] = true;
 	}
@@ -1119,6 +1122,7 @@ void CSMRRadar::OnFunctionCall(int FunctionId, const char * sItemString, POINT P
 	else if (FunctionId == RIMCAS_UPDATE_APP_TRAIL)
 	{
 		Trail_App = atoi(sItemString);
+		SaveDataToAsr("AppTrailsDots", "vSMR APPR Trail Dots", std::to_string(Trail_App).c_str());
 
 		ShowLists["APPR Trail Dots"] = true;
 	}
@@ -1126,6 +1130,7 @@ void CSMRRadar::OnFunctionCall(int FunctionId, const char * sItemString, POINT P
 	else if (FunctionId == RIMCAS_UPDATE_PTL)
 	{
 		PredictedLength = atoi(sItemString);
+		SaveDataToAsr("PredictedLine", "vSMR Predicted Track Lines", std::to_string(PredictedLength).c_str());
 
 		ShowLists["Predicted Track Line"] = true;
 	}
