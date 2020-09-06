@@ -23,8 +23,8 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 map<int, CInsetWindow *> appWindows;
 string EmptyScratchpad = "..\0"; // Make Scratchpad tag clickable, if empty
 
-inline double closest(std::vector<double> const& vec, double value) {
-	auto const it = std::lower_bound(vec.begin(), vec.end(), value);
+inline double closest(vector<double> const& vec, double value) {
+	auto const it = lower_bound(vec.begin(), vec.end(), value);
 	if (it == vec.end()) { return -1; }
 	
 	return *it;
@@ -38,8 +38,8 @@ bool mouseWithin(CRect rect) {
 		return true;
 	return false;
 }
-bool is_digits(const std::string &str) {
-	return str.find_first_not_of("0123456789") == std::string::npos;
+bool is_digits(const string &str) {
+	return str.find_first_not_of("0123456789") == string::npos;
 }
 // ReSharper disable CppMsExtAddressOfClassRValue
 
@@ -186,7 +186,7 @@ void CSMRRadar::CorrelateCursor() {
 			if (customCursors["default"].length())
 				smrCursor = CopyCursor((HCURSOR)::LoadImage(AfxGetInstanceHandle(), customCursors["default"].c_str(), IMAGE_CURSOR, 0, 0, LR_SHARED | LR_LOADFROMFILE));
 			else
-			smrCursor = CopyCursor((HCURSOR)::LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDC_SMRCORRELATE), IMAGE_CURSOR, 0, 0, LR_SHARED));
+				smrCursor = CopyCursor((HCURSOR)::LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDC_SMRCORRELATE), IMAGE_CURSOR, 0, 0, LR_SHARED));
 
 			AFX_MANAGE_STATE(AfxGetStaticModuleState());
 			ASSERT(smrCursor);
@@ -202,7 +202,7 @@ void CSMRRadar::CorrelateCursor() {
 				if (customCursors["default"].length())
 					smrCursor = CopyCursor((HCURSOR)::LoadImage(AfxGetInstanceHandle(), customCursors["default"].c_str(), IMAGE_CURSOR, 0, 0, LR_SHARED | LR_LOADFROMFILE));
 				else
-				smrCursor = CopyCursor((HCURSOR)::LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDC_SMRCURSOR), IMAGE_CURSOR, 0, 0, LR_SHARED));
+					smrCursor = CopyCursor((HCURSOR)::LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDC_SMRCURSOR), IMAGE_CURSOR, 0, 0, LR_SHARED));
 			}
 			else {
 				smrCursor = (HCURSOR)::LoadCursor(NULL, IDC_ARROW);
@@ -369,7 +369,7 @@ void CSMRRadar::OnAsrContentLoaded(bool Loaded)
 
 	for (int i = 1; i < 3; i++)
 	{
-		string prefix = "SRW" + std::to_string(i);
+		string prefix = "SRW" + to_string(i);
 
 		if ((p_value = GetDataFromAsr(string(prefix + "TopLeftX").c_str())) != NULL)
 			appWindows[i]->m_Area.left = atoi(p_value);
@@ -432,31 +432,31 @@ void CSMRRadar::OnAsrContentToBeSaved()
 
 	SaveDataToAsr("ActiveProfile", "vSMR active profile", CurrentConfig->getActiveProfileName().c_str());
 
-	SaveDataToAsr("FontSize", "vSMR font size", std::to_string(currentFontSize).c_str());
+	SaveDataToAsr("FontSize", "vSMR font size", to_string(currentFontSize).c_str());
 
-	SaveDataToAsr("Afterglow", "vSMR Afterglow enabled", std::to_string(int(Afterglow)).c_str());
+	SaveDataToAsr("Afterglow", "vSMR Afterglow enabled", to_string(int(Afterglow)).c_str());
 
-	SaveDataToAsr("AppTrailsDots", "vSMR APPR Trail Dots", std::to_string(Trail_App).c_str());
+	SaveDataToAsr("AppTrailsDots", "vSMR APPR Trail Dots", to_string(Trail_App).c_str());
 
-	SaveDataToAsr("GndTrailsDots", "vSMR GRND Trail Dots", std::to_string(Trail_Gnd).c_str());
+	SaveDataToAsr("GndTrailsDots", "vSMR GRND Trail Dots", to_string(Trail_Gnd).c_str());
 
-	SaveDataToAsr("PredictedLine", "vSMR Predicted Track Lines", std::to_string(PredictedLength).c_str());
+	SaveDataToAsr("PredictedLine", "vSMR Predicted Track Lines", to_string(PredictedLength).c_str());
 
 	for (int i = 1; i < 3; i++)
 	{
-		string prefix = "SRW" + std::to_string(i);
+		string prefix = "SRW" + to_string(i);
 
-		SaveDataToAsr(string(prefix + "TopLeftX").c_str(), "SRW position", std::to_string(appWindows[i]->m_Area.left).c_str());
-		SaveDataToAsr(string(prefix + "TopLeftY").c_str(), "SRW position", std::to_string(appWindows[i]->m_Area.top).c_str());
-		SaveDataToAsr(string(prefix + "BottomRightX").c_str(), "SRW position", std::to_string(appWindows[i]->m_Area.right).c_str());
-		SaveDataToAsr(string(prefix + "BottomRightY").c_str(), "SRW position", std::to_string(appWindows[i]->m_Area.bottom).c_str());
+		SaveDataToAsr(string(prefix + "TopLeftX").c_str(), "SRW position", to_string(appWindows[i]->m_Area.left).c_str());
+		SaveDataToAsr(string(prefix + "TopLeftY").c_str(), "SRW position", to_string(appWindows[i]->m_Area.top).c_str());
+		SaveDataToAsr(string(prefix + "BottomRightX").c_str(), "SRW position", to_string(appWindows[i]->m_Area.right).c_str());
+		SaveDataToAsr(string(prefix + "BottomRightY").c_str(), "SRW position", to_string(appWindows[i]->m_Area.bottom).c_str());
 
-		SaveDataToAsr(string(prefix + "OffsetX").c_str(), "SRW offset", std::to_string(appWindows[i]->m_Offset.x).c_str());
-		SaveDataToAsr(string(prefix + "OffsetY").c_str(), "SRW offset", std::to_string(appWindows[i]->m_Offset.y).c_str());
+		SaveDataToAsr(string(prefix + "OffsetX").c_str(), "SRW offset", to_string(appWindows[i]->m_Offset.x).c_str());
+		SaveDataToAsr(string(prefix + "OffsetY").c_str(), "SRW offset", to_string(appWindows[i]->m_Offset.y).c_str());
 
-		SaveDataToAsr(string(prefix + "Filter").c_str(), "SRW filter", std::to_string(appWindows[i]->m_Filter).c_str());
-		SaveDataToAsr(string(prefix + "Scale").c_str(), "SRW range", std::to_string(appWindows[i]->m_Scale).c_str());
-		SaveDataToAsr(string(prefix + "Rotation").c_str(), "SRW rotation", std::to_string(appWindows[i]->m_Rotation).c_str());
+		SaveDataToAsr(string(prefix + "Filter").c_str(), "SRW filter", to_string(appWindows[i]->m_Filter).c_str());
+		SaveDataToAsr(string(prefix + "Scale").c_str(), "SRW range", to_string(appWindows[i]->m_Scale).c_str());
+		SaveDataToAsr(string(prefix + "Rotation").c_str(), "SRW rotation", to_string(appWindows[i]->m_Rotation).c_str());
 
 		string to_save = "0";
 		if (appWindowDisplays[i])
@@ -481,13 +481,13 @@ void CSMRRadar::OnMoveScreenObject(int ObjectType, const char * sObjectId, POINT
 					if (customCursors["inset_move"].length())
 						smrCursor = CopyCursor((HCURSOR)::LoadImage(AfxGetInstanceHandle(), customCursors["inset_move"].c_str(), IMAGE_CURSOR, 0, 0, LR_SHARED | LR_LOADFROMFILE));
 					else
-					smrCursor = CopyCursor((HCURSOR)::LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDC_SMRMOVEWINDOW), IMAGE_CURSOR, 0, 0, LR_SHARED));
+						smrCursor = CopyCursor((HCURSOR)::LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDC_SMRMOVEWINDOW), IMAGE_CURSOR, 0, 0, LR_SHARED));
 				}
 				else if (strcmp(sObjectId, "resize") == 0) {
 					if (customCursors["inset_resize"].length())
 						smrCursor = CopyCursor((HCURSOR)::LoadImage(AfxGetInstanceHandle(), customCursors["inset_resize"].c_str(), IMAGE_CURSOR, 0, 0, LR_SHARED | LR_LOADFROMFILE));
 					else
-					smrCursor = CopyCursor((HCURSOR)::LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDC_SMRRESIZE), IMAGE_CURSOR, 0, 0, LR_SHARED));
+						smrCursor = CopyCursor((HCURSOR)::LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDC_SMRRESIZE), IMAGE_CURSOR, 0, 0, LR_SHARED));
 				}
 				AFX_MANAGE_STATE(AfxGetStaticModuleState());
 				ASSERT(smrCursor);
@@ -502,7 +502,7 @@ void CSMRRadar::OnMoveScreenObject(int ObjectType, const char * sObjectId, POINT
 					if (customCursors["default"].length())
 						smrCursor = CopyCursor((HCURSOR)::LoadImage(AfxGetInstanceHandle(), customCursors["default"].c_str(), IMAGE_CURSOR, 0, 0, LR_SHARED | LR_LOADFROMFILE));
 					else
-					smrCursor = CopyCursor((HCURSOR)::LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDC_SMRCURSOR), IMAGE_CURSOR, 0, 0, LR_SHARED));
+						smrCursor = CopyCursor((HCURSOR)::LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDC_SMRCURSOR), IMAGE_CURSOR, 0, 0, LR_SHARED));
 				}
 				else {
 					smrCursor = (HCURSOR)::LoadCursor(NULL, IDC_ARROW);
@@ -526,7 +526,7 @@ void CSMRRadar::OnMoveScreenObject(int ObjectType, const char * sObjectId, POINT
 				if (customCursors["move_tag"].length())
 					smrCursor = CopyCursor((HCURSOR)::LoadImage(AfxGetInstanceHandle(), customCursors["move_tag"].c_str(), IMAGE_CURSOR, 0, 0, LR_SHARED | LR_LOADFROMFILE));
 				else
-				smrCursor = CopyCursor((HCURSOR)::LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDC_SMRMOVETAG), IMAGE_CURSOR, 0, 0, LR_SHARED));
+					smrCursor = CopyCursor((HCURSOR)::LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDC_SMRMOVETAG), IMAGE_CURSOR, 0, 0, LR_SHARED));
 				AFX_MANAGE_STATE(AfxGetStaticModuleState());
 				ASSERT(smrCursor);
 				SetCursor(smrCursor);
@@ -541,7 +541,7 @@ void CSMRRadar::OnMoveScreenObject(int ObjectType, const char * sObjectId, POINT
 					if (customCursors["default"].length())
 						smrCursor = CopyCursor((HCURSOR)::LoadImage(AfxGetInstanceHandle(), customCursors["default"].c_str(), IMAGE_CURSOR, 0, 0, LR_SHARED | LR_LOADFROMFILE));
 					else
-					smrCursor = CopyCursor((HCURSOR)::LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDC_SMRCURSOR), IMAGE_CURSOR, 0, 0, LR_SHARED));
+						smrCursor = CopyCursor((HCURSOR)::LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDC_SMRCURSOR), IMAGE_CURSOR, 0, 0, LR_SHARED));
 				}
 				else {
 					smrCursor = (HCURSOR)::LoadCursor(NULL, IDC_ARROW);
@@ -603,7 +603,7 @@ void CSMRRadar::OnMoveScreenObject(int ObjectType, const char * sObjectId, POINT
 				if (customCursors["inset_move"].length())
 					smrCursor = CopyCursor((HCURSOR)::LoadImage(AfxGetInstanceHandle(), customCursors["inset_move"].c_str(), IMAGE_CURSOR, 0, 0, LR_SHARED | LR_LOADFROMFILE));
 				else
-				smrCursor = CopyCursor((HCURSOR)::LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDC_SMRMOVEWINDOW), IMAGE_CURSOR, 0, 0, LR_SHARED));
+					smrCursor = CopyCursor((HCURSOR)::LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDC_SMRMOVEWINDOW), IMAGE_CURSOR, 0, 0, LR_SHARED));
 
 				AFX_MANAGE_STATE(AfxGetStaticModuleState());
 				ASSERT(smrCursor);
@@ -619,7 +619,7 @@ void CSMRRadar::OnMoveScreenObject(int ObjectType, const char * sObjectId, POINT
 					if (customCursors["default"].length())
 						smrCursor = CopyCursor((HCURSOR)::LoadImage(AfxGetInstanceHandle(), customCursors["default"].c_str(), IMAGE_CURSOR, 0, 0, LR_SHARED | LR_LOADFROMFILE));
 					else
-					smrCursor = CopyCursor((HCURSOR)::LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDC_SMRCURSOR), IMAGE_CURSOR, 0, 0, LR_SHARED));					
+						smrCursor = CopyCursor((HCURSOR)::LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDC_SMRCURSOR), IMAGE_CURSOR, 0, 0, LR_SHARED));
 				}
 				else {
 					smrCursor = (HCURSOR)::LoadCursor(NULL, IDC_ARROW);
@@ -699,7 +699,7 @@ void CSMRRadar::OnClickScreenObject(int ObjectType, const char * sObjectId, POIN
 			GetPlugIn()->AddPopupListElement("2500", "", RIMCAS_UPDATEFILTER + appWindowId, false, int(appWindows[appWindowId]->m_Filter == 2500));
 			GetPlugIn()->AddPopupListElement("1500", "", RIMCAS_UPDATEFILTER + appWindowId, false, int(appWindows[appWindowId]->m_Filter == 1500));
 			GetPlugIn()->AddPopupListElement("500", "", RIMCAS_UPDATEFILTER + appWindowId, false, int(appWindows[appWindowId]->m_Filter == 500));
-			string tmp = std::to_string(GetPlugIn()->GetTransitionAltitude());
+			string tmp = to_string(GetPlugIn()->GetTransitionAltitude());
 			GetPlugIn()->AddPopupListElement(tmp.c_str(), "", RIMCAS_UPDATEFILTER + appWindowId, false, 2, false, true);
 			GetPlugIn()->AddPopupListElement("Close", "", RIMCAS_CLOSE, false, 2, false, true);
 		}
@@ -707,7 +707,7 @@ void CSMRRadar::OnClickScreenObject(int ObjectType, const char * sObjectId, POIN
 			GetPlugIn()->OpenPopupList(Area, "SRW Rotate (deg)", 1);
 			for (int k = 0; k <= 360; k++)
 			{
-				string tmp = std::to_string(k);
+				string tmp = to_string(k);
 				GetPlugIn()->AddPopupListElement(tmp.c_str(), "", RIMCAS_UPDATEROTATE + appWindowId, false, int(appWindows[appWindowId]->m_Rotation == k));
 			}
 			GetPlugIn()->AddPopupListElement("Close", "", RIMCAS_CLOSE, false, 2, false, true);
@@ -859,8 +859,8 @@ void CSMRRadar::OnClickScreenObject(int ObjectType, const char * sObjectId, POIN
 
 				ReleasedTracks.push_back(rt.GetSystemID());
 
-				if (std::find(ManuallyCorrelated.begin(), ManuallyCorrelated.end(), rt.GetSystemID()) != ManuallyCorrelated.end())
-					ManuallyCorrelated.erase(std::find(ManuallyCorrelated.begin(), ManuallyCorrelated.end(), rt.GetSystemID()));
+				if (find(ManuallyCorrelated.begin(), ManuallyCorrelated.end(), rt.GetSystemID()) != ManuallyCorrelated.end())
+					ManuallyCorrelated.erase(find(ManuallyCorrelated.begin(), ManuallyCorrelated.end(), rt.GetSystemID()));
 			}
 
 			if (AcquireInProgress)
@@ -869,8 +869,8 @@ void CSMRRadar::OnClickScreenObject(int ObjectType, const char * sObjectId, POIN
 
 				ManuallyCorrelated.push_back(rt.GetSystemID());
 
-				if (std::find(ReleasedTracks.begin(), ReleasedTracks.end(), rt.GetSystemID()) != ReleasedTracks.end())
-					ReleasedTracks.erase(std::find(ReleasedTracks.begin(), ReleasedTracks.end(), rt.GetSystemID()));
+				if (find(ReleasedTracks.begin(), ReleasedTracks.end(), rt.GetSystemID()) != ReleasedTracks.end())
+					ReleasedTracks.erase(find(ReleasedTracks.begin(), ReleasedTracks.end(), rt.GetSystemID()));
 			}
 
 
@@ -967,7 +967,7 @@ void CSMRRadar::OnClickScreenObject(int ObjectType, const char * sObjectId, POIN
 		pair<string, string> toRemove = pair<string, string>(s.front(), s.back());
 
 		typedef multimap<string, string>::iterator iterator;
-		std::pair<iterator, iterator> iterpair = DistanceTools.equal_range(toRemove.first);
+		pair<iterator, iterator> iterpair = DistanceTools.equal_range(toRemove.first);
 
 		iterator it = iterpair.first;
 		for (; it != iterpair.second; ++it) {
@@ -1067,8 +1067,8 @@ void CSMRRadar::OnFunctionCall(int FunctionId, const char * sItemString, POINT P
 			currentFontSize = 4;
 		else if (strcmp(sItemString, "Size 5") == 0)
 			currentFontSize = 5;
-
-		SaveDataToAsr("FontSize", "vSMR font size", std::to_string(currentFontSize).c_str());
+		
+		SaveDataToAsr("FontSize", "vSMR font size", to_string(currentFontSize).c_str());
 		ShowLists["Label Font Size"] = true;
 	}
 
@@ -1175,13 +1175,13 @@ void CSMRRadar::OnFunctionCall(int FunctionId, const char * sItemString, POINT P
 	else if (FunctionId == RIMCAS_UPDATE_AFTERGLOW)
 	{
 		Afterglow = !Afterglow;
-		SaveDataToAsr("Afterglow", "vSMR Afterglow enabled", std::to_string(int(Afterglow)).c_str());
+		SaveDataToAsr("Afterglow", "vSMR Afterglow enabled", to_string(int(Afterglow)).c_str());
 	}
 
 	else if (FunctionId == RIMCAS_UPDATE_GND_TRAIL)
 	{
 		Trail_Gnd = atoi(sItemString);
-		SaveDataToAsr("GndTrailsDots", "vSMR GRND Trail Dots", std::to_string(Trail_Gnd).c_str());
+		SaveDataToAsr("GndTrailsDots", "vSMR GRND Trail Dots", to_string(Trail_Gnd).c_str());
 
 		ShowLists["GRND Trail Dots"] = true;
 	}
@@ -1189,7 +1189,7 @@ void CSMRRadar::OnFunctionCall(int FunctionId, const char * sItemString, POINT P
 	else if (FunctionId == RIMCAS_UPDATE_APP_TRAIL)
 	{
 		Trail_App = atoi(sItemString);
-		SaveDataToAsr("AppTrailsDots", "vSMR APPR Trail Dots", std::to_string(Trail_App).c_str());
+		SaveDataToAsr("AppTrailsDots", "vSMR APPR Trail Dots", to_string(Trail_App).c_str());
 
 		ShowLists["APPR Trail Dots"] = true;
 	}
@@ -1197,26 +1197,26 @@ void CSMRRadar::OnFunctionCall(int FunctionId, const char * sItemString, POINT P
 	else if (FunctionId == RIMCAS_UPDATE_PTL)
 	{
 		PredictedLength = atoi(sItemString);
-		SaveDataToAsr("PredictedLine", "vSMR Predicted Track Lines", std::to_string(PredictedLength).c_str());
+		SaveDataToAsr("PredictedLine", "vSMR Predicted Track Lines", to_string(PredictedLength).c_str());
 
 		ShowLists["Predicted Track Line"] = true;
 	}
 
 	else if (FunctionId == RIMCAS_BRIGHTNESS_LABEL)
 	{
-		ColorManager->update_brightness("label", std::atoi(sItemString));
+		ColorManager->update_brightness("label", atoi(sItemString));
 		ShowLists["Label"] = true;
 	}
 
 	else if (FunctionId == RIMCAS_BRIGHTNESS_AFTERGLOW)
 	{
-		ColorManager->update_brightness("afterglow", std::atoi(sItemString));
+		ColorManager->update_brightness("afterglow", atoi(sItemString));
 		ShowLists["Afterglow"] = true;
 	}
 
 	else if (FunctionId == RIMCAS_BRIGHTNESS_SYMBOL)
 	{
-		ColorManager->update_brightness("symbol", std::atoi(sItemString));
+		ColorManager->update_brightness("symbol", atoi(sItemString));
 		ShowLists["Symbol"] = true;
 	}
 
@@ -1453,9 +1453,9 @@ string CSMRRadar::GetBottomLine(const char * Callsign) {
 			if (rfl == 0)
 				rfl = fp.GetFlightPlanData().GetFinalAltitude();
 			else if (rfl > GetPlugIn()->GetTransitionAltitude())
-				rfl_s = "FL" + std::to_string(rfl / 100);
+				rfl_s = "FL" + to_string(rfl / 100);
 			else
-				rfl_s = std::to_string(rfl) + "ft";
+				rfl_s = to_string(rfl) + "ft";
 
 			to_render += rfl_s;
 			to_render += " Route: ";
@@ -1581,7 +1581,7 @@ map<string, string> CSMRRadar::GenerateTagData(CPlugIn* Plugin, CRadarTarget rt,
 		sctype = sqerror;
 
 	// ----- Groundspeed -------
-	string speed = std::to_string(int(rt.GetPosition().GetReportedGS() / 10));
+	string speed = to_string(int(rt.GetPosition().GetReportedGS() / 10));
 
 	int ass_spd = fp.GetControllerAssignedData().GetAssignedSpeed();
 	if (ass_spd)
@@ -1610,7 +1610,7 @@ map<string, string> CSMRRadar::GenerateTagData(CPlugIn* Plugin, CRadarTarget rt,
 	// ----- Gate -------
 	string gate;
 	if (useSpeedForGates)
-		gate = std::to_string(fp.GetControllerAssignedData().GetAssignedSpeed());
+		gate = to_string(fp.GetControllerAssignedData().GetAssignedSpeed());
 	else
 		gate = fp.GetControllerAssignedData().GetScratchPadString();
 
@@ -1790,7 +1790,7 @@ map<string, string> CSMRRadar::GenerateTagData(CPlugIn* Plugin, CRadarTarget rt,
 		{
 			flightlevel = "NoALT";
 			tendency = "?";
-			speed = std::to_string(rt.GetGS());
+			speed = to_string(rt.GetGS());
 		}
 
 		if (isAirborne && !isAcCorrelated && IsPrimary)
@@ -1859,7 +1859,7 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 			if (customCursors["default"].length())
 				smrCursor = CopyCursor((HCURSOR)::LoadImage(AfxGetInstanceHandle(), customCursors["default"].c_str(), IMAGE_CURSOR, 0, 0, LR_SHARED | LR_LOADFROMFILE));
 			else
-			smrCursor = CopyCursor((HCURSOR)::LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDC_SMRCURSOR), IMAGE_CURSOR, 0, 0, LR_SHARED));
+				smrCursor = CopyCursor((HCURSOR)::LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDC_SMRCURSOR), IMAGE_CURSOR, 0, 0, LR_SHARED));
 			// This got broken because of threading as far as I can tell
 			// The cursor does change for some milliseconds but gets reset almost instantly by external MFC code
 
@@ -2306,7 +2306,7 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 		if (!AcisCorrelated && reportedGs < 3)
 			isAcDisplayed = false;
 
-		if (std::find(ReleasedTracks.begin(), ReleasedTracks.end(), rt.GetSystemID()) != ReleasedTracks.end())
+		if (find(ReleasedTracks.begin(), ReleasedTracks.end(), rt.GetSystemID()) != ReleasedTracks.end())
 			isAcDisplayed = false;
 
 		if (show_on_rwy && RimcasInstance->isAcOnRunway(rt.GetCallsign()))
@@ -2500,8 +2500,8 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 				definedBackgroundColor = CurrentConfig->getConfigColor(LabelsSettings[Utils::getEnumString(ColorTagType).c_str()]["nosid_color"]);
 			}
 		}
-			if (TagReplacingMap["actype"] == "NoFPL" && LabelsSettings[Utils::getEnumString(ColorTagType).c_str()].HasMember("nofpl_color")) {
-				definedBackgroundColor = CurrentConfig->getConfigColor(LabelsSettings[Utils::getEnumString(ColorTagType).c_str()]["nofpl_color"]);
+		if (TagReplacingMap["actype"] == "NoFPL" && LabelsSettings[Utils::getEnumString(ColorTagType).c_str()].HasMember("nofpl_color")) {
+			definedBackgroundColor = CurrentConfig->getConfigColor(LabelsSettings[Utils::getEnumString(ColorTagType).c_str()]["nofpl_color"]);
 		}
 
 		Color TagBackgroundColor = RimcasInstance->GetAircraftColor(rt.GetCallsign(),
@@ -2698,7 +2698,7 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 
 	int TextHeight = dc.GetTextExtent("60").cy;
 	Logger::info("RIMCAS Loop");
-	for (std::map<string, bool>::iterator it = RimcasInstance->MonitoredRunwayArr.begin(); it != RimcasInstance->MonitoredRunwayArr.end(); ++it)
+	for (map<string, bool>::iterator it = RimcasInstance->MonitoredRunwayArr.begin(); it != RimcasInstance->MonitoredRunwayArr.end(); ++it)
 	{
 		if (!it->second || RimcasInstance->TimeTable[it->first].empty())
 			continue;
@@ -2725,7 +2725,7 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 		{
 			dc.SetTextColor(RGB(33, 33, 33));
 
-			tempS = std::to_string(Time) + ": " + RimcasInstance->TimeTable[it->first][Time];
+			tempS = to_string(Time) + ": " + RimcasInstance->TimeTable[it->first][Time];
 			if (RimcasInstance->AcColor.find(RimcasInstance->TimeTable[it->first][Time]) != RimcasInstance->AcColor.end())
 			{
 				CBrush RimcasBrush(RimcasInstance->GetAircraftColor(RimcasInstance->TimeTable[it->first][Time],
@@ -2753,7 +2753,7 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 
 	if (ShowLists["Conflict Alert ARR"]) {
 		GetPlugIn()->OpenPopupList(ListAreas["Conflict Alert ARR"], "CA Arrival", 1);
-		for (std::map<string, CRimcas::RunwayAreaType>::iterator it = RimcasInstance->RunwayAreas.begin(); it != RimcasInstance->RunwayAreas.end(); ++it)
+		for (map<string, CRimcas::RunwayAreaType>::iterator it = RimcasInstance->RunwayAreas.begin(); it != RimcasInstance->RunwayAreas.end(); ++it)
 		{
 			GetPlugIn()->AddPopupListElement(it->first.c_str(), "", RIMCAS_CA_ARRIVAL_FUNC, false, RimcasInstance->MonitoredRunwayArr[it->first.c_str()]);
 		}
@@ -2763,7 +2763,7 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 
 	if (ShowLists["Conflict Alert DEP"]) {
 		GetPlugIn()->OpenPopupList(ListAreas["Conflict Alert DEP"], "CA Departure", 1);
-		for (std::map<string, CRimcas::RunwayAreaType>::iterator it = RimcasInstance->RunwayAreas.begin(); it != RimcasInstance->RunwayAreas.end(); ++it)
+		for (map<string, CRimcas::RunwayAreaType>::iterator it = RimcasInstance->RunwayAreas.begin(); it != RimcasInstance->RunwayAreas.end(); ++it)
 		{
 			GetPlugIn()->AddPopupListElement(it->first.c_str(), "", RIMCAS_CA_MONITOR_FUNC, false, RimcasInstance->MonitoredRunwayDep[it->first.c_str()]);
 		}
@@ -2773,7 +2773,7 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 
 	if (ShowLists["Runway closed"]) {
 		GetPlugIn()->OpenPopupList(ListAreas["Runway closed"], "Runway Closed", 1);
-		for (std::map<string, CRimcas::RunwayAreaType>::iterator it = RimcasInstance->RunwayAreas.begin(); it != RimcasInstance->RunwayAreas.end(); ++it)
+		for (map<string, CRimcas::RunwayAreaType>::iterator it = RimcasInstance->RunwayAreas.begin(); it != RimcasInstance->RunwayAreas.end(); ++it)
 		{
 			GetPlugIn()->AddPopupListElement(it->first.c_str(), "", RIMCAS_CLOSED_RUNWAYS_FUNC, false, RimcasInstance->ClosedRunway[it->first.c_str()]);
 		}
@@ -2792,7 +2792,7 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 	if (ShowLists["Profiles"]) {
 		GetPlugIn()->OpenPopupList(ListAreas["Profiles"], "Profiles", 1);
 		vector<string> allProfiles = CurrentConfig->getAllProfiles();
-		for (std::vector<string>::iterator it = allProfiles.begin(); it != allProfiles.end(); ++it) {
+		for (vector<string>::iterator it = allProfiles.begin(); it != allProfiles.end(); ++it) {
 			GetPlugIn()->AddPopupListElement(it->c_str(), "", RIMCAS_UPDATE_PROFILE, false, int(CurrentConfig->isItActiveProfile(it->c_str())));
 		}
 		GetPlugIn()->AddPopupListElement("Close", "", RIMCAS_CLOSE, false, 2, false, true);
@@ -2865,7 +2865,7 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 	{
 		GetPlugIn()->OpenPopupList(ListAreas["Label"], "Label Brightness", 1);
 		for(int i = CColorManager::bounds_low(); i <= CColorManager::bounds_high(); i +=10)
-			GetPlugIn()->AddPopupListElement(std::to_string(i).c_str(), "", RIMCAS_BRIGHTNESS_LABEL, false, int(bool(i == ColorManager->get_brightness("label"))));
+			GetPlugIn()->AddPopupListElement(to_string(i).c_str(), "", RIMCAS_BRIGHTNESS_LABEL, false, int(bool(i == ColorManager->get_brightness("label"))));
 
 		GetPlugIn()->AddPopupListElement("Close", "", RIMCAS_CLOSE, false, 2, false, true);
 		ShowLists["Label"] = false;
@@ -2875,7 +2875,7 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 	{
 		GetPlugIn()->OpenPopupList(ListAreas["Symbol"], "Symbol Brightness", 1);
 		for (int i = CColorManager::bounds_low(); i <= CColorManager::bounds_high(); i += 10)
-			GetPlugIn()->AddPopupListElement(std::to_string(i).c_str(), "", RIMCAS_BRIGHTNESS_SYMBOL, false, int(bool(i == ColorManager->get_brightness("symbol"))));
+			GetPlugIn()->AddPopupListElement(to_string(i).c_str(), "", RIMCAS_BRIGHTNESS_SYMBOL, false, int(bool(i == ColorManager->get_brightness("symbol"))));
 
 		GetPlugIn()->AddPopupListElement("Close", "", RIMCAS_CLOSE, false, 2, false, true);
 		ShowLists["Symbol"] = false;
@@ -2885,7 +2885,7 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 	{
 		GetPlugIn()->OpenPopupList(ListAreas["Afterglow"], "Afterglow Brightness", 1);
 		for (int i = CColorManager::bounds_low(); i <= CColorManager::bounds_high(); i += 10)
-			GetPlugIn()->AddPopupListElement(std::to_string(i).c_str(), "", RIMCAS_BRIGHTNESS_AFTERGLOW, false, int(bool(i == ColorManager->get_brightness("afterglow"))));
+			GetPlugIn()->AddPopupListElement(to_string(i).c_str(), "", RIMCAS_BRIGHTNESS_AFTERGLOW, false, int(bool(i == ColorManager->get_brightness("afterglow"))));
 
 		GetPlugIn()->AddPopupListElement("Close", "", RIMCAS_CLOSE, false, 2, false, true);
 		ShowLists["Afterglow"] = false;
@@ -2935,11 +2935,11 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 
 		if (!DistanceToolActive)
 		{
-			string distances = std::to_string(Distance);
+			string distances = to_string(Distance);
 			size_t decimal_pos = distances.find(".");
 			distances = distances.substr(0, decimal_pos + 2);
 
-			string bearings = std::to_string(Bearing);
+			string bearings = to_string(Bearing);
 			decimal_pos = bearings.find(".");
 			bearings = bearings.substr(0, decimal_pos + 2);
 
@@ -2979,11 +2979,11 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 		double Distance = one.GetPosition().GetPosition().DistanceTo(two.GetPosition().GetPosition());
 		double Bearing = one.GetPosition().GetPosition().DirectionTo(two.GetPosition().GetPosition());
 
-		string distances = std::to_string(Distance);
+		string distances = to_string(Distance);
 		size_t decimal_pos = distances.find(".");
 		distances = distances.substr(0, decimal_pos + 2);
 
-		string bearings = std::to_string(Bearing);
+		string bearings = to_string(Bearing);
 		decimal_pos = bearings.find(".");
 		bearings = bearings.substr(0, decimal_pos + 2);
 
@@ -3173,7 +3173,7 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 
 	Logger::info("App window rendering");
 
-	for (std::map<int, bool>::iterator it = appWindowDisplays.begin(); it != appWindowDisplays.end(); ++it)
+	for (map<int, bool>::iterator it = appWindowDisplays.begin(); it != appWindowDisplays.end(); ++it)
 	{
 		if (!it->second)
 			continue;

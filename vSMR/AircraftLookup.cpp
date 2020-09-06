@@ -5,7 +5,7 @@
 // CAircraftLookup Class by Even Rognlien, used with permission
 //
 
-CAircraftLookup::CAircraftLookup(std::string fileName) {
+CAircraftLookup::CAircraftLookup(string fileName) {
 	ifstream myfile;
 
 	myfile.open(fileName);

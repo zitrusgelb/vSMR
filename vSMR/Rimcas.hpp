@@ -52,13 +52,13 @@ public:
 			(point.x - p0.x) * (p1.y - p0.y));
 	}
 
-	bool Is_Inside(const POINT &point, const std::vector<POINT> &points_list)
+	bool Is_Inside(const POINT &point, const vector<POINT> &points_list)
 	{
 		// The winding number counter.
 		int winding_number = 0;
 
 		// Loop through all edges of the polygon.
-		typedef std::vector<POINT>::size_type size_type;
+		typedef vector<POINT>::size_type size_type;
 
 		size_type size = points_list.size();
 
@@ -123,10 +123,10 @@ public:
 	void setCountdownDefinition(vector<int> data, vector<int> dataLVP)
 	{
 		CountdownDefinition = data;
-		std::sort(CountdownDefinition.begin(), CountdownDefinition.end(), std::greater<int>());
+		sort(CountdownDefinition.begin(), CountdownDefinition.end(), greater<int>());
 
 		CountdownDefinitionLVP = dataLVP;
-		std::sort(CountdownDefinitionLVP.begin(), CountdownDefinitionLVP.end(), std::greater<int>());
+		sort(CountdownDefinitionLVP.begin(), CountdownDefinitionLVP.end(), greater<int>());
 	}
 
 	void toggleClosedRunway(string runway) {

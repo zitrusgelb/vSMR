@@ -57,16 +57,16 @@ inline static Gdiplus::Rect CopyRect(CRect &rect)
 	return Gdiplus::Rect(rect.left, rect.top, rect.Width(), rect.Height());
 };
 
-inline static std::vector<std::string> &split(const std::string &s, char delim, std::vector<std::string> &elems) {
-	std::stringstream ss(s);
-	std::string item;
-	while (std::getline(ss, item, delim)) {
+inline static vector<string> &split(const string &s, char delim, vector<string> &elems) {
+	stringstream ss(s);
+	string item;
+	while (getline(ss, item, delim)) {
 		elems.push_back(item);
 	}
 	return elems;
 };
-inline static std::vector<std::string> split(const std::string &s, char delim) {
-	std::vector<std::string> elems;
+inline static vector<string> split(const string &s, char delim) {
+	vector<string> elems;
 	split(s, delim, elems);
 	return elems;
 };
@@ -125,13 +125,13 @@ inline static int Is_Left(const POINT &p0, const POINT &p1, const POINT &point)
 		(point.x - p0.x) * (p1.y - p0.y));
 };
 
-inline static bool Is_Inside(const POINT &point, const std::vector<POINT> &points_list)
+inline static bool Is_Inside(const POINT &point, const vector<POINT> &points_list)
 {
 	// The winding number counter.
 	int winding_number = 0;
 
 	// Loop through all edges of the polygon.
-	typedef std::vector<POINT>::size_type size_type;
+	typedef vector<POINT>::size_type size_type;
 
 	size_type size = points_list.size();
 

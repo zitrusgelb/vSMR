@@ -15,7 +15,7 @@ void CConfig::loadConfig() {
 
 	stringstream ss;
 	ifstream ifs;
-	ifs.open(config_path.c_str(), std::ios::binary);
+	ifs.open(config_path.c_str(), ios::binary);
 	ss << ifs.rdbuf();
 	ifs.close();
 
@@ -63,15 +63,15 @@ bool CConfig::isSidInitClbAvail(string sid, string airport) {
 			{
 				const Value& SIDs = getActiveProfile()["maps"][airport.c_str()]["sids"];
 				string sidzero;
-				std::regex_replace(std::back_inserter(sidzero), sid.begin(), sid.end(), std::regex("[0-9]"), "0");
+				regex_replace(back_inserter(sidzero), sid.begin(), sid.end(), regex("[0-9]"), "0");
 				for (SizeType i = 0; i < SIDs.Size(); i++)
 				{
 					const Value& SIDNames = SIDs[i]["names"];
 					for (SizeType s = 0; s < SIDNames.Size(); s++) {
 						string currentsid = SIDNames[s].GetString();
-						std::transform(currentsid.begin(), currentsid.end(), currentsid.begin(), ::toupper);
+						transform(currentsid.begin(), currentsid.end(), currentsid.begin(), ::toupper);
 						
-						if (currentsid.find('0') != std::string::npos) {
+						if (currentsid.find('0') != string::npos) {
 							if (startsWith(sidzero.c_str(), currentsid.c_str()) && getActiveProfile()["maps"][airport.c_str()]["sids"][i].HasMember("init_clb"))
 								return true;
 						}
@@ -95,15 +95,15 @@ int CConfig::getSidInitClb(string sid, string airport)
 			{
 				const Value& SIDs = getActiveProfile()["maps"][airport.c_str()]["sids"];
 				string sidzero;
-				std::regex_replace(std::back_inserter(sidzero), sid.begin(), sid.end(), std::regex("[0-9]"), "0");
+				regex_replace(back_inserter(sidzero), sid.begin(), sid.end(), regex("[0-9]"), "0");
 				for (SizeType i = 0; i < SIDs.Size(); i++)
 				{
 					const Value& SIDNames = SIDs[i]["names"];
 					for (SizeType s = 0; s < SIDNames.Size(); s++) {
 						string currentsid = SIDNames[s].GetString();
-						std::transform(currentsid.begin(), currentsid.end(), currentsid.begin(), ::toupper);
+						transform(currentsid.begin(), currentsid.end(), currentsid.begin(), ::toupper);
 
-						if (currentsid.find('0') != std::string::npos) {
+						if (currentsid.find('0') != string::npos) {
 							if (startsWith(sidzero.c_str(), currentsid.c_str()) && getActiveProfile()["maps"][airport.c_str()]["sids"][i].HasMember("init_clb"))
 								return SIDs[i]["init_clb"].GetInt();
 						}
@@ -126,16 +126,16 @@ bool CConfig::isSidColorAvail(string sid, string airport) {
 			{
 				const Value& SIDs = getActiveProfile()["maps"][airport.c_str()]["sids"];
 				string sidzero;
-				std::regex_replace(std::back_inserter(sidzero), sid.begin(), sid.end(), std::regex("[0-9]"), "0");
+				regex_replace(back_inserter(sidzero), sid.begin(), sid.end(), regex("[0-9]"), "0");
 
 				for (SizeType i = 0; i < SIDs.Size(); i++)
 				{
 					const Value& SIDNames = SIDs[i]["names"];
 					for (SizeType s = 0; s < SIDNames.Size(); s++) {
 						string currentsid = SIDNames[s].GetString();
-						std::transform(currentsid.begin(), currentsid.end(), currentsid.begin(), ::toupper);
+						transform(currentsid.begin(), currentsid.end(), currentsid.begin(), ::toupper);
 
-						if (currentsid.find('0') != std::string::npos) {
+						if (currentsid.find('0') != string::npos) {
 							if (startsWith(sidzero.c_str(), currentsid.c_str()) && getActiveProfile()["maps"][airport.c_str()]["sids"][i].HasMember("color"))
 								return true;
 						}
@@ -159,15 +159,15 @@ Gdiplus::Color CConfig::getSidColor(string sid, string airport)
 			{
 				const Value& SIDs = getActiveProfile()["maps"][airport.c_str()]["sids"];
 				string sidzero;
-				std::regex_replace(std::back_inserter(sidzero), sid.begin(), sid.end(), std::regex("[0-9]"), "0");
+				regex_replace(back_inserter(sidzero), sid.begin(), sid.end(), regex("[0-9]"), "0");
 				for (SizeType i = 0; i < SIDs.Size(); i++)
 				{
 					const Value& SIDNames = SIDs[i]["names"];
 					for (SizeType s = 0; s < SIDNames.Size(); s++) {
 						string currentsid = SIDNames[s].GetString();
-						std::transform(currentsid.begin(), currentsid.end(), currentsid.begin(), ::toupper);
+						transform(currentsid.begin(), currentsid.end(), currentsid.begin(), ::toupper);
 
-						if (currentsid.find('0') != std::string::npos) {
+						if (currentsid.find('0') != string::npos) {
 							if (startsWith(sidzero.c_str(), currentsid.c_str()))
 								return getConfigColor(SIDs[i]["color"]);
 						}
@@ -253,7 +253,7 @@ bool CConfig::isCustomRunwayAvail(string airport, string name1, string name2) {
 
 vector<string> CConfig::getAllProfiles() {
 	vector<string> toR;
-	for (std::map<string, rapidjson::SizeType>::iterator it = profiles.begin(); it != profiles.end(); ++it)
+	for (map<string, rapidjson::SizeType>::iterator it = profiles.begin(); it != profiles.end(); ++it)
 	{
 		toR.push_back(it->first);
 	}

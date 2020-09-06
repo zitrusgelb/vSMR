@@ -11,7 +11,7 @@ using namespace std;
 class CAircraftLookup
 {
 private:
-	std::map<string, string> wingspans;
+	map<string, string> wingspans;
 
 
 public:

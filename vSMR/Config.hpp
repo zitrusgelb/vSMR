@@ -46,7 +46,7 @@ public:
 
 	inline string getActiveProfileName() {
 		string name;
-		for (std::map<string, rapidjson::SizeType>::iterator it = profiles.begin(); it != profiles.end(); ++it)
+		for (map<string, rapidjson::SizeType>::iterator it = profiles.begin(); it != profiles.end(); ++it)
 		{
 			if (it->second == active_profile) {
 				name = it->first;

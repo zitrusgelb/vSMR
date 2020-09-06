@@ -11,7 +11,7 @@ using namespace std;
 class CCallsignLookup
 {
 private:
-	std::map<string, string> callsigns;
+	map<string, string> callsigns;
 
 
 public:

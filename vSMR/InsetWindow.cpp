@@ -624,7 +624,7 @@ void CInsetWindow::render(HDC hDC, CSMRRadar * radar_screen, Graphics* gdi, POIN
 							if (radar_screen->isActiveAirport(TagReplacingMap["dest"].c_str())) {
 								if (reportedGs > 50)
 									color = &ArrivalColor;
-								else if (TagReplacingMap["gate"].find_first_not_of("0123456789") == std::string::npos)
+								else if (TagReplacingMap["gate"].find_first_not_of("0123456789") == string::npos)
 									color = &FontColor;
 							} 
 						}
@@ -766,11 +766,11 @@ void CInsetWindow::render(HDC hDC, CSMRRadar * radar_screen, Graphics* gdi, POIN
 		double Distance = one.GetPosition().GetPosition().DistanceTo(two.GetPosition().GetPosition());
 		double Bearing = one.GetPosition().GetPosition().DirectionTo(two.GetPosition().GetPosition());
 
-		string distances = std::to_string(Distance);
+		string distances = to_string(Distance);
 		size_t decimal_pos = distances.find(".");
 		distances = distances.substr(0, decimal_pos + 2);
 
-		string bearings = std::to_string(Bearing);
+		string bearings = to_string(Bearing);
 		decimal_pos = bearings.find(".");
 		bearings = bearings.substr(0, decimal_pos + 2);
 
@@ -826,7 +826,7 @@ void CInsetWindow::render(HDC hDC, CSMRRadar * radar_screen, Graphics* gdi, POIN
 
 	radar_screen->AddScreenObject(m_Id, "topbar", TopBar, true, "");
 
-	string Toptext = "SRW " + std::to_string(m_Id - APPWINDOW_BASE);
+	string Toptext = "SRW " + to_string(m_Id - APPWINDOW_BASE);
 	dc.TextOutA(TopLeftText.x + (TopBar.right-TopBar.left) / 2 - dc.GetTextExtent("SRW 1").cx , TopLeftText.y, Toptext.c_str());
 
 	// Range button

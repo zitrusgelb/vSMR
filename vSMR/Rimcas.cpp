@@ -58,7 +58,7 @@ string CRimcas::GetAcInRunwayArea(CRadarTarget Ac, CRadarScreen *instance) {
 
 	POINT AcPosPix = instance->ConvertCoordFromPositionToPixel(Ac.GetPosition().GetPosition());
 
-	for (std::map<string, RunwayAreaType>::iterator it = RunwayAreas.begin(); it != RunwayAreas.end(); ++it)
+	for (map<string, RunwayAreaType>::iterator it = RunwayAreas.begin(); it != RunwayAreas.end(); ++it)
 	{
 		if (!MonitoredRunwayDep[string(it->first)])
 			continue;
@@ -71,7 +71,7 @@ string CRimcas::GetAcInRunwayArea(CRadarTarget Ac, CRadarScreen *instance) {
 		}
 	
 		if (Is_Inside(AcPosPix, RunwayOnScreen)) {
-			AcOnRunway.insert(std::pair<string, string>(it->first, Ac.GetCallsign()));
+			AcOnRunway.insert(pair<string, string>(it->first, Ac.GetCallsign()));
 			return string(it->first);
 		}
 	}
@@ -97,7 +97,7 @@ string CRimcas::GetAcInRunwayAreaSoon(CRadarTarget Ac, CRadarScreen *instance, b
 
 	POINT AcPosPix = instance->ConvertCoordFromPositionToPixel(Ac.GetPosition().GetPosition());
 
-	for (std::map<string, RunwayAreaType>::iterator it = RunwayAreas.begin(); it != RunwayAreas.end(); ++it)
+	for (map<string, RunwayAreaType>::iterator it = RunwayAreas.begin(); it != RunwayAreas.end(); ++it)
 	{
 		if (!MonitoredRunwayArr[it->first])
 			continue;
@@ -176,12 +176,12 @@ string CRimcas::GetAcInRunwayAreaSoon(CRadarTarget Ac, CRadarScreen *instance, b
 					StageTwoTrigger = 30;
 
 				if (t <= StageTwoTrigger)
-					AcOnRunway.insert(std::pair<string, string>(it->first, Ac.GetCallsign()));
+					AcOnRunway.insert(pair<string, string>(it->first, Ac.GetCallsign()));
 
 				// If the AC is 45 seconds away from the runway, we consider him approaching
 
 				if (t > StageTwoTrigger && t <= 45)
-					ApproachingAircrafts.insert(std::pair<string, string>(it->first, Ac.GetCallsign()));
+					ApproachingAircrafts.insert(pair<string, string>(it->first, Ac.GetCallsign()));
 
 				return Ac.GetCallsign();
 			}
@@ -279,7 +279,7 @@ void CRimcas::OnRefreshEnd(CRadarScreen *instance, int threshold) {
 
 bool CRimcas::isAcOnRunway(string callsign) {
 	Logger::info(string(__FUNCSIG__));
-	for (std::map<string, string>::iterator it = AcOnRunway.begin(); it != AcOnRunway.end(); ++it)
+	for (map<string, string>::iterator it = AcOnRunway.begin(); it != AcOnRunway.end(); ++it)
 	{
 		if (it->second == callsign)
 			return true;
