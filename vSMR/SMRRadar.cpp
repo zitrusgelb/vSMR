@@ -1630,12 +1630,12 @@ map<string, string> CSMRRadar::GenerateTagData(CPlugIn* Plugin, CRadarTarget rt,
 		gate = fp.GetControllerAssignedData().GetScratchPadString();
 
 	if (gate.size() > 4)
-		gate = "NoGATE";
+		gate = "NoG";
 	else
 		gate = gate.substr(0, 4);
 
 	if (gate.size() == 0 || gate == "0" || !isAcCorrelated)
-		gate = "NoGATE";
+		gate = "NoG";
 
 	// ----- Gate that changes to speed -------
 	string sate = gate;
