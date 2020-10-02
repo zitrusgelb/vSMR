@@ -159,6 +159,8 @@ CSMRRadar::CSMRRadar()
 	this->CSMRRadar::LoadCustomCursors();
 
 	this->CSMRRadar::RefreshAirportActivity();
+
+	GenerateClickable();
 }
 
 CSMRRadar::~CSMRRadar()
@@ -338,6 +340,8 @@ void CSMRRadar::LoadProfile(string profileName) {
 
 	// Reloading the cursors
 	this->LoadCustomCursors();
+
+	GenerateClickable();
 }
 
 void CSMRRadar::OnAsrContentLoaded(bool Loaded)
@@ -984,36 +988,6 @@ void CSMRRadar::OnClickScreenObject(int ObjectType, const char * sObjectId, POIN
 		else
 			sectorIndicator++;
 	}
-
-	map <const int, const int> TagObjectLeftTypes = {
-		{ TAG_CITEM_CALLSIGN, TAG_ITEM_FUNCTION_OPEN_FP_DIALOG },
-		{ TAG_CITEM_FPBOX, TAG_ITEM_FUNCTION_OPEN_FP_DIALOG },
-		{ TAG_CITEM_SCRATCH, TAG_ITEM_FUNCTION_EDIT_SCRATCH_PAD },
-		{ TAG_CITEM_CONTROLLER, TAG_ITEM_FUNCTION_HANDOFF_POPUP_MENU },
-		{ TAG_CITEM_FL, TAG_ITEM_FUNCTION_ASSIGNED_HEADING_POPUP },
-	};
-
-	map <const int, const int> TagObjectMiddleTypes = {
-		{ TAG_CITEM_CALLSIGN, TAG_ITEM_FUNCTION_COMMUNICATION_POPUP },
-		{ TAG_CITEM_FPBOX, TAG_ITEM_FUNCTION_TOGGLE_ROUTE_DRAW },
-		{ TAG_CITEM_SCRATCH, TAG_ITEM_FUNCTION_EDIT_SCRATCH_PAD },
-	};
-
-	map <const int, const int> TagObjectRightTypes = {
-		{ TAG_CITEM_CALLSIGN, TAG_ITEM_FUNCTION_TOGGLE_ROUTE_DRAW },
-		{ TAG_CITEM_FPBOX, TAG_ITEM_FUNCTION_EDIT_SCRATCH_PAD },
-		{ TAG_CITEM_RWY, TAG_ITEM_FUNCTION_ASSIGNED_RUNWAY },
-		{ TAG_CITEM_SID, TAG_ITEM_FUNCTION_ASSIGNED_SID },
-		{ TAG_CITEM_GATE, TAG_ITEM_FUNCTION_EDIT_SCRATCH_PAD },
-		{ TAG_CITEM_GROUNDSTATUS, TAG_ITEM_FUNCTION_SET_GROUND_STATUS },
-		{ TAG_CITEM_SCRATCH, TAG_ITEM_FUNCTION_EDIT_SCRATCH_PAD },
-		{ TAG_CITEM_CONTROLLER, TAG_ITEM_FUNCTION_ASSIGNED_NEXT_CONTROLLER },
-		{ TAG_CITEM_SSR, TAG_ITEM_FUNCTION_SET_GROUND_STATUS },
-		{ TAG_CITEM_GS, TAG_ITEM_FUNCTION_ASSIGNED_SPEED_POPUP },
-		{ TAG_CITEM_FL, TAG_ITEM_FUNCTION_TEMP_ALTITUDE_POPUP },
-		{ TAG_CITEM_ASSHDG, TAG_ITEM_FUNCTION_ASSIGNED_HEADING_POPUP },
-	};
-
 	if (Button == BUTTON_LEFT && TagObjectLeftTypes[ObjectType]) {
 		int TagMenu = TagObjectLeftTypes[ObjectType];
 		CRadarTarget rt = GetPlugIn()->RadarTargetSelect(sObjectId);
@@ -1091,6 +1065,7 @@ void CSMRRadar::OnFunctionCall(int FunctionId, const char * sItemString, POINT P
 		this->CSMRRadar::LoadProfile(sItemString);
 		LoadCustomFont();
 		LoadCustomCursors();
+		GenerateClickable();
 		SaveDataToAsr("ActiveProfile", "vSMR active profile", sItemString);
 
 		ShowLists["Profiles"] = true;
