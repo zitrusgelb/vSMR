@@ -23,6 +23,7 @@ const int TAG_FUNC_DATALINK_VOICE = 547;
 const int TAG_FUNC_DATALINK_RESET = 548;
 const int TAG_FUNC_DATALINK_MESSAGE = 549;
 
+const int TAG_FUNC_DETAILED = 550;
 
 
 inline static bool startsWith(const char *pre, const char *str)

@@ -1254,6 +1254,15 @@ void CSMRRadar::OnFunctionCall(int FunctionId, const char * sItemString, POINT P
 	{
 		GetPlugIn()->OnCompileCommand(".smr poll");
 	}
+	else if (FunctionId == TAG_FUNC_DETAILED) {
+		string callsign = GetPlugIn()->RadarTargetSelectASEL().GetCallsign();
+		if (TagsDetailed.find(callsign) != TagsDetailed.end()) {
+			TagsDetailed.erase(callsign);
+		}
+		else {
+			TagsDetailed.insert(callsign);
+		}
+	}
 }
 
 void CSMRRadar::RefreshAirportActivity(void) {

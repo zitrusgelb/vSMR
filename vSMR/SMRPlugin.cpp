@@ -267,6 +267,7 @@ CSMRPlugin::CSMRPlugin(void) :CPlugIn(EuroScopePlugIn::COMPATIBILITY_CODE, MY_PL
 
 	RegisterTagItemType("Datalink clearance", TAG_ITEM_DATALINK_STS);
 	RegisterTagItemFunction("Datalink menu", TAG_FUNC_DATALINK_MENU);
+	RegisterTagItemFunction("Tag Detailed", TAG_FUNC_DETAILED);
 
 	messageId = rand() % 10000 + 1789;
 	
