@@ -379,6 +379,9 @@ public:
 		if (!rt.GetPosition().IsValid())
 			return "";
 
+		if (fp.IsValid() && fp.GetFlightPlanData().GetPlanType()[0] == 'I')
+			return "";
+
 		switch (atoi(rt.GetPosition().GetSquawk()))
 		{
 		case 20:
