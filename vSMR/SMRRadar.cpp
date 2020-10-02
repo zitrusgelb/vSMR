@@ -1430,7 +1430,7 @@ string CSMRRadar::GetBottomLine(const char * Callsign) {
 		if (span.length() > 0) {
 			to_render += " (";
 			to_render += span;
-			to_render += "): ";
+			to_render += "m): ";
 		}
 
 		to_render += " ";
