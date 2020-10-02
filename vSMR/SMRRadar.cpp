@@ -2277,7 +2277,7 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 			dc.LineTo(acPosPix.x + 12, acPosPix.y + 6);
 		}
 
-		AddScreenObject(DRAWING_AC_SYMBOL, rt.GetCallsign(), { acPosPix.x - 5, acPosPix.y - 5, acPosPix.x + 5, acPosPix.y + 5 }, false, AcisCorrelated ? GetBottomLine(rt.GetCallsign()).c_str() : rt.GetSystemID());
+		AddScreenObject(DRAWING_AC_SYMBOL, rt.GetCallsign(), { acPosPix.x - 5, acPosPix.y - 5, acPosPix.x + 5, acPosPix.y + 5 }, false, GetBottomLine(rt.GetCallsign()).c_str());
 
 		dc.SelectObject(pqOrigPen);
 	}
