@@ -1470,6 +1470,12 @@ string CSMRRadar::GetBottomLine(const char * Callsign) {
 			to_render += " Route: ";
 			to_render += fp.GetFlightPlanData().GetRoute();
 		}
+		else {
+			const char* ssr = GetPlugIn()->RadarTargetSelect(fp.GetCallsign()).GetPosition().GetSquawk();
+			to_render += "I:";
+			to_render += ssr;
+			to_render += " () ==>NOFP at 0 ft Route: ";
+		}
 	}
 
 	return to_render;
