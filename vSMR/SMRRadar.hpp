@@ -5,6 +5,7 @@
 #include <vector>
 #include <set>
 #include <map>
+#include <unordered_map>
 #include <algorithm>
 #include <time.h>
 #include <GdiPlus.h>
@@ -68,7 +69,7 @@ public:
 		map<int, POINT2> History_three_points;
 	};
 
-	map<const char *, Patatoide_Points> Patatoides;
+	unordered_map<const char *, Patatoide_Points> Patatoides;
 
 	map<string, bool> ClosedRunway;
 
