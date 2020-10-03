@@ -988,11 +988,10 @@ void CSMRRadar::OnClickScreenObject(int ObjectType, const char * sObjectId, POIN
 		else
 			sectorIndicator++;
 	}
-	if (Button == BUTTON_LEFT && TagObjectLeftTypes[ObjectType]) {
-		int TagMenu = TagObjectLeftTypes[ObjectType];
+	if (Button == BUTTON_LEFT && TagObjectLeftTypes.find(ObjectType) != TagObjectLeftTypes.end()) {
 		CRadarTarget rt = GetPlugIn()->RadarTargetSelect(sObjectId);
 		GetPlugIn()->SetASELAircraft(GetPlugIn()->FlightPlanSelect(sObjectId));
-		StartTagFunction(rt.GetCallsign(), NULL, ObjectType, rt.GetCallsign(), NULL, TagMenu, Pt, Area);
+		StartTagFunction(rt.GetCallsign(), NULL, ObjectType, rt.GetCallsign(), TagObjectLeftTypes[ObjectType].second.c_str(), TagObjectLeftTypes[ObjectType].first, Pt, Area);
 	}
 	else if (Button == BUTTON_LEFT) {
 		CRadarTarget rt = GetPlugIn()->RadarTargetSelect(sObjectId);
@@ -1002,17 +1001,15 @@ void CSMRRadar::OnClickScreenObject(int ObjectType, const char * sObjectId, POIN
 			StartTagFunction(rt.GetCallsign(), NULL, TAG_ITEM_TYPE_CALLSIGN, rt.GetCallsign(), NULL, TAG_ITEM_FUNCTION_NO, Pt, Area);
 		}
 	}
-	else if (Button == BUTTON_MIDDLE && TagObjectMiddleTypes[ObjectType]) {
-		int TagMenu = TagObjectMiddleTypes[ObjectType];
+	else if (Button == BUTTON_MIDDLE && TagObjectMiddleTypes.find(ObjectType) != TagObjectMiddleTypes.end()) {
 		CRadarTarget rt = GetPlugIn()->RadarTargetSelect(sObjectId);
 		GetPlugIn()->SetASELAircraft(GetPlugIn()->FlightPlanSelect(sObjectId));
-		StartTagFunction(rt.GetCallsign(), NULL, ObjectType, rt.GetCallsign(), NULL, TagMenu, Pt, Area);
+		StartTagFunction(rt.GetCallsign(), NULL, ObjectType, rt.GetCallsign(), TagObjectMiddleTypes[ObjectType].second.c_str(), TagObjectMiddleTypes[ObjectType].first, Pt, Area);
 	}
-	else if (Button == BUTTON_RIGHT && TagObjectRightTypes[ObjectType]) {
-		int TagMenu = TagObjectRightTypes[ObjectType];
+	else if (Button == BUTTON_RIGHT && TagObjectRightTypes.find(ObjectType) != TagObjectRightTypes.end()) {
 		CRadarTarget rt = GetPlugIn()->RadarTargetSelect(sObjectId);
 		GetPlugIn()->SetASELAircraft(GetPlugIn()->FlightPlanSelect(sObjectId));
-		StartTagFunction(rt.GetCallsign(), NULL, ObjectType, rt.GetCallsign(), NULL, TagMenu, Pt, Area);
+		StartTagFunction(rt.GetCallsign(), NULL, ObjectType, rt.GetCallsign(), TagObjectRightTypes[ObjectType].second.c_str(), TagObjectRightTypes[ObjectType].first, Pt, Area);
 	}
 	RequestRefresh();
 };

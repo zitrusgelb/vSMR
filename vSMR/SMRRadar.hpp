@@ -148,39 +148,40 @@ public:
 
 
 
-	const map <const int, int> TagObjectDefaultLeftTypes = {
-		{ TAG_CITEM_CALLSIGN, TAG_ITEM_FUNCTION_OPEN_FP_DIALOG },
-		{ TAG_CITEM_FPBOX, TAG_ITEM_FUNCTION_OPEN_FP_DIALOG },
-		{ TAG_CITEM_SCRATCH, TAG_ITEM_FUNCTION_EDIT_SCRATCH_PAD },
-		{ TAG_CITEM_CONTROLLER, TAG_ITEM_FUNCTION_HANDOFF_POPUP_MENU },
-		{ TAG_CITEM_FL, TAG_ITEM_FUNCTION_ASSIGNED_HEADING_POPUP },
-		{ TAG_CITEM_RWY, TAG_ITEM_FUNCTION_ASSIGNED_RUNWAY },
+	const map <const int, pair<int, string>> TagObjectDefaultLeftTypes = {
+		{ TAG_CITEM_CALLSIGN, make_pair(TAG_ITEM_FUNCTION_OPEN_FP_DIALOG, "") },
+		{ TAG_CITEM_FPBOX, make_pair(TAG_ITEM_FUNCTION_OPEN_FP_DIALOG, "") },
+		{ TAG_CITEM_SCRATCH, make_pair(TAG_ITEM_FUNCTION_EDIT_SCRATCH_PAD, "") },
+		{ TAG_CITEM_CONTROLLER, make_pair(TAG_ITEM_FUNCTION_HANDOFF_POPUP_MENU, "") },
+		{ TAG_CITEM_FL, make_pair(TAG_ITEM_FUNCTION_ASSIGNED_HEADING_POPUP, "") },
+		{ TAG_CITEM_RWY, make_pair(TAG_ITEM_FUNCTION_ASSIGNED_RUNWAY, "") },
+		{ TAG_CITEM_UKSTAND, make_pair(9007, "UK Controller Plugin") },
 	};
 
-	const map <const int, int> TagObjectDefaultMiddleTypes = {
-		{ TAG_CITEM_CALLSIGN, TAG_ITEM_FUNCTION_COMMUNICATION_POPUP },
-		{ TAG_CITEM_FPBOX, TAG_ITEM_FUNCTION_TOGGLE_ROUTE_DRAW },
-		{ TAG_CITEM_SCRATCH, TAG_ITEM_FUNCTION_EDIT_SCRATCH_PAD },
+	const map <const int, pair<int, string>> TagObjectDefaultMiddleTypes = {
+		{ TAG_CITEM_CALLSIGN, make_pair(TAG_ITEM_FUNCTION_COMMUNICATION_POPUP, "") },
+		{ TAG_CITEM_FPBOX, make_pair(TAG_ITEM_FUNCTION_TOGGLE_ROUTE_DRAW, "") },
+		{ TAG_CITEM_SCRATCH, make_pair(TAG_ITEM_FUNCTION_EDIT_SCRATCH_PAD, "") },
 	};
 
-	const map <const int, int> TagObjectDefaultRightTypes = {
-		{ TAG_CITEM_CALLSIGN, TAG_ITEM_FUNCTION_TOGGLE_ROUTE_DRAW },
-		{ TAG_CITEM_FPBOX, TAG_ITEM_FUNCTION_EDIT_SCRATCH_PAD },
-		{ TAG_CITEM_RWY, TAG_ITEM_FUNCTION_SET_GROUND_STATUS },
-		{ TAG_CITEM_SID, TAG_ITEM_FUNCTION_ASSIGNED_SID },
-		{ TAG_CITEM_GATE, TAG_ITEM_FUNCTION_EDIT_SCRATCH_PAD },
-		{ TAG_CITEM_GROUNDSTATUS, TAG_ITEM_FUNCTION_SET_GROUND_STATUS },
-		{ TAG_CITEM_SCRATCH, TAG_ITEM_FUNCTION_EDIT_SCRATCH_PAD },
-		{ TAG_CITEM_CONTROLLER, TAG_ITEM_FUNCTION_ASSIGNED_NEXT_CONTROLLER },
-		{ TAG_CITEM_SSR, TAG_ITEM_FUNCTION_SET_GROUND_STATUS },
-		{ TAG_CITEM_GS, TAG_ITEM_FUNCTION_ASSIGNED_SPEED_POPUP },
-		{ TAG_CITEM_FL, TAG_ITEM_FUNCTION_TEMP_ALTITUDE_POPUP },
-		{ TAG_CITEM_ASSHDG, TAG_ITEM_FUNCTION_ASSIGNED_HEADING_POPUP },
+	const map <const int, pair<int, string>> TagObjectDefaultRightTypes = {
+		{ TAG_CITEM_CALLSIGN, make_pair(TAG_ITEM_FUNCTION_TOGGLE_ROUTE_DRAW, "") },
+		{ TAG_CITEM_FPBOX, make_pair(TAG_ITEM_FUNCTION_EDIT_SCRATCH_PAD, "") },
+		{ TAG_CITEM_RWY, make_pair(TAG_ITEM_FUNCTION_SET_GROUND_STATUS, "") },
+		{ TAG_CITEM_SID, make_pair(TAG_ITEM_FUNCTION_ASSIGNED_SID, "") },
+		{ TAG_CITEM_GATE, make_pair(TAG_ITEM_FUNCTION_EDIT_SCRATCH_PAD, "") },
+		{ TAG_CITEM_GROUNDSTATUS, make_pair(TAG_ITEM_FUNCTION_SET_GROUND_STATUS, "") },
+		{ TAG_CITEM_SCRATCH, make_pair(TAG_ITEM_FUNCTION_EDIT_SCRATCH_PAD, "") },
+		{ TAG_CITEM_CONTROLLER, make_pair(TAG_ITEM_FUNCTION_ASSIGNED_NEXT_CONTROLLER, "") },
+		{ TAG_CITEM_SSR, make_pair(TAG_ITEM_FUNCTION_SET_GROUND_STATUS, "") },
+		{ TAG_CITEM_GS, make_pair(TAG_ITEM_FUNCTION_ASSIGNED_SPEED_POPUP, "") },
+		{ TAG_CITEM_FL, make_pair(TAG_ITEM_FUNCTION_TEMP_ALTITUDE_POPUP, "") },
+		{ TAG_CITEM_ASSHDG, make_pair(TAG_ITEM_FUNCTION_ASSIGNED_HEADING_POPUP, "") },
 	};
 
-	map <const int, int> TagObjectLeftTypes;
-	map <const int, int> TagObjectMiddleTypes;
-	map <const int, int> TagObjectRightTypes;
+	map <const int, pair<int, string>> TagObjectLeftTypes;
+	map <const int, pair<int, string>> TagObjectMiddleTypes;
+	map <const int, pair<int, string>> TagObjectRightTypes;
 
 	inline void GenerateClickable() {
 		TagObjectLeftTypes = TagObjectDefaultLeftTypes;
@@ -197,27 +198,36 @@ public:
 			
 			if (objName["left"].IsObject()) {
 				if (objName["left"]["function"].IsString()) {
-					try { TagObjectLeftTypes[stoi(itr->name.GetString())] = stoi(objName["left"]["function"].GetString()); }
-					catch (...) { TagObjectLeftTypes[stoi(itr->name.GetString())] = 0; }
+					try { TagObjectLeftTypes[stoi(itr->name.GetString())].first = stoi(objName["left"]["function"].GetString()); }
+					catch (...) { TagObjectLeftTypes[stoi(itr->name.GetString())].first = 0; }
 				}
 				else
-					TagObjectLeftTypes[stoi(itr->name.GetString())] = 0;
+					TagObjectLeftTypes[stoi(itr->name.GetString())].first = 0;
+
+				if (objName["left"]["plugin"].IsString()) 
+					TagObjectLeftTypes[stoi(itr->name.GetString())].second = objName["left"]["plugin"].GetString();
 			}
 			if (objName["middle"].IsObject()) {
 				if (objName["middle"]["function"].IsString()) {
-					try { TagObjectMiddleTypes[stoi(itr->name.GetString())] = stoi(objName["middle"]["function"].GetString()); }
-					catch (...) { TagObjectMiddleTypes[stoi(itr->name.GetString())] = 0; }
+					try { TagObjectMiddleTypes[stoi(itr->name.GetString())].first = stoi(objName["middle"]["function"].GetString()); }
+					catch (...) { TagObjectMiddleTypes[stoi(itr->name.GetString())].first = 0; }
 				}
 				else
-					TagObjectMiddleTypes[stoi(itr->name.GetString())] = 0;
+					TagObjectMiddleTypes[stoi(itr->name.GetString())].first = 0;
+
+				if (objName["middle"]["plugin"].IsString())
+					TagObjectLeftTypes[stoi(itr->name.GetString())].second = objName["middle"]["plugin"].GetString();
 			}
 			if (objName["right"].IsObject()) {
 				if (objName["right"]["function"].IsString()) {
-					try { TagObjectRightTypes[stoi(itr->name.GetString())] = stoi(objName["right"]["function"].GetString()); }
-					catch (...) { TagObjectRightTypes[stoi(itr->name.GetString())] = 0; }
+					try { TagObjectRightTypes[stoi(itr->name.GetString())].first = stoi(objName["right"]["function"].GetString()); }
+					catch (...) { TagObjectRightTypes[stoi(itr->name.GetString())].first = 0; }
 				}
 				else
-					TagObjectRightTypes[stoi(itr->name.GetString())] = 0;
+					TagObjectRightTypes[stoi(itr->name.GetString())].first = 0;
+
+				if (objName["right"]["plugin"].IsString())
+					TagObjectLeftTypes[stoi(itr->name.GetString())].second = objName["right"]["plugin"].GetString();
 			}
 		}
 	}
