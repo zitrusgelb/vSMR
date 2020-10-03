@@ -291,6 +291,7 @@ const int TAG_CITEM_SSR = 1920;
 const int TAG_CITEM_GS = 1921;
 const int TAG_CITEM_FL = 1922;
 const int TAG_CITEM_ASSHDG = 1923;
+const int TAG_CITEM_UKSTAND = 1990;
 
 // RIMCAS Menus & shit
 const int RIMCAS_CLOSE = EuroScopePlugIn::TAG_ITEM_FUNCTION_NO;

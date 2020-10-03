@@ -424,6 +424,7 @@ void CInsetWindow::render(HDC hDC, CSMRRadar * radar_screen, Graphics* gdi, POIN
 		TagClickableMap[TagReplacingMap["groundstatus"]] = TAG_CITEM_GROUNDSTATUS;
 		TagClickableMap[TagReplacingMap["controller"]] = TAG_CITEM_CONTROLLER;
 		TagClickableMap[TagReplacingMap["asshdg"]] = TAG_CITEM_ASSHDG;
+		TagClickableMap[TagReplacingMap["uk_stand"]] = TAG_CITEM_UKSTAND;
 
 		//
 		// ----- Now the hard part, drawing (using gdi+) -------

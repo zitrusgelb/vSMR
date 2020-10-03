@@ -1752,6 +1752,9 @@ map<string, string> CSMRRadar::GenerateTagData(CPlugIn* Plugin, CRadarTarget rt,
 	if (ass > 0)
 		asshdg = "H" + to_string(int(ass / 10));
 
+	// ----- UK Controller Plugin / Assigned Stand -------
+	string uk_stand;
+	uk_stand = fp.GetControllerAssignedData().GetFlightStripAnnotation(3);
 
 	// ----- Generating the replacing map -----
 	map<string, string> TagReplacingMap;
@@ -1812,6 +1815,7 @@ map<string, string> CSMRRadar::GenerateTagData(CPlugIn* Plugin, CRadarTarget rt,
 	TagReplacingMap["groundstatus"] = gstat;
 	TagReplacingMap["controller"] = controller;
 	TagReplacingMap["asshdg"] = asshdg;
+	TagReplacingMap["uk_stand"] = uk_stand;
 
 	return TagReplacingMap;
 }
@@ -2397,6 +2401,7 @@ void CSMRRadar::OnRefresh(HDC hDC, int Phase)
 		TagClickableMap[TagReplacingMap["groundstatus"]] = TAG_CITEM_GROUNDSTATUS;
 		TagClickableMap[TagReplacingMap["controller"]] = TAG_CITEM_CONTROLLER;
 		TagClickableMap[TagReplacingMap["asshdg"]] = TAG_CITEM_ASSHDG;
+		TagClickableMap[TagReplacingMap["uk_stand"]] = TAG_CITEM_UKSTAND;
 
 		//
 		// ----- Now the hard part, drawing (using gdi+) -------
