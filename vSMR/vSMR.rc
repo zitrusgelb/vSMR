@@ -53,8 +53,8 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,2,0,0
- PRODUCTVERSION 1,2,0,0
+ FILEVERSION 1,5,0,6
+ PRODUCTVERSION 1,5,0,6
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -70,12 +70,12 @@ BEGIN
         BLOCK "040004b0"
         BEGIN
             VALUE "FileDescription", "vSMR Plugin for EuroScope"
-            VALUE "FileVersion", "1.2.0.0"
+            VALUE "FileVersion", "1.5-hpeter6"
             VALUE "InternalName", "vSMR.dll"
             VALUE "LegalCopyright", "GNU GENERAL PUBLIC LICENSE"
             VALUE "OriginalFilename", "vSMR.dll"
             VALUE "ProductName", "vSMR"
-            VALUE "ProductVersion", "1.2.0.0"
+            VALUE "ProductVersion", "1.5-hpeter6"
         END
     END
     BLOCK "VarFileInfo"
@@ -170,7 +170,7 @@ BEGIN
     EDITTEXT        IDC_ORIG,7,110,254,49,ES_MULTILINE | ES_UPPERCASE | ES_AUTOVSCROLL | ES_READONLY | WS_VSCROLL
     CTEXT           "PILOT REQUEST",IDC_STATIC,105,101,55,8
     CTEXT           "INIT CLB",IDC_STATIC,142,42,28,8
-    EDITTEXT        IDC_CLB,141,52,29,14,ES_CENTER | ES_UPPERCASE | ES_AUTOHSCROLL | WS_DISABLED
+    EDITTEXT        IDC_CLB,141,52,29,14,ES_CENTER | ES_UPPERCASE | ES_AUTOHSCROLL | ES_NUMBER
 END
 
 IDD_DIALOG2 DIALOGEX 0, 0, 142, 105

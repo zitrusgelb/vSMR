@@ -10,7 +10,6 @@
 #include <sstream>
 #include <iomanip>
 
-#define VSTRIPS_PORT 53487
 
 using namespace std;
 using namespace EuroScopePlugIn;
@@ -24,6 +23,7 @@ const int TAG_FUNC_DATALINK_VOICE = 547;
 const int TAG_FUNC_DATALINK_RESET = 548;
 const int TAG_FUNC_DATALINK_MESSAGE = 549;
 
+const int TAG_FUNC_DETAILED = 550;
 
 
 inline static bool startsWith(const char *pre, const char *str)
@@ -58,16 +58,16 @@ inline static Gdiplus::Rect CopyRect(CRect &rect)
 	return Gdiplus::Rect(rect.left, rect.top, rect.Width(), rect.Height());
 };
 
-inline static std::vector<std::string> &split(const std::string &s, char delim, std::vector<std::string> &elems) {
-	std::stringstream ss(s);
-	std::string item;
-	while (std::getline(ss, item, delim)) {
+inline static vector<string> &split(const string &s, char delim, vector<string> &elems) {
+	stringstream ss(s);
+	string item;
+	while (getline(ss, item, delim)) {
 		elems.push_back(item);
 	}
 	return elems;
 };
-inline static std::vector<std::string> split(const std::string &s, char delim) {
-	std::vector<std::string> elems;
+inline static vector<string> split(const string &s, char delim) {
+	vector<string> elems;
 	split(s, delim, elems);
 	return elems;
 };
@@ -126,13 +126,13 @@ inline static int Is_Left(const POINT &p0, const POINT &p1, const POINT &point)
 		(point.x - p0.x) * (p1.y - p0.y));
 };
 
-inline static bool Is_Inside(const POINT &point, const std::vector<POINT> &points_list)
+inline static bool Is_Inside(const POINT &point, const vector<POINT> &points_list)
 {
 	// The winding number counter.
 	int winding_number = 0;
 
 	// Loop through all edges of the polygon.
-	typedef std::vector<POINT>::size_type size_type;
+	typedef vector<POINT>::size_type size_type;
 
 	size_type size = points_list.size();
 
@@ -285,8 +285,12 @@ const int TAG_CITEM_GATE = 1914;
 const int TAG_CITEM_MANUALCORRELATE = 1915;
 const int TAG_CITEM_SID = 1916;
 const int TAG_CITEM_GROUNDSTATUS = 1917;
-
-const int FUNC_MANUAL_CALLSIGN = 2000;
+const int TAG_CITEM_SCRATCH = 1918;
+const int TAG_CITEM_CONTROLLER = 1919;
+const int TAG_CITEM_SSR = 1920;
+const int TAG_CITEM_GS = 1921;
+const int TAG_CITEM_FL = 1922;
+const int TAG_CITEM_ASSHDG = 1923;
 
 // RIMCAS Menus & shit
 const int RIMCAS_CLOSE = EuroScopePlugIn::TAG_ITEM_FUNCTION_NO;
@@ -301,6 +305,7 @@ const int RIMCAS_UPDATE_PROFILE = 8016;
 const int RIMCAS_UPDATE_BRIGHNESS = 8017;
 const int RIMCAS_UPDATE_FONTS = 8018;
 const int RIMCAS_UPDATE_LVP = 8019;
+const int RIMCAS_RELOAD_PROFILE = 8023;
 const int RIMCAS_CA_MONITOR_FUNC = 8022;
 const int RIMCAS_CA_ARRIVAL_FUNC = 8020;
 const int RIMCAS_CLOSED_RUNWAYS_FUNC = 8021;
@@ -311,6 +316,9 @@ const int RIMCAS_UPDATE_PTL = 8033;
 const int RIMCAS_UPDATE_RELEASE = 8034;
 const int RIMCAS_UPDATE_ACQUIRE = 8035;
 
+const int RIMCAS_CPDLC_SETTINGS = 8036;
+const int RIMCAS_CPDLC_CONNECT = 8037;
+const int RIMCAS_CPDLC_POLL = 8038;
 const int RIMCAS_IAW = 7000;
 
 const int RIMCAS_UPDATERANGE = 6005;

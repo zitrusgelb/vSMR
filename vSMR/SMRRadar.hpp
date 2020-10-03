@@ -1,8 +1,11 @@
 #pragma once
 #include <EuroScopePlugIn.h>
 #include <string>
+#include <list>
 #include <vector>
+#include <set>
 #include <map>
+#include <unordered_map>
 #include <algorithm>
 #include <time.h>
 #include <GdiPlus.h>
@@ -10,14 +13,15 @@
 #include <math.h>
 #include "Constant.hpp"
 #include "CallsignLookup.hpp"
+#include "AircraftLookup.hpp"
 #include "Config.hpp"
 #include "Rimcas.hpp"
 #include "InsetWindow.h"
 #include <memory>
-#include <asio/io_service.hpp>
 #include <thread>
 #include "ColorManager.h"
 #include "Logger.h"
+#include <boost/algorithm/string/join.hpp>
 
 using namespace std;
 using namespace Gdiplus;
@@ -31,11 +35,6 @@ namespace SMRSharedData
 };
 
 
-namespace SMRPluginSharedData
-{
-	static asio::io_service io_service;
-}
-
 using namespace SMRSharedData;
 
 class CSMRRadar :
@@ -44,8 +43,6 @@ class CSMRRadar :
 public:
 	CSMRRadar();
 	virtual ~CSMRRadar();
-
-	static map<string, string> vStripsStands;
 
 	bool BLINK = false;
 
@@ -72,7 +69,7 @@ public:
 		map<int, POINT2> History_three_points;
 	};
 
-	map<const char *, Patatoide_Points> Patatoides;
+	unordered_map<const char *, Patatoide_Points> Patatoides;
 
 	map<string, bool> ClosedRunway;
 
@@ -80,6 +77,7 @@ public:
 	string DllPath;
 	string ConfigPath;
 	CCallsignLookup * Callsigns;
+	CAircraftLookup * Aircraft;
 	CColorManager * ColorManager;
 
 	map<string, bool> ShowLists;
@@ -99,6 +97,7 @@ public:
 	bool ColorSettingsDay = true;
 
 	bool isLVP = false;
+	int sectorIndicator = 0;
 
 	map<string, RECT> TimePopupAreas;
 
@@ -118,6 +117,9 @@ public:
 
 	map<int, Gdiplus::Font *> customFonts;
 	int currentFontSize = 1;
+	CFont menubar_font_left, menubar_font_right, menubar_font_timer;
+
+	map<string, string> customCursors;
 
 	map<string, CPosition> AirportPositions;
 
@@ -125,7 +127,7 @@ public:
 
 	int Trail_Gnd = 4;
 	int Trail_App = 4;
-	int PredictedLenght = 0;
+	int PredictedLength = 0;
 
 	bool NeedCorrelateCursor = false;
 	bool ReleaseInProgress = false;
@@ -135,26 +137,133 @@ public:
 	bool DistanceToolActive = false;
 	pair<string, string> ActiveDistance;
 
+
+	int Toolbar_Offset = 0;
+
 	//----
 	// Tag types
 	//---
 
-	enum TagTypes { Departure, Arrival, Airborne, Uncorrelated };
+	enum TagTypes { Departure, Arrival, Airborne, Uncorrelated, VFR };
+
+
+
+	const map <const int, int> TagObjectDefaultLeftTypes = {
+		{ TAG_CITEM_CALLSIGN, TAG_ITEM_FUNCTION_OPEN_FP_DIALOG },
+		{ TAG_CITEM_FPBOX, TAG_ITEM_FUNCTION_OPEN_FP_DIALOG },
+		{ TAG_CITEM_SCRATCH, TAG_ITEM_FUNCTION_EDIT_SCRATCH_PAD },
+		{ TAG_CITEM_CONTROLLER, TAG_ITEM_FUNCTION_HANDOFF_POPUP_MENU },
+		{ TAG_CITEM_FL, TAG_ITEM_FUNCTION_ASSIGNED_HEADING_POPUP },
+		{ TAG_CITEM_RWY, TAG_ITEM_FUNCTION_ASSIGNED_RUNWAY },
+	};
+
+	const map <const int, int> TagObjectDefaultMiddleTypes = {
+		{ TAG_CITEM_CALLSIGN, TAG_ITEM_FUNCTION_COMMUNICATION_POPUP },
+		{ TAG_CITEM_FPBOX, TAG_ITEM_FUNCTION_TOGGLE_ROUTE_DRAW },
+		{ TAG_CITEM_SCRATCH, TAG_ITEM_FUNCTION_EDIT_SCRATCH_PAD },
+	};
+
+	const map <const int, int> TagObjectDefaultRightTypes = {
+		{ TAG_CITEM_CALLSIGN, TAG_ITEM_FUNCTION_TOGGLE_ROUTE_DRAW },
+		{ TAG_CITEM_FPBOX, TAG_ITEM_FUNCTION_EDIT_SCRATCH_PAD },
+		{ TAG_CITEM_RWY, TAG_ITEM_FUNCTION_SET_GROUND_STATUS },
+		{ TAG_CITEM_SID, TAG_ITEM_FUNCTION_ASSIGNED_SID },
+		{ TAG_CITEM_GATE, TAG_ITEM_FUNCTION_EDIT_SCRATCH_PAD },
+		{ TAG_CITEM_GROUNDSTATUS, TAG_ITEM_FUNCTION_SET_GROUND_STATUS },
+		{ TAG_CITEM_SCRATCH, TAG_ITEM_FUNCTION_EDIT_SCRATCH_PAD },
+		{ TAG_CITEM_CONTROLLER, TAG_ITEM_FUNCTION_ASSIGNED_NEXT_CONTROLLER },
+		{ TAG_CITEM_SSR, TAG_ITEM_FUNCTION_SET_GROUND_STATUS },
+		{ TAG_CITEM_GS, TAG_ITEM_FUNCTION_ASSIGNED_SPEED_POPUP },
+		{ TAG_CITEM_FL, TAG_ITEM_FUNCTION_TEMP_ALTITUDE_POPUP },
+		{ TAG_CITEM_ASSHDG, TAG_ITEM_FUNCTION_ASSIGNED_HEADING_POPUP },
+	};
+
+	map <const int, int> TagObjectLeftTypes;
+	map <const int, int> TagObjectMiddleTypes;
+	map <const int, int> TagObjectRightTypes;
+
+	inline void GenerateClickable() {
+		TagObjectLeftTypes = TagObjectDefaultLeftTypes;
+		TagObjectMiddleTypes = TagObjectDefaultMiddleTypes;
+		TagObjectRightTypes = TagObjectDefaultRightTypes;
+
+		if (!CurrentConfig->getActiveProfile()["labels"]["clickable"].IsObject())
+			return;
+
+		const Value& Clickable = CurrentConfig->getActiveProfile()["labels"]["clickable"];
+		for (Value::ConstMemberIterator itr = Clickable.MemberBegin(); itr != Clickable.MemberEnd(); ++itr) {
+			const Value& objName = Clickable[itr->name.GetString()];
+			
+			
+			if (objName["left"].IsObject()) {
+				if (objName["left"]["function"].IsString()) {
+					try { TagObjectLeftTypes[stoi(itr->name.GetString())] = stoi(objName["left"]["function"].GetString()); }
+					catch (...) { TagObjectLeftTypes[stoi(itr->name.GetString())] = 0; }
+				}
+				else
+					TagObjectLeftTypes[stoi(itr->name.GetString())] = 0;
+			}
+			if (objName["middle"].IsObject()) {
+				if (objName["middle"]["function"].IsString()) {
+					try { TagObjectMiddleTypes[stoi(itr->name.GetString())] = stoi(objName["middle"]["function"].GetString()); }
+					catch (...) { TagObjectMiddleTypes[stoi(itr->name.GetString())] = 0; }
+				}
+				else
+					TagObjectMiddleTypes[stoi(itr->name.GetString())] = 0;
+			}
+			if (objName["right"].IsObject()) {
+				if (objName["right"]["function"].IsString()) {
+					try { TagObjectRightTypes[stoi(itr->name.GetString())] = stoi(objName["right"]["function"].GetString()); }
+					catch (...) { TagObjectRightTypes[stoi(itr->name.GetString())] = 0; }
+				}
+				else
+					TagObjectRightTypes[stoi(itr->name.GetString())] = 0;
+			}
+		}
+	}
 
 
 	string ActiveAirport = "EGKK";
+	list <string> ActiveAirports = { "EGKK" };
 
 	inline string getActiveAirport() {
 		return ActiveAirport;
 	}
+	inline list<string> getActiveAirports() {
+		return ActiveAirports;
+	}
+	inline bool isActiveAirport(string value) {
+		bool is = false;
+		for (string airport : getActiveAirports()) {
+			if (airport == value)
+				return true;
+		}
+		return false;
+	}
 
 	inline string setActiveAirport(string value) {
-		return ActiveAirport = value;
+		list<string> airports;
+		StrTrimA(const_cast<char *>(value.c_str()), " ,;\t\r\n");
+		transform(value.begin(), value.end(), value.begin(), ::toupper);
+
+
+		int i = 0, start = 0;
+		while (i <= value.size())
+		{
+			if (i == value.size() || value[i] < 'A' || value[i] > 'Z') {
+				if (i - start == 4)
+					airports.insert(airports.end(), value.substr(start, 4));
+				start = i + 1;
+			}
+			i++;
+		}
+		ActiveAirports = airports;
+		return ActiveAirport = ActiveAirports.front();
 	}
 
 	//---GenerateTagData--------------------------------------------
 
-	static map<string, string> GenerateTagData(CRadarTarget Rt, CFlightPlan fp, bool isAcCorrelated, bool isProMode, int TransitionAltitude, bool useSpeedForGates, string ActiveAirport);
+	static map<string, string> GenerateTagData(CPlugIn* Plugin, CRadarTarget Rt, CFlightPlan fp, bool isAcCorrelated, bool isProMode, int TransitionAltitude, bool useSpeedForGates, int sectorIndicator, string ActiveAirport);
 
 	//---IsCorrelatedFuncs---------------------------------------------
 
@@ -188,12 +297,12 @@ public:
 					}
 				}
 
-				if (std::find(ManuallyCorrelated.begin(), ManuallyCorrelated.end(), rt.GetSystemID()) != ManuallyCorrelated.end())
+				if (find(ManuallyCorrelated.begin(), ManuallyCorrelated.end(), rt.GetSystemID()) != ManuallyCorrelated.end())
 				{
 					isCorr = true;
 				}
 
-				if (std::find(ReleasedTracks.begin(), ReleasedTracks.end(), rt.GetSystemID()) != ReleasedTracks.end())
+				if (find(ReleasedTracks.begin(), ReleasedTracks.end(), rt.GetSystemID()) != ReleasedTracks.end())
 				{
 					isCorr = false;
 				}
@@ -217,6 +326,10 @@ public:
 
 	virtual void LoadCustomFont();
 
+	//---LoadCustomCursors--------------------------------------------
+
+	virtual void LoadCustomCursors();
+
 	//---LoadProfile--------------------------------------------
 
 	virtual void LoadProfile(string profileName);
@@ -236,6 +349,10 @@ public:
 	//---OnClickScreenObject-----------------------------------------
 
 	virtual void OnClickScreenObject(int ObjectType, const char * sObjectId, POINT Pt, RECT Area, int Button);
+
+	//---OnDoubleClickScreenObject-----------------------------------------
+
+	virtual void OnDoubleClickScreenObject(int ObjectType, const char* sObjectId, POINT Pt, RECT Area, int Button);
 
 	//---OnMoveScreenObject---------------------------------------------
 
@@ -261,19 +378,37 @@ public:
 
 	virtual void OnFlightPlanDisconnect(CFlightPlan FlightPlan);
 
+	//---isVisible---------------------------------------------
+
 	virtual bool isVisible(CRadarTarget rt)
 	{
 		CRadarTargetPositionData RtPos = rt.GetPosition();
 		int radarRange = CurrentConfig->getActiveProfile()["filters"]["radar_range_nm"].GetInt();
-		int altitudeFilter = CurrentConfig->getActiveProfile()["filters"]["hide_above_alt"].GetInt();
+		int altitudeFilter_above = CurrentConfig->getActiveProfile()["filters"]["hide_above_alt"].GetInt();
+		int altitudeFilter_below = CurrentConfig->getActiveProfile()["filters"]["hide_below_alt"].GetInt();
 		int speedFilter = CurrentConfig->getActiveProfile()["filters"]["hide_above_spd"].GetInt();
-		bool isAcDisplayed = true;
+		bool show_on_rwy = CurrentConfig->getActiveProfile()["filters"]["show_on_rwy"].GetBool();
+		bool isAcDisplayed = false;
 
-		if (AirportPositions[getActiveAirport()].DistanceTo(RtPos.GetPosition()) > radarRange)
+		if (show_on_rwy && RimcasInstance->isAcOnRunway(rt.GetCallsign())) {
+			return true;
+		}
+		else if (rt.GetCorrelatedFlightPlan().GetTrackingControllerIsMe())
+			return true;
+
+		for (string airport : getActiveAirports()) {
+			if (AirportPositions[airport].DistanceTo(RtPos.GetPosition()) <= radarRange) {
+				isAcDisplayed = true;
+				break;
+			}
+		}
+
+		if (altitudeFilter_above != 0) {
+			if (RtPos.GetPressureAltitude() > altitudeFilter_above)
 			isAcDisplayed = false;
-
-		if (altitudeFilter != 0) {
-			if (RtPos.GetPressureAltitude() > altitudeFilter)
+		}
+		if (altitudeFilter_below != 0) {
+			if (RtPos.GetPressureAltitude() < altitudeFilter_below)
 				isAcDisplayed = false;
 		}
 
@@ -314,6 +449,116 @@ public:
 	//---GetBottomLine---------------------------------------------
 
 	virtual string GetBottomLine(const char * Callsign);
+
+	//---IsVFR---------------------------------------------
+
+	static string IsVFR(CFlightPlan fp, CRadarTarget rt)
+	{
+		if (!rt.GetPosition().IsValid())
+			return "";
+
+		if (fp.IsValid() && fp.GetFlightPlanData().GetPlanType()[0] == 'I')
+			return "";
+
+		switch (atoi(rt.GetPosition().GetSquawk()))
+		{
+		case 20:
+			return "RESCU";
+		case 23:
+			return "BPO";
+		case 24:
+			return "TFFN";
+		case 25:
+			return "PJE";
+		case 27:
+			return "ACRO";
+		case 30:
+			return "CAL";
+		case 31:
+			return "OPSKY";
+		case 33:
+			return "VM";
+		case 34:
+			return "SAR";
+		case 35:
+			return "AIRCL";
+		case 36:
+			return "POL";
+		case 37:
+			return "BIV";
+		case 76:
+			return "VFRCD";
+		case 3701:
+			return "VFS";
+		case 3702:
+			return "VFW";
+		case 3703:
+			return "VFM";
+		case 3704:
+			return "VFN";
+		case 3707:
+			return "CR";
+		case 4406:
+			return "SW";
+		case 4472:
+			return "PJV";
+		case 4473:
+			return "CHX4";
+		case 4474:
+			return "BALL";
+		case 4476:
+			return "TAXI";
+		case 4660:
+			return "TWR";
+		case 4642:
+			return "VDH";
+		case 4643:
+			return "SSF";
+		case 4644:
+			return "SV";
+		case 4645:
+			return "EDHI";
+		case 4647:
+			return "HL";
+		case 6103:
+			return "RAFIS";
+		case 6311:
+			return "FR1";
+		case 6312:
+			return "FR2";
+		case 6313:
+			return "FR3";
+		case 6314:
+			return "FR4";
+		case 6315:
+			return "FR5";
+		case 6316:
+			return "FIS";
+		case 6317:
+			return "VMR";
+		case 6550:
+			return "DT";
+		case 6570:
+			return "DB";
+		case 7000:
+			return "V";
+		case 7001:
+			return "VOUT";
+		case 7010:
+			return "VIN";
+		case 7012:
+			return "HELI";
+		case 7040:
+			return "NL";
+		case 7050:
+			return "NU";
+		default:
+			if (fp.IsValid() && fp.GetFlightPlanData().GetPlanType()[0] == 'V')
+				return "V";
+			return "";
+		}
+	}
+
 
 	//---LineIntersect---------------------------------------------
 

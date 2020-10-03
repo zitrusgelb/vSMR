@@ -20,10 +20,11 @@ public:
 	POINT m_Offset = { 0, 0 }, m_OffsetInit = { 0, 0 }, m_OffsetDrag = { 0, 0 };
 	bool m_Grip = false;
 	double m_Rotation = 0;
+	string EmptyScratchpad = "..\0"; // Make Scratchpad tag clickable, if empty
 
 	map<string, double> m_TagAngles;
 
-	virtual void render(HDC Hdc, CSMRRadar * radar_screen, Graphics* gdi, POINT mouseLocation, multimap<string, string> DistanceTools);
+	virtual void render(HDC Hdc, CSMRRadar * radar_screen, Graphics* gdi, POINT mouseLocation, multimap<string, string> DistanceTools, set<string> TagsDetailed);
 	virtual void setAirport(string icao);
 	virtual POINT projectPoint(CPosition pos);
 	virtual void OnClickScreenObject(const char * sItemString, POINT Pt, int Button);

@@ -8,16 +8,16 @@
 
 using namespace std;
 
-class CCallsignLookup
+class CAircraftLookup
 {
 private:
-	map<string, string> callsigns;
+	map<string, string> wingspans;
 
 
 public:
 
-	CCallsignLookup(string fileName);
-	string getCallsign(string airlineCode);
+	CAircraftLookup(string fileName);
+	string getWingspan(string aircraftCode);
 
-	~CCallsignLookup();
+	~CAircraftLookup();
 };

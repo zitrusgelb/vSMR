@@ -127,7 +127,7 @@ POINT CInsetWindow::projectPoint(CPosition pos)
 	}
 }
 
-void CInsetWindow::render(HDC hDC, CSMRRadar * radar_screen, Graphics* gdi, POINT mouseLocation, multimap<string, string> DistanceTools)
+void CInsetWindow::render(HDC hDC, CSMRRadar * radar_screen, Graphics* gdi, POINT mouseLocation, multimap<string, string> DistanceTools, set<string> TagsDetailed)
 {
 	CDC dc;
 	dc.Attach(hDC);
@@ -144,8 +144,11 @@ void CInsetWindow::render(HDC hDC, CSMRRadar * radar_screen, Graphics* gdi, POIN
 				return "arrival";
 			if (type == CSMRRadar::TagTypes::Uncorrelated)
 				return "uncorrelated";
+			else if (type == CSMRRadar::TagTypes::VFR)
+				return "vfr";
 			return "airborne";
 		}
+
 		static RECT GetAreaFromText(CDC * dc, string text, POINT Pos) {
 			RECT Area = { Pos.x, Pos.y, Pos.x + dc->GetTextExtent(text.c_str()).cx, Pos.y + dc->GetTextExtent(text.c_str()).cy };
 			return Area;
@@ -232,10 +235,10 @@ void CInsetWindow::render(HDC hDC, CSMRRadar * radar_screen, Graphics* gdi, POIN
 					
 
 				double reverseHeading = RadToDeg(TrueBearing(OtherEnd, Threshold));
-				double lenght = double(radar_screen->CurrentConfig->getActiveProfile()["approach_insets"]["extended_lines_length"].GetDouble()) * 1852.0;
+				double length = double(radar_screen->CurrentConfig->getActiveProfile()["approach_insets"]["extended_lines_length"].GetDouble()) * 1852.0;
 
 				// Drawing the extended centreline
-				CPosition endExtended = BetterHarversine(Threshold, reverseHeading, lenght);
+				CPosition endExtended = BetterHarversine(Threshold, reverseHeading, length);
 
 				Pt1 = projectPoint(Threshold);
 				Pt2 = projectPoint(endExtended);
@@ -347,7 +350,7 @@ void CInsetWindow::render(HDC hDC, CSMRRadar * radar_screen, Graphics* gdi, POIN
 		double d = double(rt.GetPosition().GetReportedGS()*0.514444)*10;
 		CPosition AwayBase = BetterHarversine(rt.GetPosition().GetPosition(), rt.GetTrackHeading(), d);
 
-		d = double(rt.GetPosition().GetReportedGS()*0.514444) * (radar_screen->PredictedLenght * 60)-10;
+		d = double(rt.GetPosition().GetReportedGS()*0.514444) * (radar_screen->PredictedLength * 60)-10;
 		CPosition PredictedEnd = BetterHarversine(AwayBase, rt.GetTrackHeading(), d);
 
 		POINT liangOne, liangTwo;
@@ -381,7 +384,7 @@ void CInsetWindow::render(HDC hDC, CSMRRadar * radar_screen, Graphics* gdi, POIN
 			dc.LineTo(RtPoint.x + 10, RtPoint.y + 4);
 		}
 
-		int lenght = 50;
+		int length = 50;
 
 		POINT TagCenter;
 		if (m_TagAngles.find(rt.GetCallsign()) == m_TagAngles.end())
@@ -389,12 +392,12 @@ void CInsetWindow::render(HDC hDC, CSMRRadar * radar_screen, Graphics* gdi, POIN
 			m_TagAngles[rt.GetCallsign()] = 45.0; // TODO: Not the best, ah well
 		}
 
-		TagCenter.x = long(RtPoint.x + float(lenght * cos(DegToRad(m_TagAngles[rt.GetCallsign()]))));
-		TagCenter.y = long(RtPoint.y + float(lenght * sin(DegToRad(m_TagAngles[rt.GetCallsign()]))));
+		TagCenter.x = long(RtPoint.x + float(length * cos(DegToRad(m_TagAngles[rt.GetCallsign()]))));
+		TagCenter.y = long(RtPoint.y + float(length * sin(DegToRad(m_TagAngles[rt.GetCallsign()]))));
 		// Drawing the tags, what a mess
 
 		// ----- Generating the replacing map -----
-		map<string, string> TagReplacingMap = CSMRRadar::GenerateTagData(rt, fp, radar_screen->IsCorrelated(fp, rt), radar_screen->CurrentConfig->getActiveProfile()["filters"]["pro_mode"]["enable"].GetBool(), radar_screen->GetPlugIn()->GetTransitionAltitude(), radar_screen->CurrentConfig->getActiveProfile()["labels"]["use_aspeed_for_gate"].GetBool(), icao);
+		map<string, string> TagReplacingMap = CSMRRadar::GenerateTagData(radar_screen->GetPlugIn(), rt, fp, radar_screen->IsCorrelated(fp, rt), radar_screen->CurrentConfig->getActiveProfile()["filters"]["pro_mode"]["enable"].GetBool(), radar_screen->GetPlugIn()->GetTransitionAltitude(), radar_screen->CurrentConfig->getActiveProfile()["labels"]["use_aspeed_for_gate"].GetBool(), radar_screen->sectorIndicator, icao);
 
 		// ----- Generating the clickable map -----
 		map<string, int> TagClickableMap;
@@ -408,16 +411,19 @@ void CInsetWindow::render(HDC hDC, CSMRRadar * radar_screen, Graphics* gdi, POIN
 		TagClickableMap[TagReplacingMap["srvrwy"]] = TAG_CITEM_RWY;
 		TagClickableMap[TagReplacingMap["gate"]] = TAG_CITEM_GATE;
 		TagClickableMap[TagReplacingMap["sate"]] = TAG_CITEM_GATE;
-		TagClickableMap[TagReplacingMap["flightlevel"]] = TAG_CITEM_NO;
-		TagClickableMap[TagReplacingMap["gs"]] = TAG_CITEM_NO;
+		TagClickableMap[TagReplacingMap["scratch"]] = TAG_CITEM_SCRATCH;
+		TagClickableMap[TagReplacingMap["flightlevel"]] = TAG_CITEM_FL;
+		TagClickableMap[TagReplacingMap["gs"]] = TAG_CITEM_GS;
 		TagClickableMap[TagReplacingMap["tendency"]] = TAG_CITEM_NO;
 		TagClickableMap[TagReplacingMap["wake"]] = TAG_CITEM_FPBOX;
-		TagClickableMap[TagReplacingMap["tssr"]] = TAG_CITEM_NO;
-		TagClickableMap[TagReplacingMap["sid"]] = TagClickableMap[TagReplacingMap["shid"]] = TAG_CITEM_SID;
+		TagClickableMap[TagReplacingMap["ssr"]] = TAG_CITEM_SSR;
+		TagClickableMap[TagReplacingMap["asid"]] = TagClickableMap[TagReplacingMap["ssid"]] = TAG_CITEM_SID;
 		TagClickableMap[TagReplacingMap["origin"]] = TAG_CITEM_FPBOX;
 		TagClickableMap[TagReplacingMap["dest"]] = TAG_CITEM_FPBOX;
 		TagClickableMap[TagReplacingMap["systemid"]] = TAG_CITEM_MANUALCORRELATE;
-		TagClickableMap[TagReplacingMap["gstatus"]] = TAG_CITEM_GROUNDSTATUS;
+		TagClickableMap[TagReplacingMap["groundstatus"]] = TAG_CITEM_GROUNDSTATUS;
+		TagClickableMap[TagReplacingMap["controller"]] = TAG_CITEM_CONTROLLER;
+		TagClickableMap[TagReplacingMap["asshdg"]] = TAG_CITEM_ASSHDG;
 
 		//
 		// ----- Now the hard part, drawing (using gdi+) -------
@@ -426,7 +432,7 @@ void CInsetWindow::render(HDC hDC, CSMRRadar * radar_screen, Graphics* gdi, POIN
 		CSMRRadar::TagTypes TagType = CSMRRadar::TagTypes::Departure;
 		CSMRRadar::TagTypes ColorTagType = CSMRRadar::TagTypes::Departure;
 
-		if (fp.IsValid() && strcmp(fp.GetFlightPlanData().GetDestination(), radar_screen->getActiveAirport().c_str()) == 0) {
+		if (fp.IsValid() && radar_screen->isActiveAirport(fp.GetFlightPlanData().GetDestination())) {
 				TagType = CSMRRadar::TagTypes::Arrival;
 				ColorTagType = CSMRRadar::TagTypes::Arrival;
 		}
@@ -461,17 +467,38 @@ void CInsetWindow::render(HDC hDC, CSMRRadar * radar_screen, Graphics* gdi, POIN
 		int oneLineHeight = (int)mesureRect.GetBottom();
 
 		const Value& LabelsSettings = radar_screen->CurrentConfig->getActiveProfile()["labels"];
-		const Value& LabelLines = LabelsSettings[Utils::getEnumString(TagType).c_str()]["definition"];
+		const Value& LabelLines_Normal = LabelsSettings[Utils::getEnumString(TagType).c_str()]["definition"];
+		const Value& LabelLines_Detailed = LabelsSettings[Utils::getEnumString(TagType).c_str()]["definition_detailed"];
 		vector<vector<string>> ReplacedLabelLines;
 
-		if (!LabelLines.IsArray())
+		if (!LabelLines_Normal.IsArray())
 			return;
 
+		bool isDetailed = false;
+		if (LabelLines_Detailed.IsArray()) {
+			if (TagsDetailed.find(rt.GetCallsign()) != TagsDetailed.end()) {
+				isDetailed = true;
+			}
+		}
+
+		const Value& LabelLines = isDetailed ? LabelLines_Detailed : LabelLines_Normal;
 		for (unsigned int i = 0; i < LabelLines.Size(); i++)
 		{
-
 			const Value& line = LabelLines[i];
 			vector<string> lineStringArray;
+
+			// Empty Scratchpad special			
+			if (line.Size() == unsigned(1) && strcmp(line[unsigned(0)].GetString(), "scratch") == 0) {
+				string element = line[unsigned(0)].GetString();
+
+				for (auto& kv : TagReplacingMap)
+					replaceAll(element, kv.first, kv.second);
+
+				if (strcmp(element.c_str(), EmptyScratchpad.c_str()) == 0)
+					continue;
+				if (TagType == CSMRRadar::TagTypes::Arrival && strcmp(element.c_str(), TagReplacingMap["gate"].c_str()) == 0)
+					continue;
+			}
 
 			// Adds one line height
 			TagHeight += oneLineHeight;
@@ -511,8 +538,10 @@ void CInsetWindow::render(HDC hDC, CSMRRadar * radar_screen, Graphics* gdi, POIN
 
 		Color definedBackgroundColor = radar_screen->CurrentConfig->getConfigColor(LabelsSettings[Utils::getEnumString(ColorTagType).c_str()]["background_color"]);
 		if (TagType == CSMRRadar::TagTypes::Departure) {
-			if (!TagReplacingMap["sid"].empty() && radar_screen->CurrentConfig->isSidColorAvail(TagReplacingMap["sid"], radar_screen->getActiveAirport())) {
-				definedBackgroundColor = radar_screen->CurrentConfig->getSidColor(TagReplacingMap["sid"], radar_screen->getActiveAirport());
+			if (!TagReplacingMap["asid"].empty() &&
+				radar_screen->isActiveAirport(TagReplacingMap["origin"].c_str()) &&
+				radar_screen->CurrentConfig->isSidColorAvail(TagReplacingMap["asid"], TagReplacingMap["origin"].c_str())) {
+				definedBackgroundColor = radar_screen->CurrentConfig->getSidColor(TagReplacingMap["asid"], TagReplacingMap["origin"].c_str());
 			}
 
 			if (fp.GetFlightPlanData().GetPlanType()[0] == 'I' && TagReplacingMap["asid"].empty() && LabelsSettings[Utils::getEnumString(ColorTagType).c_str()].HasMember("nosid_color")) {
@@ -545,9 +574,26 @@ void CInsetWindow::render(HDC hDC, CSMRRadar * radar_screen, Graphics* gdi, POIN
 
 			SolidBrush FontColor(radar_screen->ColorManager->get_corrected_color("label",
 				radar_screen->CurrentConfig->getConfigColor(LabelsSettings[Utils::getEnumString(ColorTagType).c_str()]["text_color"])));
+			SolidBrush FontColorUnrelated(radar_screen->ColorManager->get_corrected_color("label",
+				radar_screen->CurrentConfig->getConfigColor(LabelsSettings[Utils::getEnumString(ColorTagType).c_str()]["text_color_unrelated"])));
 			SolidBrush SquawkErrorColor(radar_screen->ColorManager->get_corrected_color("label",
 				radar_screen->CurrentConfig->getConfigColor(LabelsSettings["squawk_error_color"])));
 			SolidBrush RimcasTextColor(radar_screen->CurrentConfig->getConfigColor(radar_screen->CurrentConfig->getActiveProfile()["rimcas"]["alert_text_color"]));
+
+			SolidBrush GroundPushColor(radar_screen->ColorManager->get_corrected_color("label",
+				radar_screen->CurrentConfig->getConfigColor(LabelsSettings["groundstatus_colors"]["push"])));
+			SolidBrush GroundTaxiColor(radar_screen->ColorManager->get_corrected_color("label",
+				radar_screen->CurrentConfig->getConfigColor(LabelsSettings["groundstatus_colors"]["taxi"])));
+			SolidBrush GroundDepaColor(radar_screen->ColorManager->get_corrected_color("label",
+				radar_screen->CurrentConfig->getConfigColor(LabelsSettings["groundstatus_colors"]["depa"])));
+			SolidBrush ArrivalColor(radar_screen->ColorManager->get_corrected_color("label",
+				radar_screen->CurrentConfig->getConfigColor(LabelsSettings["arrival_color"])));
+			SolidBrush ContrAssumedColor(radar_screen->ColorManager->get_corrected_color("label",
+				radar_screen->CurrentConfig->getConfigColor(LabelsSettings["controller_colors"]["assumed"])));
+			SolidBrush ContrTrToColor(radar_screen->ColorManager->get_corrected_color("label",
+				radar_screen->CurrentConfig->getConfigColor(LabelsSettings["controller_colors"]["transfer_to_me"])));
+			SolidBrush ContrTrFromColor(radar_screen->ColorManager->get_corrected_color("label",
+				radar_screen->CurrentConfig->getConfigColor(LabelsSettings["controller_colors"]["transfer_from_me"])));
 
 			int heightOffset = 0;
 			for (auto&& line : ReplacedLabelLines)
@@ -561,6 +607,51 @@ void CInsetWindow::render(HDC hDC, CSMRRadar * radar_screen, Graphics* gdi, POIN
 
 					if (radar_screen->RimcasInstance->getAlert(rt.GetCallsign()) != CRimcas::NoAlert)
 						color = &RimcasTextColor;
+
+					// Tag colors (colors the callsign)
+					if (element.length() > 0 && strcmp(element.c_str(), TagReplacingMap["callsign"].c_str()) == 0) {
+						// Departure
+						if (radar_screen->isActiveAirport(TagReplacingMap["origin"].c_str())) {
+							//Ground (Dep)
+							if (strcmp(TagReplacingMap["groundstatus"].c_str(), "PUSH") == 0)
+								color = &GroundPushColor;
+							else if (strcmp(TagReplacingMap["groundstatus"].c_str(), "TAXI") == 0)
+								color = &GroundTaxiColor;
+							else if (strcmp(TagReplacingMap["groundstatus"].c_str(), "DEPA") == 0)
+								color = &GroundDepaColor;
+
+							// Circuits
+							if (radar_screen->isActiveAirport(TagReplacingMap["dest"].c_str())) {
+								if (reportedGs > 50)
+									color = &ArrivalColor;
+								else if (TagReplacingMap["gate"].find_first_not_of("0123456789") == string::npos)
+									color = &FontColor;
+							} 
+						}
+						// Arrival
+						else if (element.length() > 0 && radar_screen->isActiveAirport(TagReplacingMap["dest"].c_str())) {
+							if (reportedGs > 50)
+								color = &ArrivalColor;
+						}
+					}
+					
+					// Hide empty clickable Scratchpad content
+					else if (strcmp(element.c_str(), EmptyScratchpad.c_str()) == 0)
+						color->SetColor(TagBackgroundColor);
+					// Tag colors (colours the Controller)
+					else if (element.length() > 0 && strcmp(element.c_str(), TagReplacingMap["controller"].c_str()) == 0) {
+						switch (fp.GetState()) {
+						case FLIGHT_PLAN_STATE_ASSUMED:
+							color = &ContrAssumedColor;
+							break;
+						case FLIGHT_PLAN_STATE_TRANSFER_TO_ME_INITIATED:
+							color = &ContrTrToColor;
+							break;
+						case FLIGHT_PLAN_STATE_TRANSFER_FROM_ME_INITIATED:
+							color = &ContrTrFromColor;
+							break;
+						}
+					}
 
 					RectF mRect(0, 0, 0, 0);
 
@@ -675,11 +766,11 @@ void CInsetWindow::render(HDC hDC, CSMRRadar * radar_screen, Graphics* gdi, POIN
 		double Distance = one.GetPosition().GetPosition().DistanceTo(two.GetPosition().GetPosition());
 		double Bearing = one.GetPosition().GetPosition().DirectionTo(two.GetPosition().GetPosition());
 
-		string distances = std::to_string(Distance);
+		string distances = to_string(Distance);
 		size_t decimal_pos = distances.find(".");
 		distances = distances.substr(0, decimal_pos + 2);
 
-		string bearings = std::to_string(Bearing);
+		string bearings = to_string(Bearing);
 		decimal_pos = bearings.find(".");
 		bearings = bearings.substr(0, decimal_pos + 2);
 
@@ -717,7 +808,9 @@ void CInsetWindow::render(HDC hDC, CSMRRadar * radar_screen, Graphics* gdi, POIN
 
 	// Sides
 	//CBrush FrameBrush(RGB(35, 35, 35));
-	CBrush FrameBrush(RGB(127, 122, 122));
+	
+	COLORREF qFrameColor = radar_screen->CurrentConfig->getConfigColorRef(radar_screen->CurrentConfig->getActiveProfile()["approach_insets"]["background_color"]);
+	CBrush FrameBrush(RGB(min(GetRValue(qFrameColor) + 20, 255), min(GetGValue(qFrameColor) + 20, 255), min(GetBValue(qFrameColor) + 20, 255)));
 	COLORREF TopBarTextColor(RGB(35, 35, 35));
 	dc.FrameRect(windowAreaCRect, &FrameBrush);
 
@@ -733,7 +826,7 @@ void CInsetWindow::render(HDC hDC, CSMRRadar * radar_screen, Graphics* gdi, POIN
 
 	radar_screen->AddScreenObject(m_Id, "topbar", TopBar, true, "");
 
-	string Toptext = "SRW " + std::to_string(m_Id - APPWINDOW_BASE);
+	string Toptext = "SRW " + to_string(m_Id - APPWINDOW_BASE);
 	dc.TextOutA(TopLeftText.x + (TopBar.right-TopBar.left) / 2 - dc.GetTextExtent("SRW 1").cx , TopLeftText.y, Toptext.c_str());
 
 	// Range button

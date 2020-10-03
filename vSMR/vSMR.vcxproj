@@ -125,6 +125,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AircraftLookup.cpp" />
     <ClCompile Include="CallsignLookup.cpp" />
     <ClCompile Include="Config.cpp" />
     <ClCompile Include="CPDLCSettingsDialog.cpp" />
@@ -141,6 +142,7 @@
     <ClCompile Include="vSMR.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AircraftLookup.hpp" />
     <ClInclude Include="CallsignLookup.hpp" />
     <ClInclude Include="ColorManager.h" />
     <ClInclude Include="Config.hpp" />

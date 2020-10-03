@@ -20,6 +20,8 @@ public:
 	virtual ~CConfig();
 
 	const Value& getActiveProfile();
+	bool isSidInitClbAvail(string sid, string airport);
+	int getSidInitClb(string sid, string airport);
 	bool isSidColorAvail(string sid, string airport);
 	Gdiplus::Color getSidColor(string sid, string airport);
 	const Value& getAirportMapIfAny(string airport);
@@ -44,7 +46,7 @@ public:
 
 	inline string getActiveProfileName() {
 		string name;
-		for (std::map<string, rapidjson::SizeType>::iterator it = profiles.begin(); it != profiles.end(); ++it)
+		for (map<string, rapidjson::SizeType>::iterator it = profiles.begin(); it != profiles.end(); ++it)
 		{
 			if (it->second == active_profile) {
 				name = it->first;

@@ -15,8 +15,8 @@ public:
 
 	static void info(string message) {
 		if (Logger::ENABLED && Logger::DLL_PATH.length() > 0) {
-			std::ofstream file;
-			file.open(Logger::DLL_PATH + "\\vsmr.log", std::ofstream::out | std::ofstream::app);
+			ofstream file;
+			file.open(Logger::DLL_PATH + "\\vsmr.log", ofstream::out | ofstream::app);
 			file << "INFO: " << message << endl;
 			file.close();
 		}
