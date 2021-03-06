@@ -1,0 +1,894 @@
+[
+   {
+    "name": "Default",
+      "icao_airlines": "C:\\Users\\xxx\\Documents\\EuroScope\\DATAFILES\\ICAO_Airlines.txt",
+      "icao_aircraft": "C:\\Users\\xxx\\Documents\\EuroScope\\DATAFILES\\ICAO_Aircraft.txt",
+      "toolbar_offset": 16,
+      "cursor": "Non_Default",
+      "cursors": {
+         "default": "",
+         "correlate": "",
+         "inset_move": "",
+         "inset_resize": "",
+         "move_tag": ""
+      },
+    "font": {
+        "font_name": "EuroScope",
+        "weight": "Regular",
+        "sizes": {
+            "one": 8,
+            "two": 9,
+            "three": 10,
+            "four": 11,
+            "five": 12
+        }
+    },
+    "filters": {
+         "hide_above_alt": 0,
+        "hide_below_alt": 0,
+         "hide_above_spd": 0,
+        "show_on_rwy": true,
+         "radar_range_nm": 280,
+        "night_alpha_setting": 110,
+        "pro_mode": {
+            "enable": false,
+            "accept_pilot_squawk": false,
+            "do_not_autocorrelate_squawks": [
+               "0020",
+               "0021",
+               "0022",
+               "0023",
+               "0024",
+               "0025",
+               "0026",
+               "0027",
+               "0030",
+               "0031",
+               "0032",
+               "0033",
+               "0034",
+               "0035",
+               "0036",
+               "0037",
+                "1000",
+               "1200",
+                "2000",
+                "2200",
+                "7000"
+            ]
+        }
+    },
+    "labels": {
+        "auto_deconfliction": true,
+         "leader_line_length": 25,
+        "use_aspeed_for_gate": false,
+        "squawk_error_color": {
+            "r": 255,
+            "g": 255,
+            "b": 0
+        },
+        "groundstatus_colors": {
+            "push": {
+               "r": 290,
+               "g": 190,
+                "b": 0
+            },
+            "taxi": {
+               "r": 145,
+               "g": 255,
+               "b": 255
+            },
+            "depa": {
+                "r": 255,
+               "g": 80,
+               "b": 200
+            }
+         },
+         "arrival_color": {
+            "r": 110,
+            "g": 200,
+            "b": 80
+         },
+         "controller_colors": {
+            "assumed": {
+               "r": 255,
+               "g": 255,
+               "b": 255
+            },
+            "transfer_to_me": {
+                "r": 255,
+               "g": 128,
+               "b": 192
+            },
+            "transfer_from_me": {
+               "r": 128,
+               "g": 255,
+               "b": 128
+            }
+        },
+         "clickable": {
+            "1911": {
+               "left": {
+                  "function": "7"
+               },
+               "middle": {
+                  "function": "32"
+               },
+               "right": {
+                  "function": "1"
+               }
+            },
+            "1919": {
+               "left": {
+                  "function": "8"
+               },
+               "right": {
+                  "function": "20"
+               }
+            },
+            "1990": {
+               "left": {
+                  "function": "9007",
+                  "plugin": "UK Controller Plugin"
+               },
+               "right": {
+                  "function": "9008",
+                  "plugin": "UK Controller Plugin"
+               }
+         },
+        "departure": {
+            "definition": [
+               [
+                  "callsign",
+                  "controller"
+               ],
+               [
+                  "scratch"
+               ]
+            ],
+            "definition_detailed": [
+               [
+                  "callsign",
+                  "ssr",
+                  "controller"
+               ],
+               [
+                  "sctype",
+                  "seprwy",
+                  "ssid"
+               ],
+               [
+                  "scratch"
+               ]
+            ],
+            "background_color": {
+               "r": 40,
+               "g": 50,
+               "b": 200,
+               "a": 200
+            },
+            "background_color_on_runway": {
+                "r": 40,
+                "g": 50,
+                "b": 200,
+               "a": 200
+            },
+            "nosid_color": {
+                "r": 104,
+                "g": 50,
+                "b": 168,
+               "a": 200
+            },
+            "text_color": {
+                "r": 255,
+                "g": 255,
+                "b": 255
+            },
+            "text_color_unrelated": {
+               "r": 240,
+               "g": 240,
+               "b": 240
+            }
+        },
+        "arrival": {
+            "definition": [
+               [
+                  "callsign",
+                  "controller"
+               ],
+               [
+                  "sate",
+                  "actype"
+               ],
+               [
+                  "scratch"
+               ]
+            ],
+            "definition_detailed": [
+               [
+                  "callsign",
+                  "sate",
+                  "controller"
+               ],
+               [
+                  "scratch"
+               ]
+            ],
+            "background_color": {
+                "r": 170,
+                "g": 50,
+                "b": 50,
+               "a": 200
+            },
+            "background_color_on_runway": {
+                "r": 170,
+                "g": 50,
+                "b": 50,
+               "a": 200
+            },
+            "text_color": {
+                "r": 255,
+                "g": 255,
+                "b": 255
+            },
+            "text_color_unrelated": {
+               "r": 240,
+               "g": 240,
+               "b": 240
+            }
+        },
+        "airborne": {
+            "use_departure_arrival_coloring": false,
+            "definition": [
+               [
+                  "callsign",
+                  "gs",
+                  "controller"
+               ],
+               [
+                  "flightlevel",
+                  "tendency"
+               ],
+               [
+                  "scratch"
+               ]
+            ],
+            "definition_detailed": [
+               [
+                  "callsign",
+                  "gs",
+                  "controller"
+               ],
+               [
+                  "flightlevel",
+                  "tendency"
+               ],
+               [
+                  "sctype",
+                  "asshdg",
+                  "scratch"
+               ]
+            ],
+            "background_color": {
+                "r": 0,
+                "g": 0,
+                "b": 0,
+               "a": 0
+            },
+            "background_color_on_runway": {
+                "r": 0,
+                "g": 0,
+                "b": 0,
+                "a": 0
+            },
+            "text_color": {
+                "r": 255,
+                "g": 255,
+                "b": 255
+            },
+            "text_color_unrelated": {
+               "r": 240,
+               "g": 240,
+               "b": 240
+            }
+        },
+        "uncorrelated": {
+            "definition": [
+               [
+                  "callsign",
+                  "controller"
+               ]
+            ],
+            "background_color": {
+               "r": 120,
+               "g": 90,
+               "b": 110,
+               "a": 200
+            },
+            "background_color_on_runway": {
+               "r": 0,
+               "g": 0,
+               "b": 0,
+               "a": 0
+            },
+            "text_color": {
+               "r": 255,
+               "g": 255,
+               "b": 255
+            },
+            "text_color_unrelated": {
+               "r": 240,
+               "g": 240,
+               "b": 240
+            },
+            "nofpl_color": {
+               "r": 120,
+               "g": 80,
+               "b": 80,
+               "a": 200
+            }
+         },
+         "vfr": {
+            "definition": [
+               [
+                  "callsign",
+                  "controller"
+               ],
+               [
+                  "actype",
+                  "scratch"
+               ]
+            ],
+            "definition_detailed": [
+               [
+                  "callsign",
+                  "gs",
+                  "controller"
+               ],
+               [
+                  "actype",
+                  "flightlevel",
+                  "tendency"
+               ],
+               [
+                  "scratch"
+               ]
+            ],
+            "background_color": {
+               "r": 0,
+               "g": 120,
+               "b": 0,
+               "a": 200
+            },
+            "background_color_on_runway": {
+               "r": 0,
+               "g": 120,
+               "b": 0,
+               "a": 240
+            },
+            "nosid_color": {
+               "r": 104,
+               "g": 50,
+               "b": 168,
+               "a": 240
+            },
+            "text_color": {
+                "r": 255,
+                "g": 255,
+                "b": 255
+            },
+            "text_color_unrelated": {
+               "r": 240,
+               "g": 240,
+               "b": 240
+            },
+            "nofpl_color": {
+               "r": 170,
+               "g": 50,
+               "b": 50,
+               "a": 255
+            }
+        }
+    },
+    "rimcas": {
+        "rimcas_label_only": true,
+        "use_red_symbol_for_emergencies": true,
+         "timer": [
+            60,
+            45,
+            30,
+            15,
+            0
+         ],
+         "timer_lvp": [
+            120,
+            90,
+            60,
+            30,
+            0
+         ],
+        "rimcas_stage_two_speed_threshold": 25,
+        "background_color_stage_one": {
+            "r": 160,
+            "g": 90,
+            "b": 30,
+            "a": 200
+        },
+        "background_color_stage_two": {
+            "r": 150,
+            "g": 0,
+            "b": 0,
+            "a": 200
+        },
+        "alert_text_color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+    },
+    "targets": {
+        "show_primary_target": true,
+        "target_color": {
+            "r": 255,
+            "g": 242,
+            "b": 73,
+            "a": 220
+        },
+        "history_one_color": {
+            "r": 0,
+            "g": 255,
+            "b": 255,
+            "a": 200
+        },
+        "history_two_color": {
+            "r": 0,
+            "g": 219,
+            "b": 219,
+            "a": 200
+        },
+        "history_three_color": {
+            "r": 0,
+            "g": 183,
+            "b": 183,
+            "a": 200
+        }
+    },
+    "approach_insets": {
+        "extended_lines_length": 15,
+        "extended_lines_ticks_spacing": 1,
+        "extended_lines_color": {
+            "r": 255,
+            "g": 255,
+            "b": 255
+        },
+        "runway_color": {
+            "r": 0,
+            "g": 0,
+            "b": 0
+        },
+        "background_color": {
+            "r": 35,
+            "g": 35,
+            "b": 35
+        }
+    },
+    "maps": {
+         "EDDH": {
+            "sids": [
+               {
+                  "names": [
+                     "BASUM0C",
+                     "ELSOB0C",
+                     "IDEKO0C",
+                     "WSN0C"
+                  ],
+                  "comment": "Default SIDS 05 West",
+                  "comment2": "(Blue)",
+                  "init_clb": 5000,
+                  "color": {
+                     "r": 40,
+                     "g": 50,
+                     "b": 200,
+                     "a": 200
+                  }
+               },
+               {
+                  "names": [
+                     "AMLUH0C",
+                     "EKERN0C",
+                     "LUGEG0C",
+                     "RAMAR0C"
+                  ],
+                  "comment": "Default SIDS 05 East",
+                  "comment2": "(Light Blue)",
+                  "init_clb": 5000,
+                  "color": {
+                     "r": 80,
+                     "g": 100,
+                     "b": 255,
+                     "a": 200
+                  }
+               },
+               {
+                  "names": [
+                     "BASUM0D",
+                     "ELSOB0D",
+                     "IDEKO0D",
+                     "WSN0D"
+                  ],
+                  "comment": "Default SIDS 15 West",
+                  "comment2": "(Blue)",
+                  "init_clb": 5000,
+                  "color": {
+                     "r": 40,
+                     "g": 50,
+                     "b": 200,
+                     "a": 200
+                  }
+               },
+               {
+                  "names": [
+                     "AMLUH0D",
+                     "EKERN0D",
+                     "LUGEG0D",
+                     "RAMAR0D"
+                  ],
+                  "comment": "Default SIDS 15 East",
+                  "comment2": "(Light Blue)",
+                  "init_clb": 5000,
+                  "color": {
+                     "r": 80,
+                     "g": 100,
+                     "b": 255,
+                     "a": 200
+                  }
+               },
+               {
+                  "names": [
+                     "BASUM0B",
+                     "ELSOB0B",
+                     "IDEKO0B",
+                     "WSN0B"
+                  ],
+                  "comment": "Default SIDS 23 West",
+                  "comment2": "(Blue)",
+                  "init_clb": 5000,
+                  "color": {
+                     "r": 40,
+                     "g": 50,
+                     "b": 200,
+                     "a": 200
+                  }
+               },
+               {
+                  "names": [
+                     "AMLUH0B",
+                     "EKERN0B",
+                     "LUGEG0B",
+                     "RAMAR0B"
+                  ],
+                  "comment": "Default SIDS 23 East",
+                  "comment2": "(Light Blue)",
+                  "init_clb": 5000,
+                  "color": {
+                     "r": 80,
+                     "g": 100,
+                     "b": 255,
+                     "a": 200
+                  }
+               },
+               {
+                  "names": [
+                     "BASUM0G",
+                     "ELSOB0G",
+                     "IDEKO0G",
+                     "WSN0G"
+                  ],
+                  "comment": "Default SIDS 33 West",
+                  "comment2": "(Blue)",
+                  "init_clb": 5000,
+                  "color": {
+                     "r": 40,
+                     "g": 50,
+                     "b": 200,
+                     "a": 200
+                  }
+               },
+               {
+                  "names": [
+                     "AMLUH0G",
+                     "EKERN0G",
+                     "LUGEG0G",
+                     "RAMAR0G"
+                  ],
+                  "comment": "Default SIDS 33 East",
+                  "comment2": "(Light Blue)",
+                  "init_clb": 5000,
+                  "color": {
+                     "r": 80,
+                     "g": 100,
+                     "b": 255,
+                     "a": 200
+                  }
+               },
+               {
+                  "names": [
+                     "VCT"
+                  ],
+                  "comment": "Vectored",
+                  "comment2": "(Yellow)",
+                  "color": {
+                     "r": 220,
+                     "g": 175,
+                     "b": 80,
+                     "a": 200
+                  }
+               },
+               {
+                  "names": [
+                     "xxxx"
+                  ],
+                  "comment": "Example",
+                  "comment2": "(Orange accent)",
+                  "init_clb": 5000,
+                  "color": {
+                     "r": 220,
+                     "g": 175,
+                     "b": 80,
+                     "a": 200
+                  }
+               },
+               {
+                  "names": [
+                     "xxxx"
+                  ],
+                  "comment": "Example",
+                  "comment2": "(Light Blue)",
+                  "init_clb": 5000,
+                  "color": {
+                     "r": 80,
+                     "g": 150,
+                     "b": 255,
+                     "a": 200
+                  }
+               },
+               {
+                  "names": [
+                     "xxxx"
+                  ],
+                  "comment": "Example",
+                  "comment2": "(Cyan)",
+                  "init_clb": 5000,
+                  "color": {
+                     "r": 80,
+                     "g": 150,
+                     "b": 255,
+                     "a": 200
+                  }
+               },
+               {
+                  "names": [
+                     "xxxx"
+                  ],
+                  "comment": "Example",
+                  "comment2": "(Yellow)",
+                  "init_clb": 5000,
+                  "color": {
+                     "r": 220,
+                     "g": 175,
+                     "b": 80,
+                     "a": 200
+                  }
+               },
+               {
+                  "names": [
+                     "xxxx"
+                  ],
+                  "comment": "Example",
+                  "comment2": "(Mint Green)",
+                  "init_clb": 5000,
+                  "color": {
+                     "r": 150,
+                     "g": 255,
+                     "b": 150,
+                     "a": 200
+                  }
+               },
+               {
+                  "names": [
+                     "xxxx"
+                  ],
+                  "comment": "Example",
+                  "comment2": "(Brown)",
+                  "init_clb": 5000,
+                  "color": {
+                     "r": 160,
+                     "g": 90,
+                     "b": 30,
+                     "a": 200
+                  }
+               }
+            ]
+         },
+         "EDDW": {
+            "sids": [
+               {
+                  "names": [
+                     "BASUM0Q",
+                     "ERLAD0Q",
+                     "GESTO0M",
+                     "NIE0Q",
+                     "EEL0Q",
+                     "WSN0M"
+                  ],
+                  "comment": "Default SIDS 09",
+                  "comment2": "(Blue)",
+                  "init_clb": 4000,
+                  "color": {
+                     "r": 40,
+                     "g": 50,
+                     "b": 200,
+                     "a": 200
+                  }
+               },
+               {
+                  "names": [
+                     "EEL0E"
+                  ],
+                  "comment": "Kurz SIDS 09",
+                  "comment2": "(Light Blue)",
+                  "init_clb": 4000,
+                  "color": {
+                     "r": 80,
+                     "g": 150,
+                     "b": 255,
+                     "a": 200
+                  }
+               },
+               {
+                  "names": [
+                     "BASUM0K",
+                     "ERLAD0K",
+                     "GESTO0K",
+                     "NIE0K",
+                     "EEL0K",
+                     "WSR0K"
+                  ],
+                  "comment": "Default SIDS 27",
+                  "comment2": "(Blue)",
+                  "init_clb": 4000,
+                  "color": {
+                     "r": 40,
+                     "g": 50,
+                     "b": 200,
+                     "a": 200
+                  }
+               },
+               {
+                  "names": [
+                     "BASUM0A",
+                     "ERLAD0Z",
+                     "GESTO0A",
+                     "NIE0Z",
+                     "EEL0W"
+                  ],
+                  "comment": "Kurz SIDS 27",
+                  "comment2": "(Light Blue)",
+                  "init_clb": 4000,
+                  "color": {
+                     "r": 80,
+                     "g": 150,
+                     "b": 255,
+                     "a": 200
+                  }
+               },
+               {
+                  "names": [
+                     "VCT"
+                  ],
+                  "comment": "Vectored",
+                  "comment2": "(Yellow)",
+                  "color": {
+                     "r": 220,
+                     "g": 175,
+                     "b": 80,
+                     "a": 200
+                  }
+               }
+            ]
+         },
+        "EGKK": {
+          "sids": [{
+                "names": ["CLN0M", "CLN0M", "CLN0P", "DVR0M", "DVR0P", "LAM0M", "LAM0P", "BIG0M", "BIG0P", "#SAM0M", "SAM0P", "SFD0M", "SFD0P", "BOGNA0M", "NOVMA0M", "DVR0M", "WIZAD0M", "LAM0M", "TIGER0M", "DAGGA0M"],
+                "comment": "Old Conventional Unused SIDS",
+			    "color": {
+                    "r": 255,
+                    "g": 50,
+                    "b": 50,
+                    "a": 255
+                }
+            },
+            {
+                "names": ["BOGNA0X", "HARDY0X", "NOVMA0X"],
+                "comment": "26L A2 SIDs",
+                "color": {
+                    "r": 220,
+                    "g": 175,
+                    "b": 80,
+                    "a": 255
+                }
+            },
+            {
+                "names": ["FRANE0X", "LAM0X", "ADMAG0X"],
+                "comment": "26L A3 SIDs",
+                "color": {
+                    "r": 80,
+                    "g": 150,
+                    "b": 255,
+                    "a": 255
+                }
+            },
+            {
+                "names": ["FRANE0Z", "LAM0Z", "ODVIK0Z"],
+                "comment": "08R J4 SIDs",
+                "color": {
+                    "r": 80,
+                    "g": 150,
+                    "b": 255,
+                    "a": 255
+                }
+            },
+            {
+                "names": ["SFD0Z", "IMVUR0Z", "KENET0P"],
+                "comment": "08R J7 SIDs",
+                "color": {
+                    "r": 220,
+                    "g": 175,
+                    "b": 80,
+                    "a": 255
+                }
+            },
+            {
+                "names": ["BIG0X", "BIG0Z"],
+                "comment": "Biggin Hill SIDs",
+                "color": {
+                    "r": 150,
+                    "g": 255,
+                    "b": 150,
+                    "a": 255
+                }
+            },
+            {
+                "names": ["SFD0X", "DAGGA0X", "TIGER0X", "WIZAD0X"],
+                "comment": "Time Restricted and Relief SIDs",
+                "color": {
+                    "r": 160,
+                    "g": 90,
+                    "b": 30,
+                    "a": 255
+                }
+            }],
+            "runways": [
+                {
+                    "runway_name": "08L/26R",
+                    "path": [
+                        ["N051.08.49.700", "W000.12.45.500"],
+                        ["N051.08.48.000", "W000.12.44.900"],
+                        ["N051.09.05.900", "W000.10.36.200"],
+                        ["N051.09.07.500", "W000.10.36.900"]
+                    ]
+                },
+                {
+                    "runway_name": "08R/26L",
+                    "path": [
+                        ["N051.08.43.500", "W000.12.44.700"],
+                        ["N051.08.41.300", "W000.12.43.900"],
+                        ["N051.09.04.000", "W000.09.55.600"],
+                        ["N051.09.07.200", "W000.09.57.000"]
+                    ]
+                }
+            ]
+        }
+    }
+   }
+]
